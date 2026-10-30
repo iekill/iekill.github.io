@@ -144,17 +144,20 @@ table{border-collapse:collapse;width:100%}
 .ops-h{color:var(--muted);margin-top:40px;display:block}
 .ops{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);margin-top:14px;border:1px solid var(--hair);background:var(--canvas)}
 .ops-list{display:flex;flex-direction:column;border-right:1px solid var(--hair)}
+.ops-list .op{flex:1 1 0;align-content:center;transition:flex-grow .45s ease,background .3s ease,border-color .3s ease}
+.ops-list .op[aria-selected="true"]{flex-grow:1.8}
 .op{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:32px minmax(0,1fr);gap:8px;padding:20px 20px 20px 17px;border-bottom:1px solid var(--hair);border-left:3px solid transparent;transition:background .3s ease,border-color .3s ease}
 .op:last-child{border-bottom:0}
 .op .n{font-weight:700;font-size:13px;color:var(--accent);padding-top:2px}
 .op b{display:block;font-size:15px}
-.op .d{display:block;font-weight:400;font-size:13px;color:var(--muted);margin-top:4px;line-height:1.55}
+.op .d{display:block;font-weight:400;font-size:13px;color:var(--muted);line-height:1.55;max-height:0;opacity:0;overflow:hidden;margin-top:0;transition:max-height .45s ease,opacity .3s ease,margin-top .45s ease}
+.op[aria-selected="true"] .d{max-height:6em;opacity:1;margin-top:6px}
 .op:hover{background:var(--soft)}
 .op[aria-selected="true"]{background:var(--accent-soft);border-left-color:var(--accent)}
 .op:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
-.ops-panel{padding:28px;display:grid;gap:16px;align-content:start}
-.ops-panel[hidden]{display:none}
-.ops-panel:not([hidden]){animation:fade .45s ease}
+.ops-panels{display:grid}
+.ops-panel{grid-area:1/1;padding:28px;display:grid;gap:16px;align-content:start;visibility:hidden;opacity:0;transition:opacity .35s ease,visibility 0s linear .35s}
+.ops-panel.on{visibility:visible;opacity:1;transition:opacity .35s ease}
 .fig-k{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase}
 .fig{display:block;width:100%;height:auto;max-height:300px}
 .fig path{fill:var(--canvas);stroke:var(--fig-line);stroke-width:1.1;stroke-linejoin:round;stroke-linecap:round}
@@ -184,11 +187,12 @@ table{border-collapse:collapse;width:100%}
 @media (prefers-reduced-motion:reduce){
   .fig.draw path:not(.da){stroke-dasharray:none;stroke-dashoffset:0;animation:none}
   .fig.draw path.da,.fig.draw text,.fig.draw .dot{opacity:1;animation:none}
-  .ops-panel:not([hidden]){animation:none}
+  .ops-list .op,.op .d,.ops-panel,.ops-panel.on{transition:none}
 }
 @media (max-width:900px){
   .ops{grid-template-columns:minmax(0,1fr)}
   .ops-list{border-right:0;border-bottom:1px solid var(--hair)}
+  .ops-list .op{flex:none}
 }
 @media (max-width:640px){
   .ops-panel{padding:20px 16px}
@@ -472,7 +476,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
           <button class="op" type="button" role="tab" id="op-t4" aria-controls="op-p4" aria-selected="false" tabindex="-1"><span class="n">04</span><span><b>최종 판단은 직접</b><span class="d">밸런스와 품질은 완전 자동화하지 않고 직접 검수</span></span></button>
         </div>
         <div class="ops-panels">
-          <div class="ops-panel" role="tabpanel" id="op-p1" aria-labelledby="op-t1">
+          <div class="ops-panel on" role="tabpanel" id="op-p1" aria-labelledby="op-t1">
             <div class="fig-k">FIG 1.1 · 작업 지침 표준화</div>
             <svg class="fig" id="fig1" role="img" aria-label="작업 지침 문서가 AI 실행으로 이어지고, UI 제작, SDK·결제 점검, 리소스 관리 결과물로 나가는 도식"></svg>
             <h5>반복 작업을 작업 지침으로 고정해 AI에게 맡기는 방식</h5>
@@ -481,7 +485,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
               <div><dt>결과</dt><dd class="ops-res"><span class="v num">6<small>주</small></span><span>기획·개발·밸런싱 1인으로 AOS·iOS 출시</span></dd></div>
             </dl>
           </div>
-          <div class="ops-panel" role="tabpanel" id="op-p2" aria-labelledby="op-t2" hidden>
+          <div class="ops-panel" role="tabpanel" id="op-p2" aria-labelledby="op-t2" aria-hidden="true" inert>
             <div class="fig-k">FIG 1.2 · 스테이지 생성 · 밸런스 자동화</div>
             <svg class="fig" id="fig2" role="img" aria-label="패턴 학습, 생성 자동화, 스코어링 밸런스, 검증, 데이터 업데이트가 순환하는 도식"></svg>
             <h5>샘플 50개를 기준으로 한 스테이지 생성 · 밸런스 자동화</h5>
@@ -493,7 +497,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
               </dd></div>
             </dl>
           </div>
-          <div class="ops-panel" role="tabpanel" id="op-p3" aria-labelledby="op-t3" hidden>
+          <div class="ops-panel" role="tabpanel" id="op-p3" aria-labelledby="op-t3" aria-hidden="true" inert>
             <div class="fig-k">FIG 1.3 · 코딩 규칙과 역방향 리뷰</div>
             <svg class="fig" id="fig3" role="img" aria-label="코딩 규칙에서 생성 코드, 완성 코드로 이어지고, 완성 코드에서 규칙 쪽으로 거꾸로 리뷰하는 도식"></svg>
             <h5>규칙으로 생성을 제한하고, 완성 코드를 거꾸로 따라가는 리뷰</h5>
@@ -502,7 +506,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
               <div><dt>결과</dt><dd class="ops-res"><span>구조적 결함을 리뷰 단계에서 걸러냄</span></dd></div>
             </dl>
           </div>
-          <div class="ops-panel" role="tabpanel" id="op-p4" aria-labelledby="op-t4" hidden>
+          <div class="ops-panel" role="tabpanel" id="op-p4" aria-labelledby="op-t4" aria-hidden="true" inert>
             <div class="fig-k">FIG 1.4 · 최종 판단은 직접</div>
             <svg class="fig" id="fig4" role="img" aria-label="스테이지 난이도가 기준 곡선을 따라 오르고, 기준을 벗어난 스테이지 하나를 직접 플레이로 확인하는 개념도"></svg>
             <h5>밸런스와 품질의 최종 판단은 사람이 하는 구조</h5>
@@ -890,7 +894,7 @@ fig($('fig4'),g=>{
 const ops=[...document.querySelectorAll('.op')];
 function redraw(p){if(reduce)return;const f=p.querySelector('.fig');f.classList.remove('draw');void f.getBoundingClientRect();f.classList.add('draw')}
 function sel(i,focus){
-  ops.forEach((b,j)=>{const on=i===j,p=$(b.getAttribute('aria-controls'));b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;p.hidden=!on;if(on)redraw(p)});
+  ops.forEach((b,j)=>{const on=i===j,p=$(b.getAttribute('aria-controls'));b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;p.classList.toggle("on",on);p.inert=!on;on?p.removeAttribute("aria-hidden"):p.setAttribute("aria-hidden","true");if(on)redraw(p)});
   if(focus)ops[i].focus();
 }
 ops.forEach((b,i)=>{
@@ -898,7 +902,7 @@ ops.forEach((b,i)=>{
   b.addEventListener('keydown',e=>{const k={ArrowDown:1,ArrowRight:1,ArrowUp:-1,ArrowLeft:-1}[e.key];if(k){e.preventDefault();sel((i+k+ops.length)%ops.length,true)}});
 });
 if(!reduce&&'IntersectionObserver'in window){
-  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){redraw(document.querySelector('.ops-panel:not([hidden])'));io.disconnect()}}),{rootMargin:'0px 0px -20% 0px'});
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){redraw(document.querySelector('.ops-panel.on'));io.disconnect()}}),{rootMargin:'0px 0px -20% 0px'});
   io.observe($('ops'));
 }
 
