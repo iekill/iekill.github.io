@@ -145,29 +145,29 @@ table{border-collapse:collapse;width:100%}
 .ops-track{margin-top:48px}
 .ops-track > .feature{margin-top:0}
 .ops-track.scrolly > .feature{position:sticky}
-.ops{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);margin-top:14px;border:1px solid var(--hair);background:var(--canvas)}
+.ops{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);margin-top:14px;border:1px solid var(--hair);background:var(--canvas)}
 .ops-list{display:flex;flex-direction:column;border-right:1px solid var(--hair)}
 .ops-list .op{flex:1 1 0;align-content:center;transition:flex-grow .45s ease,background .3s ease}
-.ops-list .op[aria-selected="true"]{flex-grow:2.6}
-.op{all:unset;box-sizing:border-box;position:relative;cursor:pointer;display:grid;grid-template-columns:32px minmax(0,1fr);align-items:first baseline;column-gap:8px;padding:22px 24px 22px 28px;transition:background .3s ease}
+.ops-list .op[aria-selected="true"]{flex-grow:1.6}
+.op{all:unset;box-sizing:border-box;position:relative;cursor:pointer;display:grid;grid-template-columns:40px minmax(0,1fr);align-items:first baseline;column-gap:8px;padding:22px 24px 22px 28px;transition:background .3s ease}
 /* 구분선과 선택 테두리는 겹치지 않게 의사 요소로 한 줄만 그림 */
 .op::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--hair)}
 .op:last-child::after,.op[aria-selected="true"]::after,.op:has(+ .op[aria-selected="true"])::after{display:none}
 .op::before{content:"";position:absolute;inset:-1px;border:1px solid transparent;border-left-width:3px;pointer-events:none;z-index:1;transition:border-color .3s ease}
 .op[aria-selected="true"]::before{border-color:var(--accent)}
-.op .n{font-weight:700;font-size:13px;color:var(--accent)}
-.op b{display:block;font-size:14px;transition:font-size .3s ease}
-.op[aria-selected="true"] b{font-size:17px}
+.op .n{font-weight:700;font-size:16px;color:var(--accent)}
+.op b{display:block;font-size:18px;transition:font-size .3s ease}
+.op[aria-selected="true"] b{font-size:22px}
 .op .d{display:block;font-weight:400;font-size:13px;color:var(--muted);line-height:1.55;max-height:0;opacity:0;overflow:hidden;margin-top:0;transition:max-height .45s ease,opacity .3s ease,margin-top .45s ease}
-.op[aria-selected="true"] .d{max-height:6em;opacity:1;margin-top:8px;font-size:14px}
+.op[aria-selected="true"] .d{max-height:6em;opacity:1;margin-top:10px;font-size:16px}
 .op:hover{background:var(--soft)}
 .op[aria-selected="true"]{background:var(--accent-soft)}
 .op:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
 .ops-panels{display:grid}
-.ops-panel{grid-area:1/1;padding:28px;display:grid;gap:16px;align-content:center;visibility:hidden;opacity:0;transition:opacity .35s ease,visibility 0s linear .35s}
+.ops-panel{grid-area:1/1;padding:22px 24px;display:grid;gap:16px;align-content:center;visibility:hidden;opacity:0;transition:opacity .35s ease,visibility 0s linear .35s}
 .ops-panel.on{visibility:visible;opacity:1;transition:opacity .35s ease}
 .fig-k{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase}
-.fig{display:block;width:100%;height:auto;max-height:300px}
+.fig{display:block;width:100%;height:auto;max-height:230px}
 .fig path{fill:var(--canvas);stroke:var(--fig-line);stroke-width:1.1;stroke-linejoin:round;stroke-linecap:round}
 .fig path.o{fill:none}
 .fig path.hi{stroke:var(--accent)}
@@ -197,14 +197,16 @@ table{border-collapse:collapse;width:100%}
   .fig.draw path.da,.fig.draw text,.fig.draw .dot{opacity:1;animation:none}
   .ops-list .op,.op .d,.ops-panel,.ops-panel.on{transition:none}
 }
-@media (max-width:900px){
+@media (max-width:640px){
   .ops{grid-template-columns:minmax(0,1fr)}
   .ops-list{border-right:0;border-bottom:1px solid var(--hair)}
   .ops-list .op{flex:none}
-}
-@media (max-width:640px){
-  .ops-panel{padding:20px 16px}
-  .op{padding:16px 16px 16px 16px}
+  .ops-panel{padding:20px 16px;align-content:start}
+  .op{padding:16px}
+  .op b{font-size:15px}
+  .op[aria-selected="true"] b{font-size:17px}
+  .op .n{font-size:13px}
+  .op[aria-selected="true"] .d{font-size:14px}
 }
 
 /* combat */
@@ -925,7 +927,7 @@ let step=0,cur=0,stick=TOP,pinned=false;
 function layoutOps(){
   track.classList.remove('scrolly');track.style.height='';card.style.top='';box.style.minHeight='';
   pinned=false;step=0;
-  if(innerWidth<=900){return}
+  if(innerWidth<=640){return}
   const vh=innerHeight,room=vh-TOP;
   let h=card.getBoundingClientRect().height;
   if(h<room){box.style.minHeight=(box.offsetHeight+room-h)+'px';h=card.getBoundingClientRect().height}
@@ -942,6 +944,8 @@ function layoutOps(){
 }
 function syncOps(){
   if(!step)return;
+  // 카드 높이가 나중에 바뀌어도(글꼴 로드, 패널 전환) 바닥에 딱 맞게 다시 맞춤
+  if(pinned){const h=card.getBoundingClientRect().height,t=Math.floor(innerHeight-h);if(t!==stick){stick=t;card.style.top=t+'px';track.style.height=(h+step*(ops.length-1))+'px'}}
   const p=pinned?(stick-track.getBoundingClientRect().top)/step:(innerHeight*.5-box.getBoundingClientRect().top)/(box.offsetHeight/ops.length)-.5;
   const i=Math.max(0,Math.min(ops.length-1,Math.round(p)));
   if(i!==cur){cur=i;sel(i)}
@@ -953,6 +957,7 @@ ops.forEach((b,i)=>b.addEventListener('click',()=>{
 addEventListener('scroll',syncOps,{passive:true});
 addEventListener('resize',layoutOps);
 layoutOps();
+if(document.fonts)document.fonts.ready.then(layoutOps);
 
 // 보스 실측
 const BOSS=[['코카트라코',18,'24,560',137.6],['실바드',47,'182,077',150.3],['불칸',64,'481,249',148.4],['기안티',78,'631,892',146.5],['가디안트',80,'649,094',146.0],['스텔리아',89,'735,865',145.0],['메카라곤',98,'825,029',142.9],['키메라',100,'843,062',146.7]];
