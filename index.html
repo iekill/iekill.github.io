@@ -177,6 +177,7 @@ table{border-collapse:collapse;width:100%}
 .decide div{padding:16px 14px 0 0}
 .decide div+div{padding-left:14px;border-left:1px solid var(--hair)}
 .decide .k{font-weight:700;font-size:12px;letter-spacing:.1em;color:var(--accent)}
+.decide.four{grid-template-columns:repeat(4,minmax(0,1fr))}
 .decide b{display:block;margin-top:4px;font-size:16px}
 .decide p{font-size:14px;color:var(--muted)}
 .box{background:var(--canvas);border:1px solid var(--hair);padding:28px}
@@ -238,7 +239,7 @@ table{border-collapse:collapse;width:100%}
 
 /* earlier */
 .early{border-top:1px solid var(--hair-strong)}
-.early .e{display:grid;grid-template-columns:120px 160px minmax(0,1fr);gap:20px;padding:18px 0;border-bottom:1px solid var(--hair);align-items:baseline}
+.early .e{display:grid;grid-template-columns:150px 210px minmax(0,1fr);gap:20px;padding:18px 0;border-bottom:1px solid var(--hair);align-items:baseline}
 .early .y{font-weight:700;color:var(--accent);font-size:14px}
 .early .co{font-weight:400;font-size:13px;color:var(--muted)}
 .early b{font-size:16px}
@@ -273,7 +274,10 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   .pipe{grid-template-columns:repeat(2,minmax(0,1fr))}
   .ways .w{grid-template-columns:32px minmax(0,1fr)}
   .ways .ev{grid-column:2}
-  .early .e{grid-template-columns:110px minmax(0,1fr)}
+  .early .e{grid-template-columns:140px minmax(0,1fr)}
+  .decide.four{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .decide.four div:nth-child(3){padding-left:0;border-left:0}
+  .decide.four div:nth-child(n+3){margin-top:16px}
   .early .e > div:last-child{grid-column:1 / -1}
 }
 @media (max-width:640px){
@@ -282,7 +286,8 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   .stats,.kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
   .stat:nth-child(3),.kpis div:nth-child(3){padding-left:0;border-left:0}
   .stat:nth-child(n+3),.kpis div:nth-child(n+3){margin-top:16px}
-  .facts,.decide,.books{grid-template-columns:minmax(0,1fr)}
+  .facts,.decide,.decide.four,.books{grid-template-columns:minmax(0,1fr)}
+  .decide.four div{margin-top:0;padding-top:16px}
   .facts div+div,.decide div+div,.books div+div{padding-left:0;border-left:0}
   .cells,.titles{grid-template-columns:minmax(0,1fr)}
   .feature{padding:22px 16px}
@@ -360,7 +365,6 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
     <table class="map" id="capmap">
       <thead><tr>
         <th scope="col"><span class="sr"></span></th>
-        <th scope="col">메이크 드라마: MAD<small>Fluffy Duck</small></th>
         <th scope="col">DoubleuGames<small>퍼즐 · 캐주얼</small></th>
         <th scope="col">Netmarble Neo<small>제2의 나라</small></th>
         <th scope="col">Com2us<small>서머너즈워 크로니클</small></th>
@@ -377,33 +381,10 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
     <div><h2>프로젝트</h2><p class="desc">최근 프로젝트부터 순서대로 정리했습니다.</p></div>
   </div>
 
-  <!-- 01 MAD -->
-  <article class="proj rv" id="mad">
-    <div class="ph">
-      <div><div class="label">Project 01 · 2026</div></div>
-      <div>
-        <h3>메이크 드라마: MAD</h3>
-        <p class="sum">라이브 서비스 진행 시스템 분석 및 최적화, 신규 BM 설계와 사용자 편의성을 높이는 시스템 추가</p>
-        <p class="cap tags">서브컬처 수집형 RPG · 모바일 · 글로벌 원빌드 라이브 서비스 · 플러피덕 · 시스템 기획</p>
-        <div class="legend"><span class="st live">라이브</span><span class="st done">기획 완료</span><span class="st prop">제안</span></div>
-      </div>
-    </div>
-    <div class="cells">
-      <div><span class="n">01</span><b>선별 가챠 BM</b><p>레퍼런스 분석, 선택 횟수·확률 보너스·마일리지 샵 규칙 설계</p><span class="st live">라이브</span></div>
-      <div><span class="n">02</span><b>경쟁 콘텐츠 일정 구조</b><p>단일 일정 → 전체·진행·결산 3단계 분리, 예외 처리</p><span class="st live">라이브</span></div>
-      <div><span class="n">03</span><b>보상·Enum 데이터 구조</b><p>보상 타입 47 → 15, Enum 시트 218 → 단일 테이블</p><span class="st done">기획 완료</span></div>
-      <div><span class="n">04</span><b>아이템 교환</b><p>3개 안 비교 후 기존 상점 재사용안으로 확정</p><span class="st done">기획 완료</span></div>
-      <div><span class="n">05</span><b>캐시샵 기능 개선</b><p>주기형 초기화 타입 추가, 검증 규칙 5종</p><span class="st done">기획 완료</span></div>
-      <div><span class="n">06</span><b>글로벌 로그인 플로우</b><p>디바이스 언어 기반 초기 설정, 서버 선택, 등급 표시</p><span class="st done">기획 완료</span></div>
-      <div><span class="n">07</span><b>BM 상품 구조 분석</b><p>상품 33종 판매 축 분석, 재화 가치 산정</p><span class="st prop">제안</span></div>
-      <div><span class="n">08</span><b>장비 일괄 성장</b><p>레퍼런스 5종 비교, 추천안·차선안</p><span class="st prop">제안</span></div>
-    </div>
-  </article>
-
-  <!-- 02 DoubleuGames -->
+  <!-- 01 DoubleuGames -->
   <article class="proj rv" id="dug">
     <div class="ph">
-      <div><div class="label">Project 02 · 2022 — 2026</div></div>
+      <div><div class="label">Project 01 · 2022.04 — 2026.06</div></div>
       <div>
         <h3>DoubleuGames</h3>
         <p class="sum">Sort Master: Asian Kitchen 1인 개발 런칭, 그리고 LeonOut · Goldville Spin &amp; Build · Dessert Bliss Sorting Puzzle · Block Wonder Magic Puzzle 등 8종의 게임 시스템 설계와 개발 리드, 서비스 런칭</p>
@@ -412,18 +393,20 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
     </div>
     <div class="titles">
       <div><b>Sort Master: Asian Kitchen</b><span>1인 개발 · 런칭</span></div>
+      <div><b>AI War</b><span>퍼즐 RPG · 전투 코어 리뉴얼 · 기획 리드 <a href="#aiwar" style="color:var(--accent)">→ 사례</a></span></div>
+      <div><b>Hidden Fable</b><span>시스템 설계 · 개발 리드</span></div>
       <div><b>LeonOut</b><span>시스템 설계 · 개발 리드</span></div>
       <div><b>Goldville Spin &amp; Build</b><span>시스템 설계 · 개발 리드</span></div>
       <div><b>Dessert Bliss Sorting Puzzle</b><span>시스템 설계 · 개발 리드</span></div>
       <div><b>Block Wonder Magic Puzzle</b><span>시스템 설계 · 개발 리드</span></div>
       <div><b>그 외 타이틀</b><span>시스템 설계 · 개발 리드</span></div>
     </div>
-    <div class="scope"><span class="chip">메인 시스템 설계</span><span class="chip">개발 리드</span><span class="chip">스테이지·밸런스 툴 제작</span><span class="chip">광고·IAP 상품 기획</span><span class="chip">서비스 런칭</span></div>
+    <div class="scope"><span class="chip">메인 시스템 설계</span><span class="chip">퍼즐 RPG 전투 시스템 · AI 로직 · 수치 밸런싱</span><span class="chip">개발 리드</span><span class="chip">스테이지·밸런스 툴 제작</span><span class="chip">광고·IAP 상품 기획</span><span class="chip">서비스 런칭</span></div>
 
     <div class="feature" id="sortmaster">
       <div class="label">대표 작업 · Sort Master: Asian Kitchen</div>
       <h4>AI를 팀원처럼 운영하는 1인 개발과 출시</h4>
-      <p class="cap" style="margin-top:6px">DoubleuGames · 퍼즐 · 캐주얼 모바일 · 기획 · 개발 · 밸런싱 · AOS·iOS 글로벌 출시</p>
+      <p class="cap" style="margin-top:6px">DoubleuGames · 3매치 퍼즐 · 캐주얼 모바일 · 바이브 코딩 · 기획 · 개발 · 밸런싱 · AOS·iOS 글로벌 출시</p>
       <div class="kpis">
         <div><div class="v num">6<small>주</small></div><div class="k">기획부터 AOS·iOS 출시</div></div>
         <div><div class="v num">1<small>인</small></div><div class="k">기획 · 개발 · 밸런싱</div></div>
@@ -444,42 +427,45 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
           <div class="pipe">
             <div><span class="n">01</span><b>직접 제작 50개</b><p>패턴 · 제작 방식 · 엔진 툴 기능의 기준</p></div>
             <div><span class="n">02</span><b>생성 자동화 200개</b><p>데이터 테이블 · 리소스 자동 생성</p></div>
-            <div><span class="n">03</span><b>난이도 점수</b><p>밸런스 툴과 스테이지 밸런스 포인트로 시뮬레이션</p></div>
-            <div><span class="n">04</span><b>성장 곡선 · 검수</b><p>난이도 곡선 그래프 검토, 최종 조정은 직접</p></div>
+            <div><span class="n">03</span><b>난이도 점수</b><p>오브젝트 수량 · 빈 슬롯 · 기믹 배치 · 제한 시간을 점수화해 밸런스 툴로 시뮬레이션</p></div>
+            <div><span class="n">04</span><b>성장 곡선 · 검수</b><p>난이도 곡선 검토, 기준을 벗어난 스테이지는 직접 플레이로 원인 확정 후 조정</p></div>
           </div>
         </div>
       </div>
       <div class="footnote">
         <div><b>출시 후 확인 지표</b> · CPI · ROAS · 리텐션 · 스테이지 플레이 타임 · 세션 타임</div>
-        <div>D1 48%: 페이스북 테크마케팅으로 D7 리텐션 38%를 확보한 뒤 AOS·iOS 마케팅을 시작한 시점의 수치</div>
+        <div>D1 48%: 초기 빌드에서 추가 난이도 조정 없이 기록한 수치</div>
       </div>
     </div>
   </article>
 
-  <!-- 03 제2의 나라 -->
+  <!-- 02 제2의 나라 -->
   <article class="proj rv" id="ni">
     <div class="ph">
-      <div><div class="label">Project 03 · 2019 — 2022</div></div>
+      <div><div class="label">Project 02 · 2019.03 — 2022.04</div></div>
       <div>
         <h3>제2의 나라</h3>
         <p class="sum">MMORPG의 다양한 콘텐츠·시스템 설계와 기한 내 효율적인 개발</p>
-        <p class="cap tags">모바일 MMORPG · Unreal 4 · 넷마블 네오 · 전투 시스템 · 콘텐츠 기획</p>
+        <p class="cap tags">모바일 MMORPG · Unreal 4 · 넷마블 네오 · 프로토타입부터 참여 · 전투 시스템 · 수치 밸런싱 · 콘텐츠 기획</p>
       </div>
     </div>
     <div class="cells">
-      <div><span class="n">01</span><b>성장 던전</b><p>메타 성장 콘텐츠 기획</p></div>
-      <div><span class="n">02</span><b>카오스 필드</b><p>방치 성장 콘텐츠 기획</p></div>
-      <div><span class="n">03</span><b>크로스 필드</b><p>서버 대항 경쟁 콘텐츠 단독 설계, 출시 후 개선안 반영</p></div>
-      <div><span class="n">04</span><b>레벨 디자인</b><p>핵심 콘텐츠 레벨 디자인</p></div>
-      <div><span class="n">05</span><b>PVE 전투 밸런스</b><p>클래스 5종 DPS · 유저 HPS 모델로 보스·던전 전투 시간 설계 <a href="#combat" style="color:var(--accent)">→ 전투 · 수치</a></p></div>
-      <div><span class="n">06</span><b>보스 전투 패턴</b><p>루아 스크립트 기반 PVE 보스 패턴 설계</p></div>
+      <div><span class="n">01</span><b>전투 수식</b><p>스킬 피해 → 속성·등급·종족 배율 → 상성 → 피해 편차 → 치명타로 이어지는 계층형 데미지 구조, 5속성 상성</p></div>
+      <div><span class="n">02</span><b>PVE 전투 밸런스</b><p>클래스 5종 DPS · 유저 HPS 모델로 필드 보스 · 월드 보스 · 던전의 전투 시간과 생존 압박 설계 <a href="#combat" style="color:var(--accent)">→ 전투 · 수치</a></p></div>
+      <div><span class="n">03</span><b>전투 구조</b><p>콘텐츠별 데미지 압축 · 제한 보정 구조 설계</p></div>
+      <div><span class="n">04</span><b>보스 전투 패턴</b><p>루아 스크립트 기반 PVE 보스 패턴 설계</p></div>
+      <div><span class="n">05</span><b>성장 던전</b><p>메타 성장 콘텐츠 기획</p></div>
+      <div><span class="n">06</span><b>카오스 필드</b><p>방치 성장 콘텐츠 기획</p></div>
+      <div><span class="n">07</span><b>탑승물</b><p>메타 성장 시스템 설계</p></div>
+      <div><span class="n">08</span><b>크로스 필드</b><p>서버 대항 경쟁 콘텐츠 단독 설계, 출시 후 개선안 반영 <a href="#cross" style="color:var(--accent)">→ 사례</a></p></div>
+      <div><span class="n">09</span><b>레벨 디자인</b><p>핵심 콘텐츠 레벨 디자인</p></div>
     </div>
   </article>
 
-  <!-- 04 크로니클 -->
+  <!-- 03 Com2us -->
   <article class="proj rv" id="swc">
     <div class="ph">
-      <div><div class="label">Project 04 · 2016 — 2019</div></div>
+      <div><div class="label">Project 03 · 2016.12 — 2019.02</div></div>
       <div>
         <h3>서머너즈워 크로니클</h3>
         <p class="sum">MMORPG 서머너즈워 크로니클의 전투, 월드, 퀘스트, 아이템, 캐릭터, 성장, 전투 수식과 AI 시스템 설계, 그리고 프로토타입 개발</p>
@@ -496,6 +482,12 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
       <div><span class="n">07</span><b>전투 수식</b></div>
       <div><span class="n">08</span><b>AI 시스템</b></div>
       <div><span class="n">09</span><b>프로토타입 개발</b></div>
+    </div>
+    <div class="feature">
+      <div class="label">Com2us · 함께 맡은 프로젝트</div>
+      <h4>히어로즈 워 2</h4>
+      <p class="cap" style="margin-top:6px">영웅 수집·육성 턴제 RPG · 메인 전투 시스템 기획 리드</p>
+      <p style="margin-top:16px;max-width:44em">전투 시스템, AI 로직, 성장 메커니즘 등 코어 시스템을 설계하고 밸런싱했습니다. 속성, 역할, 스킬 구성이 조합 안에서 맞물리도록 설계해 신규 캐릭터가 추가될 때마다 새로운 조합 선택지가 생기도록 했습니다.</p>
     </div>
   </article>
 </div></section>
@@ -575,7 +567,17 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
     <div><div class="label">Leadership · 프로젝트 리드</div></div>
     <div>
       <h2>문제의 원인을 정확히 파악하고, 근본적인 해결책을 제시하고 실행하는 프로젝트 리드</h2>
-      <p class="desc">6인 이하 팀부터 30인 이상 조직까지 리드 · 근거 사례: AI War 전투 코어 리뉴얼, 제2의 나라 정예던전, 크로스 서버</p>
+      <p class="desc">6인 이하 팀부터 30인 이상 조직까지 리드 · 근거 사례: AI War 전투 코어 리뉴얼, 제2의 나라 정예던전, 크로스 필드</p>
+    </div>
+  </div>
+
+  <div class="split" style="margin-bottom:56px">
+    <div><div class="label" style="color:var(--muted)">리드 이력</div></div>
+    <div class="decide four rv" style="margin-top:0">
+      <div><div class="k">StudioG9 · 2015 — 2016</div><b>30인 이상 조직</b><p>기획 팀장 · 히어로즈 제네시스 개발 조직의 일정과 업무 조율</p></div>
+      <div><div class="k">EK GAMES · 2014</div><b>6개월 런칭</b><p>프로젝트 리드 · 네모네모 로사 시스템 설계부터 밸런싱까지</p></div>
+      <div><div class="k">넷마블 네오 · 2020</div><b>기획 5명</b><p>정예던전 · 3주가 되지 않아 개발 단계로 넘김</p></div>
+      <div><div class="k">DoubleuGames · 2022 — 2023</div><b>실무 5명</b><p>AI War · 코어 재구축 후 런칭</p></div>
     </div>
   </div>
 
@@ -647,7 +649,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
 
   <!-- 사례 03 크로스 서버 -->
   <article class="case" id="cross">
-    <div class="label">사례 03 · 제2의 나라 크로스 서버</div>
+    <div class="label">사례 03 · 제2의 나라 크로스 필드</div>
     <h3>서버 대항 경쟁 콘텐츠의 단독 설계와 출시 후 개선안 반영</h3>
     <p class="meta">넷마블 네오 · 제2의 나라 · 2021.09 — 11 · 단독 기획 · 리드</p>
     <dl class="story rv">
@@ -673,12 +675,12 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
     <div><h2>이전 프로젝트 2008 — 2016</h2></div>
   </div>
   <div class="early rv">
-    <div class="e"><span class="y">2015 — 2016</span><span class="co">StudioG9</span><div><b>히어로즈 제네시스</b><p>기획 팀장 · 3인 스쿼드 전투, 몬스터 AI, 스킬 연계</p></div></div>
-    <div class="e"><span class="y">2014 — 2015</span><span class="co">Key Studio</span><div><b>Blame</b><p>기획 팀장 · 콤보 액션, 스킬 트리, 스테이지 난이도</p></div></div>
-    <div class="e"><span class="y">2014</span><span class="co">EK GAMES</span><div><b>네모네모 로사</b><p>프로젝트 리드 · 6개월 내 시스템 설계부터 밸런싱, 런칭</p></div></div>
-    <div class="e"><span class="y">2013 — 2014</span><span class="co">쿵 게임즈</span><div><b>CODEX</b><p>기획 리드 · 핵심 게임 루프, 전투, 시나리오 퀘스트</p></div></div>
-    <div class="e"><span class="y">2011 — 2013</span><span class="co">엔플로드 소프트</span><div><b>Project-S</b><p>코어 전투/AI · 논타겟팅 PC MMORPG 시스템 아키텍처</p></div></div>
-    <div class="e"><span class="y">2008 — 2011</span><span class="co">YD온라인</span><div><b>프리스톤테일 2</b><p>라이브 시스템 · 스페인·캐나다·터키·대만 현지화 런칭</p></div></div>
+    <div class="e"><span class="y">2015.07 — 2016.12</span><span class="co">StudioG9 · 기획 팀장</span><div><b>히어로즈 제네시스</b><p>언리얼4 3인 파티 ARPG · 3인 스쿼드 전투, 몬스터 AI, 스킬 연계 시스템 설계와 전투 밸런싱</p></div></div>
+    <div class="e"><span class="y">2014.11 — 2015.07</span><span class="co">Key Studio · 기획 팀장</span><div><b>Blame</b><p>액션 RPG · 콤보 액션·스킬 트리 설계, 스테이지 난이도 곡선과 파밍 밸런스</p></div></div>
+    <div class="e"><span class="y">2014.02 — 2014.11</span><span class="co">EK GAMES · 프로젝트 리드</span><div><b>네모네모 로사</b><p>로스트사가 IP 모바일 퍼즐 RPG · 6개월 내 시스템 설계부터 밸런싱까지 완수, 런칭</p></div></div>
+    <div class="e"><span class="y">2013.05 — 2014.02</span><span class="co">쿵 게임즈 · 기획 리드</span><div><b>CODEX</b><p>모바일 ARPG · 초기 핵심 게임 루프, 전투, 시나리오 퀘스트 설계</p></div></div>
+    <div class="e"><span class="y">2011.06 — 2013.05</span><span class="co">엔플로드 소프트 · 코어 전투/AI</span><div><b>Project-S</b><p>언리얼3 논타겟팅 PC MMORPG · 초기 시스템 아키텍처, 스킬·전투 메커니즘 설계</p></div></div>
+    <div class="e"><span class="y">2008.01 — 2011.06</span><span class="co">YD온라인 · 시스템 기획</span><div><b>프리스톤테일 2</b><p>PC MMORPG · 스킬·인스턴스 던전 리뉴얼, 스페인·캐나다·터키·대만 현지화 서비스</p></div></div>
   </div>
 </div></section>
 
@@ -693,6 +695,10 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
         <div><div class="k">저서 · 출판 계약 완료 · 출간 준비 중</div><b>게임 기획의 언어 1권 : 게임 시스템 설계</b></div>
         <div><div class="k">저서 · 출판 계약 완료 · 출간 준비 중</div><b>게임 기획의 언어 2권 : RPG 스킬 시스템 설계</b></div>
       </div>
+      <div class="books">
+        <div><div class="k">강의 · 4년</div><b>신입 기획 지망생 대상 온라인 강의 · 포트폴리오·기획서 첨삭</b></div>
+        <div><div class="k">강의 · 2025</div><b>게임 기획 오픈 강의</b></div>
+      </div>
     </div>
   </div>
 </div></section>
@@ -704,15 +710,15 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $=id=>document.getElementById(id);
 
-// 역량 맵: MAD, DoubleuGames, 제2의 나라, 크로니클, 이전
+// 역량 맵: DoubleuGames, 제2의 나라, 크로니클, 이전
 const MAP=[
-  ['시스템 설계',[1,1,0,1,1]],
-  ['전투 · AI',[0,0,1,1,1]],
-  ['밸런스 · 수식',[0,1,1,1,1]],
-  ['콘텐츠 · 레벨 디자인',[0,0,1,1,0]],
-  ['라이브 운영',[1,0,0,0,1]],
-  ['개발 리드 · 런칭',[0,1,0,0,1]],
-  ['AI 활용 개발',[1,1,0,0,0]],
+  ['시스템 설계',[1,0,1,1]],
+  ['전투 · AI',[0,1,1,1]],
+  ['밸런스 · 수식',[1,1,1,1]],
+  ['콘텐츠 · 레벨 디자인',[0,1,1,0]],
+  ['라이브 운영',[0,0,0,1]],
+  ['개발 리드 · 런칭',[1,0,0,1]],
+  ['AI 활용 개발',[1,0,0,0]],
 ];
 $('maprows').innerHTML=MAP.map(([n,c])=>`<tr><th scope="row">${n}</th>${c.map(v=>`<td><i class="${v?'y':''}" aria-label="${v?'담당':'해당 없음'}"></i></td>`).join('')}</tr>`).join('');
 
