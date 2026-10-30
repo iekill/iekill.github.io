@@ -17,12 +17,6 @@
   --f:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
   --wrap:1120px;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --canvas:#12171d; --soft:#171d24; --card:#1b222a; --strong:#232b34;
-  --ink:#eef1f4; --body:#c9cfd6; --deep:#f4f6f8; --muted:#8d97a3; --faint:#6c7682; --hair:#2a333d; --hair-strong:#3a4552;
-  --accent:#5b9aec; --accent-press:#7aaef0; --accent-ink:#0b1016; --accent-soft:#1a2a40;
-  --band:#0c1015; --band-2:#1a222b; --on-band:#ffffff; --on-band-soft:#a9b2bc; --band-accent:#7aaef0;
-  color-scheme:dark}}
 :root[data-theme="dark"]{
   --canvas:#12171d; --soft:#171d24; --card:#1b222a; --strong:#232b34;
   --ink:#eef1f4; --body:#c9cfd6; --deep:#f4f6f8; --muted:#8d97a3; --faint:#6c7682; --hair:#2a333d; --hair-strong:#3a4552;
@@ -312,7 +306,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
     <li><a class="l" href="#profile">프로필</a></li>
     <li><a class="l" href="#map">역량 맵</a></li>
     <li><a class="l" href="#projects">프로젝트</a></li>
-    <li><a class="l" href="#combat">전투 · 수치</a></li>
+    <li><a class="l" href="#combat">밸런스</a></li>
     <li><a class="l" href="#lead">리딩</a></li>
     <li><a class="l" href="#earlier">이전 프로젝트</a></li>
     <li><a class="l" href="#contact">연락처</a></li>
@@ -345,7 +339,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
         <p>코어 시스템 설계, 콘텐츠, 밸런스, 라이브 서비스 운영 경험</p>
         <p>18년간 전투 밸런스와 코어 시스템 설계를 맡아 왔습니다. MMORPG, 수집형 RPG, 퍼즐 장르의 시스템을 설계했고, 런칭 이후에는 지표를 근거로 라이브 업데이트를 운영했습니다.</p>
         <p>6인 이하의 소규모 팀부터 30인 이상의 조직까지 리드했습니다. 리드할 때도 일정·업무 조율과 함께 핵심 실무를 직접 맡습니다.</p>
-        <p>반복 작업을 절차로 문서화해 AI에게 맡기고, 최종 판단은 직접 하는 방식으로 일합니다. Claude Code로 사내 프로젝트를 기획부터 출시까지 1인 개발했습니다.</p>
+        <p>반복 작업을 절차로 문서화해 AI에게 맡기고, 최종 판단은 직접 하는 방식으로 일합니다.</p>
       </div>
       <dl class="facts rv">
         <div><dt>Focus</dt><dd>전투·수치 · 코어 시스템</dd></div>
@@ -387,7 +381,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
       <div><div class="label">Project 01 · 2022.04 — 2026.06</div></div>
       <div>
         <h3>DoubleuGames</h3>
-        <p class="sum">Sort Master: Asian Kitchen 1인 개발 런칭, 그리고 LeonOut · Goldville Spin &amp; Build · Dessert Bliss Sorting Puzzle · Block Wonder Magic Puzzle 등 8종의 게임 시스템 설계와 개발 리드, 서비스 런칭</p>
+        <p class="sum">퍼즐·캐주얼 8종 메인 시스템 기획과 개발 리딩</p>
         <p class="cap tags">퍼즐 · 캐주얼 모바일 · 글로벌 서비스 · 메인 시스템 기획 · 개발 리드</p>
       </div>
     </div>
@@ -434,7 +428,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
       </div>
       <div class="footnote">
         <div><b>출시 후 확인 지표</b> · CPI · ROAS · 리텐션 · 스테이지 플레이 타임 · 세션 타임</div>
-        <div>D1 48%: 초기 빌드에서 추가 난이도 조정 없이 기록한 수치</div>
+        <div>D1 48%: 초기 빌드, 추가 난이도 조정 없이 기록. 페이스북 테크마케팅으로 D7 리텐션 38%를 확보한 뒤 AOS·iOS 마케팅을 시작한 시점의 수치</div>
       </div>
     </div>
   </article>
@@ -451,7 +445,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
     </div>
     <div class="cells">
       <div><span class="n">01</span><b>전투 수식</b><p>스킬 피해 → 속성·등급·종족 배율 → 상성 → 피해 편차 → 치명타로 이어지는 계층형 데미지 구조, 5속성 상성</p></div>
-      <div><span class="n">02</span><b>PVE 전투 밸런스</b><p>클래스 5종 DPS · 유저 HPS 모델로 필드 보스 · 월드 보스 · 던전의 전투 시간과 생존 압박 설계 <a href="#combat" style="color:var(--accent)">→ 전투 · 수치</a></p></div>
+      <div><span class="n">02</span><b>PVE 전투 밸런스</b><p>클래스 5종 DPS · 유저 HPS 모델로 필드 보스 · 월드 보스 · 던전의 전투 시간과 생존 압박 설계 <a href="#combat" style="color:var(--accent)">→ 밸런스</a></p></div>
       <div><span class="n">03</span><b>전투 구조</b><p>콘텐츠별 데미지 압축 · 제한 보정 구조 설계</p></div>
       <div><span class="n">04</span><b>보스 전투 패턴</b><p>루아 스크립트 기반 PVE 보스 패턴 설계</p></div>
       <div><span class="n">05</span><b>성장 던전</b><p>메타 성장 콘텐츠 기획</p></div>
@@ -468,7 +462,8 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
       <div><div class="label">Project 03 · 2016.12 — 2019.02</div></div>
       <div>
         <h3>서머너즈워 크로니클</h3>
-        <p class="sum">MMORPG 서머너즈워 크로니클의 전투, 월드, 퀘스트, 아이템, 캐릭터, 성장, 전투 수식과 AI 시스템 설계, 그리고 프로토타입 개발</p>
+        <p class="sum">코어 전투 시스템 설계</p>
+        <p style="margin-top:10px;max-width:44em">메인 전투 시스템 기획 리드. 전투 플로우, 몬스터 AI, 성장 시스템 설계, MMORPG 필드 맵·레벨 디자인 기획 리드</p>
         <p class="cap tags">모바일 MMORPG · 컴투스 · 코어 시스템 설계 · 전투 기획 리드</p>
       </div>
     </div>
@@ -494,7 +489,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
 
 <section class="sec alt" id="combat"><div class="wrap">
   <div class="sec-head">
-    <div><div class="label">Skill 01 · 전투 · 수치</div></div>
+    <div><div class="label">Balance · 밸런스</div></div>
     <div>
       <h2>계산, 실측, 라이브 데이터로 검증하고 보정하는 밸런스</h2>
       <p class="desc">넷마블 네오 · 제2의 나라 · 2차 QA (2020.12 — 2021.02) · 라이브 에피소드 2 하드 (2021.08) · 전투 밸런스 담당</p>
@@ -574,7 +569,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   <div class="split" style="margin-bottom:56px">
     <div><div class="label" style="color:var(--muted)">리드 이력</div></div>
     <div class="decide four rv" style="margin-top:0">
-      <div><div class="k">StudioG9 · 2015 — 2016</div><b>30인 이상 조직</b><p>기획 팀장 · 히어로즈 제네시스 개발 조직의 일정과 업무 조율</p></div>
+      <div><div class="k">StudioG9 · 2015 — 2016</div><b>30인 이상 조직</b><p>기획 팀장 · PD 역할 병행 · 히어로즈 제네시스</p></div>
       <div><div class="k">EK GAMES · 2014</div><b>6개월 런칭</b><p>프로젝트 리드 · 네모네모 로사 시스템 설계부터 밸런싱까지</p></div>
       <div><div class="k">넷마블 네오 · 2020</div><b>기획 5명</b><p>정예던전 · 3주가 되지 않아 개발 단계로 넘김</p></div>
       <div><div class="k">DoubleuGames · 2022 — 2023</div><b>실무 5명</b><p>AI War · 코어 재구축 후 런칭</p></div>
