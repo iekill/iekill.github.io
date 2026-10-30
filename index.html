@@ -833,7 +833,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   </div>
 
   <div class="sub">
-    <span class="label">03 · 출시 후 · 라이브 보정</span>
+    <div class="sub-h"><span class="label">03 · 출시 후 · 라이브 보정</span><button class="wk-btn" type="button" data-work="b03" aria-haspopup="dialog">작업물 보기</button></div>
     <div class="box rv">
       <div class="dec-h"><p>에피소드 2 하드 · 1서버 상위 랭커(직업별 200인) 전투력 10분위</p><div class="seg" role="group" aria-label="진입 기준"><button type="button" data-th="98" aria-pressed="false">1안 98만</button><button type="button" data-th="52.6" aria-pressed="false">최종 52.6만</button></div></div>
       <div class="deciles pre" id="deciles" role="img" aria-label="전투력 10분위: 64만부터 174만. 1안 진입 기준 98만, 최종 진입 기준 52.6만"></div>
@@ -1191,6 +1191,7 @@ document.querySelectorAll('#ni .cells, #swc .cells').forEach(grid => {
 
 // 작업물 팝업: 원본 기획서 장면 (회사 머리글·대외비 표시 제거)
 const WORKS={
+  b03:{k:'제2의 나라 · 밸런스 · 라이브 보정',t:'에피소드 2 하드 진입 기준 조정',src:'에피2_하드모드_기준투력 · 2021.08.23',f:[['b03_sheet','10분위 분포와 단계별 권장 투력','1서버 직업별 랭크 200인 평균 투력의 10분위 분포를 근거로 1안 → 2안 → 최종본 순으로 하드 단계 권장 투력과 입장 제한(70%)을 조정']]},
   b02:{k:'제2의 나라 · 밸런스 · 실측',t:'보스별 처치 시간 실측',src:'테스트_몬스터 체력 20210120 · 2021.01',f:[['b02_sheet','처치 시간 3회 측정','보스별 체력 · 기준 전투력 · 레벨에서 3회 처치 시간을 재고 평균을 기록, 미측정 보스는 테스트 필요로 관리']]},
   b01:{k:'제2의 나라 · 밸런스 · 계산',t:'몬스터 공격력 역산과 클래스별 DPS',src:'00_던전 밸런스 시트 · Battle_골드던전 · DB_User_DPS · 2021 — 2022',f:[['c02_monatk','몬스터 공격력 역산','공격자 체력 · HPS · 공격 인원과 목표 전투 시간, 기준 방어율로 단계별 공격력과 DPS 산출'],['c02_dps','클래스별 DPS 모델','레벨 · 스킬 레벨에 따른 클래스 5종의 속성별 DPS와 평균 DPS']]},
   c01:{k:'제2의 나라 · 전투 수식',t:'전투 수식 정의',src:'00_던전 밸런스 시트 · 전투 수식 · 2021 — 2022',f:[['c01_formula','단계별 피해 계산','최종 피해 → 1차 피해(공격력 · 방어율) → 속성 공방 순으로 Factor와 수식, 참조 OperationType 정의']]},
