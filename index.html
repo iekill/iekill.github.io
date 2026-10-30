@@ -142,7 +142,8 @@ table{border-collapse:collapse;width:100%}
 
 /* AI 운영 방식: 항목 선택 → 도식 + 활용 · 결과 */
 .ops-h{color:var(--muted);margin-top:40px;display:block}
-.ops-track.scrolly .ops{position:sticky;top:76px}
+.ops-track.scrolly .ops-pin{position:sticky;top:76px;height:calc(100vh - 76px);display:flex;flex-direction:column;justify-content:center}
+.ops-track.scrolly .ops-h{margin-top:0}
 .ops{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);margin-top:14px;border:1px solid var(--hair);background:var(--canvas)}
 .ops-list{display:flex;flex-direction:column;border-right:1px solid var(--hair)}
 .ops-list .op{flex:1 1 0;align-content:center;transition:flex-grow .45s ease,background .3s ease,border-color .3s ease}
@@ -469,8 +470,9 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
         <div><div class="v num">250<small>개</small></div><div class="k">스테이지 (직접 50 + AI 200)</div></div>
         <div><div class="v num">48<small>%</small></div><div class="k">초기 빌드 D1 잔존율</div></div>
       </div>
-      <div class="label ops-h">AI 운영 방식 · 항목을 고르면 활용 방식과 결과가 나옵니다</div>
       <div class="ops-track" id="opsTrack">
+      <div class="ops-pin">
+      <div class="label ops-h">AI 운영 방식 · 항목을 고르면 활용 방식과 결과가 나옵니다</div>
       <div class="ops" id="ops">
         <div class="ops-list" role="tablist" aria-label="AI 운영 방식" aria-orientation="vertical">
           <button class="op" type="button" role="tab" id="op-t1" aria-controls="op-p1" aria-selected="true"><span class="n">01</span><span><b>작업 지침 표준화</b><span class="d">UI 제작, SDK·결제 점검, 리소스 관리를 절차로 문서화해 AI에게 맡김</span></span></button>
@@ -519,6 +521,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
             </dl>
           </div>
         </div>
+      </div>
       </div>
       </div>
       <div class="footnote">
@@ -910,27 +913,25 @@ if(!reduce&&'IntersectionObserver'in window){
   io.observe($('ops'));
 }
 
-// 스크롤 연동: PC에서 블록 아래쪽을 화면 하단에 맞춰 고정하고, 스크롤 위치로 항목을 넘김
-// (아래에 남는 스크롤 구간이 화면에 보이지 않게)
-const track=$('opsTrack'),opsBox=$('ops'),TOP=76;
-let step=0,cur=0,stick=TOP;
+// 스크롤 연동: PC에서 화면 높이만큼의 영역을 고정하고(블록은 제자리), 스크롤 위치로 항목을 넘김
+const track=$('opsTrack'),pin=track.querySelector('.ops-pin'),TOP=76;
+let step=0,cur=0;
 function layoutOps(){
-  const on=innerWidth>900&&opsBox.offsetHeight+TOP+16<innerHeight;
+  track.classList.remove('scrolly');track.style.height='';
+  const on=innerWidth>900&&pin.offsetHeight+TOP+32<innerHeight;
   track.classList.toggle('scrolly',on);
   step=on?Math.round(innerHeight*.45):0;
-  stick=Math.max(TOP,innerHeight-opsBox.offsetHeight-24);
-  opsBox.style.top=on?stick+'px':'';
-  track.style.height=on?(opsBox.offsetHeight+step*(ops.length-1))+'px':'';
+  track.style.height=on?(innerHeight-TOP+step*(ops.length-1))+'px':'';
   syncOps();
 }
 function syncOps(){
   if(!step)return;
-  const i=Math.max(0,Math.min(ops.length-1,Math.round((stick-track.getBoundingClientRect().top)/step)));
+  const i=Math.max(0,Math.min(ops.length-1,Math.round((TOP-track.getBoundingClientRect().top)/step)));
   if(i!==cur){cur=i;sel(i)}
 }
 ops.forEach((b,i)=>b.addEventListener('click',()=>{
   cur=i;
-  if(step)scrollTo({top:scrollY+track.getBoundingClientRect().top-stick+i*step,behavior:reduce?'auto':'smooth'});
+  if(step)scrollTo({top:scrollY+track.getBoundingClientRect().top-TOP+i*step,behavior:reduce?'auto':'smooth'});
 }));
 addEventListener('scroll',syncOps,{passive:true});
 addEventListener('resize',layoutOps);
