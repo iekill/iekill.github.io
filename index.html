@@ -441,6 +441,25 @@ dialog.work[open]::backdrop{animation:fade .35s ease}
 .curve .pt{fill:var(--accent)}
 .curve text{font-family:var(--f);font-size:11px;fill:var(--muted)}
 /* 밸런스 03: 1안 / 최종 전환 */
+.msg{font-size:clamp(18px,2.2vw,22px);line-height:1.4;margin:0}
+.pjr{margin:14px 0 22px;display:grid;border-top:1px solid var(--hair-strong)}
+.pjr > div{display:grid;grid-template-columns:56px minmax(0,1fr);gap:14px;padding:12px 0;border-bottom:1px solid var(--hair)}
+.pjr dt{font-weight:700;font-size:12px;letter-spacing:.12em;color:var(--accent);padding-top:2px}
+.pjr dd{margin:0;font-size:15px;color:var(--body)}
+.spread{width:100%;height:auto;margin-top:8px;overflow:visible}
+.spread text{font-family:var(--f);font-size:12px;fill:var(--muted)}
+.spread text.rl{fill:var(--ink);font-weight:700;font-size:13px}
+.spread text.hv{fill:var(--ink);font-weight:700}
+.spread text.bad{fill:#e5795f;font-weight:700}
+.spread .trk{fill:var(--strong)}
+.spread .no{fill:#e5795f;opacity:.28}
+.spread .rng{fill:var(--accent);opacity:.22}
+.spread .dot{stroke:var(--canvas);stroke-width:2;transition:cx .5s ease}
+.spread .dot.ok{fill:var(--accent)}
+.spread .dot.ng{fill:#e5795f}
+.spread .tk{stroke:var(--accent);stroke-width:2}
+.spread .gl{stroke:var(--accent);stroke-dasharray:4 4;opacity:.8}
+.spread .ax{stroke:var(--hair-strong)}
 .lad-h{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;margin-top:22px;padding-top:14px;border-top:1px solid var(--hair)}
 .ladder{display:grid;gap:5px;margin-top:10px}
 .ladder .lr{display:grid;grid-template-columns:150px minmax(0,1fr) 54px;gap:12px;align-items:center;font-size:13px;transition:opacity .35s}
@@ -879,7 +898,16 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   <div class="sub">
     <div class="sub-h"><span class="label">03 · 출시 후 · 라이브 보정</span><button class="wk-btn" type="button" data-work="b03" aria-haspopup="dialog">작업물 보기</button></div>
     <div class="box rv">
-      <div class="dec-h"><p>에피소드 2 하드 · 1서버 상위 랭커(직업별 200인) 전투력 10분위</p><div class="seg" role="group" aria-label="하드 단계 안"><button type="button" data-p="0" aria-pressed="false">1안</button><button type="button" data-p="1" aria-pressed="false">2안</button><button type="button" data-p="2" aria-pressed="false">최종본</button><button type="button" data-p="3" aria-pressed="false">최종</button></div></div>
+      <h4 class="msg">라이브 투력 분포 기반 하드 모드 진입 기준 재설계</h4>
+      <dl class="pjr">
+        <div><dt>문제</dt><dd>상위 랭커끼리도 투력 편차가 290.9% (59.9만 ~ 174.3만). 1안 기준 98만이면 10개 분위 중 8개가 하드 1단계에 진입할 수 없음</dd></div>
+        <div><dt>판단</dt><dd>편차 폭에 맞춰 하위 2단계를 새로 두고, 상위 3단계 기준도 낮춤</dd></div>
+        <div><dt>결과</dt><dd>모든 분위가 1단계에 진입하고, 상위 단계는 7 · 2 · 1 · 1개 분위만 도달하는 도전 구간으로 유지</dd></div>
+      </dl>
+      <div class="dec-h"><p class="cap">에피소드 2 하드 · 1서버 상위 랭커(직업별 200인) 투력 · 안을 바꿔 비교</p><div class="seg" role="group" aria-label="하드 단계 안"><button type="button" data-p="0" aria-pressed="false">1안</button><button type="button" data-p="1" aria-pressed="false">2안</button><button type="button" data-p="2" aria-pressed="false">최종본</button><button type="button" data-p="3" aria-pressed="false">최종</button></div></div>
+      <div class="lad-h" style="border-top:0;margin-top:14px;padding-top:0"><span class="cap">투력 편차와 하드 단계 범위</span><span class="cap" id="spreadSum"></span></div>
+      <svg class="spread" id="spread" viewBox="0 0 800 200" role="img" aria-label="상위 랭커 투력 분포와 선택한 안의 하드 단계 권장 투력 범위"></svg>
+      <div class="lad-h" style="margin-top:18px"><span class="cap">분위별 투력과 단계 기준선</span></div>
       <div class="deciles pre" id="deciles" role="img" aria-label="전투력 10분위 64만부터 174만과 하드 단계 권장 투력"></div>
       <div class="dx" id="dx"></div>
       <div class="lad-h"><span class="cap">하드 단계별 권장 투력에 도달하는 분위</span><span class="cap" id="ladSum"></span></div>
@@ -891,7 +919,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
         <div><div class="k">제한</div><b>입장 제한</b><p>권장 전투력 70%</p></div>
       </div>
     </div>
-    <p class="src">「M4 밸런스」 필드보스 시트, 「던전 밸런스」 ver1.0 — 7.1, 「테스트_몬스터 체력」(2021.01.20), 「에피2_하드모드_기준투력」(2021.08.23) 재구성</p>
+    <p class="src">「던전 밸런스」 ver1.0 — 7.1, 「테스트_몬스터 체력」(2021.01.20), 「에피2_하드모드_기준투력」(2021.08.23) 재구성</p>
   </div>
 
 </div></section>
@@ -1434,6 +1462,27 @@ addEventListener('scroll',onScroll,{passive:true});onScroll();
     {n:'최종본',t:[565000,718000,980000,1160000,1410000],m:'하위 2단계를 56.5만 · 71.8만으로 조정'},
     {n:'최종',t:[526000,718000,957000,1100000,1360000],m:'1단계 52.6만, 상위 3단계도 95.7만 · 110만 · 136만으로 낮춰 확정'}];
   const cells=[...$('deciles').querySelectorAll('.c')],btns=[...document.querySelectorAll('.seg button')];
+  // 편차 차트: 위 줄은 상위 랭커 분포(최소~최대와 10분위 점), 아래 줄은 선택한 안의 하드 단계 범위
+  const SMIN=599401,SMAX=1743439;
+  function drawSpread(p){
+    const t=p.t,W=800,L=118,R=24,A0=450000,A1=1850000,x=v=>L+(v-A0)/(A1-A0)*(W-L-R),yA=58,yB=138;
+    const m=v=>(v/10000).toFixed(1).replace(/\.0$/,'')+'만';
+    const below=DV.filter(d=>d<t[0]).length;
+    let g='<text class="rl" x="0" y="'+(yA+4)+'">상위 랭커 분포</text><text class="rl" x="0" y="'+(yB+4)+'">하드 단계 · '+p.n+'</text>';
+    g+='<rect class="trk" x="'+x(SMIN)+'" y="'+(yA-6)+'" width="'+(x(SMAX)-x(SMIN))+'" height="12"/>';
+    if(t[0]>SMIN)g+='<rect class="no" x="'+x(SMIN)+'" y="'+(yA-6)+'" width="'+(x(Math.min(t[0],SMAX))-x(SMIN))+'" height="12"/>';
+    g+='<text x="'+x(SMIN)+'" y="'+(yA-16)+'" text-anchor="middle">최소 '+m(SMIN)+'</text><text x="'+x(SMAX)+'" y="'+(yA-16)+'" text-anchor="middle">최대 '+m(SMAX)+'</text>';
+    g+='<text class="hv" x="'+((x(SMIN)+x(SMAX))/2)+'" y="'+(yA-16)+'" text-anchor="middle">편차율 290.9%</text>';
+    DV.forEach(d=>{g+='<circle class="dot '+(d>=t[0]?'ok':'ng')+'" r="6" cx="'+x(d)+'" cy="'+yA+'"/>'});
+    if(below)g+='<text class="bad" x="'+x(SMIN)+'" y="'+(yA+26)+'">1단계 아래 '+below+'개 분위</text>';
+    g+='<line class="gl" x1="'+x(t[0])+'" x2="'+x(t[0])+'" y1="'+(yA+8)+'" y2="'+(yB-8)+'"/>';
+    g+='<rect class="rng" x="'+x(t[0])+'" y="'+(yB-6)+'" width="'+(x(t[t.length-1])-x(t[0]))+'" height="12"/>';
+    t.forEach((v,j)=>{g+='<line class="tk" x1="'+x(v)+'" x2="'+x(v)+'" y1="'+(yB-11)+'" y2="'+(yB+11)+'"/><text class="hv" x="'+x(v)+'" y="'+(yB-16)+'" text-anchor="middle">'+(j+1)+'</text><text x="'+x(v)+'" y="'+(yB+28)+'" text-anchor="middle">'+m(v)+'</text>'});
+    g+='<line class="ax" x1="'+L+'" x2="'+(W-R)+'" y1="190" y2="190"/>';
+    for(const v of [500000,1000000,1500000])g+='<line class="ax" x1="'+x(v)+'" x2="'+x(v)+'" y1="186" y2="194"/><text x="'+x(v)+'" y="'+(yB+56)+'" text-anchor="middle" style="display:none">'+m(v)+'</text>';
+    $('spread').innerHTML=g;
+    $('spreadSum').textContent=below?'1단계 기준 '+m(t[0])+' · 분포의 '+below+'0%가 기준 아래':'1단계 기준 '+m(t[0])+' · 분포 전체가 기준 이상';
+  }
   const man=v=>(v/10000).toFixed(v%10000?1:0).replace(/\.0$/,'')+'만';
   let touched=false,timers=[];
   function setPlan(k){
@@ -1446,6 +1495,7 @@ addEventListener('scroll',onScroll,{passive:true});onScroll();
     $('ladSum').textContent='1단계 진입 '+first+'/10 분위';
     btns.forEach((b,j)=>b.setAttribute('aria-pressed',j===k));
     $('decRes').textContent=p.n+' · '+p.m;
+    drawSpread(p);
   }
   btns.forEach((b,j)=>b.addEventListener('click',()=>{touched=true;timers.forEach(clearTimeout);setPlan(j)}));
   setPlan(3);
