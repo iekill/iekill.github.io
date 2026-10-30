@@ -926,11 +926,16 @@ fig($('fig2'),g=>{
   [...tiles].sort((a,b)=>(a.x+a.y)-(b.x+b.y)).forEach(t=>g.box(t.x-28,t.y-28,0,56,56,12,'tile t'+t.i));
   tiles.forEach(t=>{const p=P(t.x,t.y,12);g.text(p,t.n[0],'tlab tn t'+t.i,-40);g.text(p,t.n[1],'tlab t'+t.i,-26)});
 });
-// 타일 순차 점등: 한 칸씩 켜졌다 꺼지며 순환
-if(!reduce){
-  const groups=[0,1,2,3,4].map(i=>$('fig2').querySelectorAll('.t'+i));
-  let lit=0;groups[0].forEach(e=>e.classList.add('lit'));
-  setInterval(()=>{groups[lit].forEach(e=>e.classList.remove('lit'));lit=(lit+1)%5;groups[lit].forEach(e=>e.classList.add('lit'))},1300);
+// 타일 누적 점등: 02 패널이 열릴 때마다 모두 꺼진 상태에서 한 칸씩 켜고, 다섯 칸이 다 켜지면 그대로 유지
+const fig2Groups=[0,1,2,3,4].map(i=>$('fig2').querySelectorAll('.t'+i));
+let fig2Timer=0;
+function playFig2(){
+  clearTimeout(fig2Timer);
+  fig2Groups.forEach(g=>g.forEach(e=>e.classList.remove('lit')));
+  if(reduce){fig2Groups.forEach(g=>g.forEach(e=>e.classList.add('lit')));return}
+  let k=0;
+  const next=()=>{fig2Groups[k].forEach(e=>e.classList.add('lit'));if(++k<5)fig2Timer=setTimeout(next,600)};
+  fig2Timer=setTimeout(next,900);
 }
 // FIG 1.3 규칙 → 생성 → 완성, 완성에서 거꾸로 리뷰
 fig($('fig3'),g=>{
@@ -963,7 +968,7 @@ fig($('fig4'),g=>{
 const ops=[...document.querySelectorAll('.op')];
 function redraw(p){if(reduce)return;const f=p.querySelector('.fig');f.classList.remove('draw');void f.getBoundingClientRect();f.classList.add('draw')}
 function sel(i,focus){
-  ops.forEach((b,j)=>{const on=i===j,p=$(b.getAttribute('aria-controls'));b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;p.classList.toggle("on",on);p.inert=!on;on?p.removeAttribute("aria-hidden"):p.setAttribute("aria-hidden","true");if(on)redraw(p)});
+  ops.forEach((b,j)=>{const on=i===j,p=$(b.getAttribute('aria-controls'));b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;p.classList.toggle("on",on);if(on&&j===1)playFig2();p.inert=!on;on?p.removeAttribute("aria-hidden"):p.setAttribute("aria-hidden","true");if(on)redraw(p)});
   if(focus)ops[i].focus();
 }
 ops.forEach((b,i)=>{
