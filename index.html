@@ -366,6 +366,13 @@ dialog.work[open]::backdrop{animation:fade .35s ease}
 .model-out .big{font-weight:700;font-size:clamp(40px,5vw,56px);line-height:1;color:var(--ink)}
 .curve{width:100%;height:auto;margin-top:8px;overflow:visible}
 .curve .ax{stroke:var(--hair-strong);stroke-width:1}
+.curve .ref{fill:none;stroke:var(--muted);stroke-width:1.2;stroke-dasharray:4 4;opacity:.7}
+.curve text.lg{font-size:10px}
+.comp{position:relative;background:var(--strong)}
+.comp-h b small{font-size:12px;margin-left:6px}
+.comp-h b small.up{color:#e5795f}
+.comp-h b small.dn{color:#5fbf8a}
+.comp .refmark{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--ink);opacity:.6}
 .curve .bar{fill:var(--accent);opacity:.26;transition:opacity .25s}
 .curve .bar.on{opacity:.7}
 .curve .area{fill:url(#mGrad)}
@@ -373,7 +380,7 @@ dialog.work[open]::backdrop{animation:fade .35s ease}
 .comp-h{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px}
 .comp-h b{font-size:15px;color:var(--ink)}
 .comp{display:flex;gap:2px;height:16px;margin-top:6px}
-.comp span{display:block;min-width:2px;transition:flex-grow .35s ease}
+.comp span{display:block;flex:none}
 .comp span:nth-child(1){background:var(--accent)}
 .comp span:nth-child(2){background:color-mix(in srgb,var(--accent) 60%,transparent)}
 .comp span:nth-child(3){background:color-mix(in srgb,var(--accent) 30%,transparent)}
@@ -1261,29 +1268,46 @@ addEventListener('scroll',onScroll,{passive:true});onScroll();
   const P=[['hp','공격자 체력',30000,5000,200000,1000,v=>v.toLocaleString()],['hps','공격자 HPS',1160,0,5000,10,v=>v.toLocaleString()],['n','공격 인원',5,1,10,1,v=>v+'명'],['pot','물약 회복',0,0,20000,500,v=>v.toLocaleString()],['t','전투 시간',10,3,60,1,v=>v+'초'],['dr','기준 방어율',60,0,90,1,v=>v+'%'],['adj','보정값',0,-50,100,1,v=>(v>0?'+':'')+v+'%']];
   const st={};P.forEach(p=>st[p[0]]=p[2]);
   $('mCtrls').innerHTML=P.map(([k,l,v,a,b,s])=>'<label><span class="row"><span>'+l+'</span><b id="mv_'+k+'"></b></span><input type="range" min="'+a+'" max="'+b+'" step="'+s+'" value="'+v+'" data-k="'+k+'" aria-label="'+l+'"></label>').join('');
-  const atkAt=t=>((st.hp+st.hps*st.n+st.pot)/(t*(1-st.dr/100)))*(1+st.adj/100);
+  const atkWith=(p,t)=>((p.hp+p.hps*p.n+p.pot)/(t*(1-p.dr/100)))*(1+p.adj/100);
+  const atkAt=t=>atkWith(st,t);
+  const poolOf=p=>p.hp+p.hps*p.n+p.pot;
+  const REF={...st},shown={...st};
   const svg=$('mCurve'),W=400,H=230,L=44,B=26,T0=3,T1=60;
   const kfmt=v=>v>=10000?(v/1000).toFixed(0)+'k':Math.round(v).toLocaleString();
+  // 축 상한: 초기값 기준을 2배씩만 늘리거나 줄여서, 값이 바뀌면 곡선이 실제로 오르내림
+  const ladder=(need,base)=>{let top=base;while(need>top)top*=2;while(top/2>=need&&top/2>=base)top/=2;return top};
+  const yBase=atkWith(REF,T0)*2.2,pBase=poolOf(REF)*2.2;
+  let topY=yBase,topP=pBase,tw=0;
   function draw(){
-    const a=atkAt(st.t),ymax=atkAt(T0)*1.05,x=t=>L+(t-T0)/(T1-T0)*(W-L-8),y=v=>H-B-(v/ymax)*(H-B-8);
-    let d='';for(let t=T0;t<=T1;t+=.5)d+=(d?'L':'M')+x(t).toFixed(1)+' '+y(atkAt(t)).toFixed(1);
-    const area=d+'L'+x(T1)+' '+(H-B)+'L'+x(T0)+' '+(H-B)+'Z';
-    // 3초 간격 막대: 각 전투 시간에서 필요한 공격력, 현재 시간과 가장 가까운 막대를 강조
-    const bw=(W-L-8)/20*.62,near=Math.round(st.t/3)*3;let bars='';
-    for(let t=T0;t<=T1;t+=3){const v=atkAt(t);bars+='<rect class="bar'+(t===near?' on':'')+'" x="'+(x(t)-bw/2).toFixed(1)+'" y="'+y(v).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+(H-B-y(v)).toFixed(1)+'"/>'}
-    let ticks='';for(let k=1;k<=3;k++){const v=ymax/3.15*k;ticks+='<line class="tk" x1="'+L+'" x2="'+(W-8)+'" y1="'+y(v).toFixed(1)+'" y2="'+y(v).toFixed(1)+'"/><text x="'+(L-6)+'" y="'+(y(v)+4).toFixed(1)+'" text-anchor="end">'+kfmt(v)+'</text>'}
+    const p=shown,a=atkWith(p,p.t),x=t=>L+(t-T0)/(T1-T0)*(W-L-8),y=v=>H-B-Math.min(1,v/topY)*(H-B-8);
+    const path=q=>{let d='';for(let t=T0;t<=T1;t+=.5)d+=(d?'L':'M')+x(t).toFixed(1)+' '+y(atkWith(q,t)).toFixed(1);return d};
+    const d=path(p),area=d+'L'+x(T1)+' '+(H-B)+'L'+x(T0)+' '+(H-B)+'Z';
+    const bw=(W-L-8)/20*.62,near=Math.round(p.t/3)*3;let bars='';
+    for(let t=T0;t<=T1;t+=3){const v=atkWith(p,t);bars+='<rect class="bar'+(t===near?' on':'')+'" x="'+(x(t)-bw/2).toFixed(1)+'" y="'+y(v).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+(H-B-y(v)).toFixed(1)+'"/>'}
+    let ticks='';for(let k=1;k<=3;k++){const v=topY/3.15*k;ticks+='<line class="tk" x1="'+L+'" x2="'+(W-8)+'" y1="'+y(v).toFixed(1)+'" y2="'+y(v).toFixed(1)+'"/><text x="'+(L-6)+'" y="'+(y(v)+4).toFixed(1)+'" text-anchor="end">'+kfmt(v)+'</text>'}
     let xt='';for(const t of [10,20,30,40,50])xt+='<text x="'+x(t)+'" y="'+(H-8)+'" text-anchor="middle">'+t+'</text>';
     svg.innerHTML='<defs><linearGradient id="mGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--accent)" stop-opacity=".32"/><stop offset="1" stop-color="var(--accent)" stop-opacity="0"/></linearGradient></defs>'
       +ticks+bars+'<path class="area" d="'+area+'"/>'
+      +'<path class="ref" d="'+path(REF)+'"/>'
       +'<line class="ax" x1="'+L+'" y1="'+(H-B)+'" x2="'+(W-8)+'" y2="'+(H-B)+'"/><line class="ax" x1="'+L+'" y1="4" x2="'+L+'" y2="'+(H-B)+'"/>'
-      +'<line class="gd" x1="'+x(st.t)+'" y1="'+y(a)+'" x2="'+x(st.t)+'" y2="'+(H-B)+'"/><line class="gd" x1="'+L+'" y1="'+y(a)+'" x2="'+x(st.t)+'" y2="'+y(a)+'"/>'
-      +'<path class="ln" d="'+d+'"/><circle class="pt" r="5" cx="'+x(st.t)+'" cy="'+y(a)+'"/>'
-      +'<text x="'+L+'" y="'+(H-8)+'" text-anchor="middle">'+T0+'</text>'+xt+'<text x="'+(W-8)+'" y="'+(H-8)+'" text-anchor="end">60초</text>';
-    // 깎아야 할 총량 구성
-    const parts=[['공격자 체력',st.hp],['HPS × 인원',st.hps*st.n],['물약 회복',st.pot]],tot=parts.reduce((p,q)=>p+q[1],0);
-    $('mPool').textContent=tot.toLocaleString();
-    $('mComp').innerHTML=parts.map(p=>'<span style="flex-grow:'+p[1]+'"></span>').join('');
-    $('mCompLg').innerHTML=parts.map(p=>'<span><i></i>'+p[0]+' '+p[1].toLocaleString()+'</span>').join('');
+      +'<line class="gd" x1="'+x(p.t)+'" y1="'+y(a)+'" x2="'+x(p.t)+'" y2="'+(H-B)+'"/><line class="gd" x1="'+L+'" y1="'+y(a)+'" x2="'+x(p.t)+'" y2="'+y(a)+'"/>'
+      +'<path class="ln" d="'+d+'"/><circle class="pt" r="5" cx="'+x(p.t)+'" cy="'+y(a)+'"/>'
+      +'<text x="'+L+'" y="'+(H-8)+'" text-anchor="middle">'+T0+'</text>'+xt+'<text x="'+(W-8)+'" y="'+(H-8)+'" text-anchor="end">60초</text>'
+      +'<text class="lg" x="'+(W-8)+'" y="14" text-anchor="end">점선 · 초기값</text>';
+    // 깎아야 할 총량: 고정 눈금 위에서 길이가 바뀜
+    const parts=[['공격자 체력',p.hp],['HPS × 인원',p.hps*p.n],['물약 회복',p.pot]],tot=poolOf(p),ref=poolOf(REF),diff=tot-ref;
+    $('mPool').innerHTML=Math.round(tot).toLocaleString()+(Math.abs(diff)>=1?' <small class="'+(diff>0?'up':'dn')+'">'+(diff>0?'+':'−')+Math.round(Math.abs(diff)).toLocaleString()+'</small>':'');
+    $('mComp').innerHTML=parts.map(q=>'<span style="width:'+(q[1]/topP*100).toFixed(2)+'%"></span>').join('')+'<i class="refmark" style="left:'+(ref/topP*100).toFixed(2)+'%"></i>';
+    $('mCompLg').innerHTML=parts.map(q=>'<span><i></i>'+q[0]+' '+Math.round(q[1]).toLocaleString()+'</span>').join('');
+  }
+  // 입력이 바뀌면 이전 값에서 새 값으로 0.35초 동안 보간해서 다시 그림
+  function animate(){
+    cancelAnimationFrame(tw);
+    const from={...shown},to={...st},fy=topY,ty=ladder(atkWith(st,T0)*1.05,yBase),fp=topP,tp=ladder(poolOf(st)*1.05,pBase),t0=performance.now(),D=reduce?0:350;
+    const step=now=>{const k=D?Math.min(1,(now-t0)/D):1,e=1-Math.pow(1-k,3);
+      for(const key in to)shown[key]=from[key]+(to[key]-from[key])*e;
+      topY=fy+(ty-fy)*e;topP=fp+(tp-fp)*e;draw();if(k<1)tw=requestAnimationFrame(step)};
+    tw=requestAnimationFrame(step);
   }
   function calc(){
     P.forEach(([k,,,,,,f])=>$('mv_'+k).textContent=f(st[k]));
@@ -1291,7 +1315,7 @@ addEventListener('scroll',onScroll,{passive:true});onScroll();
     $('mAtk').textContent=Math.round(a).toLocaleString();
     $('fxSub').textContent='= (('+st.hp.toLocaleString()+' + '+st.hps.toLocaleString()+' × '+st.n+' + '+st.pot.toLocaleString()+') ÷ ('+st.t+' × (1 − '+(st.dr/100).toFixed(2)+'))) × (1 + '+(st.adj/100).toFixed(2)+')';
     $('mNote').textContent='전투 시간을 '+st.t+'초에서 '+(st.t*2)+'초로 늘리면 '+Math.round(atkAt(st.t*2)).toLocaleString()+'으로 절반이 됩니다.';
-    draw();
+    animate();
   }
   $('mCtrls').addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;st[k]=+e.target.value;calc();
     document.querySelectorAll('.fx-main i').forEach(i=>i.classList.toggle('hot',i.dataset.v===k))});
