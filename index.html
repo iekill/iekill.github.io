@@ -366,6 +366,22 @@ dialog.work[open]::backdrop{animation:fade .35s ease}
 .model-out .big{font-weight:700;font-size:clamp(40px,5vw,56px);line-height:1;color:var(--ink)}
 .curve{width:100%;height:auto;margin-top:8px;overflow:visible}
 .curve .ax{stroke:var(--hair-strong);stroke-width:1}
+.curve .bar{fill:var(--accent);opacity:.26;transition:opacity .25s}
+.curve .bar.on{opacity:.7}
+.curve .area{fill:url(#mGrad)}
+.curve .tk{stroke:var(--hair);stroke-width:1}
+.comp-h{display:flex;justify-content:space-between;align-items:baseline;margin-top:14px}
+.comp-h b{font-size:15px;color:var(--ink)}
+.comp{display:flex;gap:2px;height:16px;margin-top:6px}
+.comp span{display:block;min-width:2px;transition:flex-grow .35s ease}
+.comp span:nth-child(1){background:var(--accent)}
+.comp span:nth-child(2){background:color-mix(in srgb,var(--accent) 60%,transparent)}
+.comp span:nth-child(3){background:color-mix(in srgb,var(--accent) 30%,transparent)}
+.comp-lg{display:flex;flex-wrap:wrap;gap:4px 14px;margin-top:6px;font-weight:400;font-size:12px;color:var(--muted)}
+.comp-lg i{display:inline-block;width:9px;height:9px;margin-right:5px;vertical-align:-1px}
+.comp-lg span:nth-child(1) i{background:var(--accent)}
+.comp-lg span:nth-child(2) i{background:color-mix(in srgb,var(--accent) 60%,transparent)}
+.comp-lg span:nth-child(3) i{background:color-mix(in srgb,var(--accent) 30%,transparent)}
 .curve .ln{fill:none;stroke:var(--accent);stroke-width:2}
 .curve .gd{stroke:var(--hair);stroke-dasharray:3 4}
 .curve .pt{fill:var(--accent)}
@@ -754,7 +770,10 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
           <div class="cap">몬스터 공격력</div>
           <div class="big num" id="mAtk">0</div>
           <p class="cap" id="mNote"></p>
-          <svg class="curve" id="mCurve" viewBox="0 0 400 180" role="img" aria-label="전투 시간에 따른 몬스터 공격력 곡선"></svg>
+          <div class="comp-h"><span class="cap">전투 시간 동안 깎아야 할 총량</span><b class="num" id="mPool"></b></div>
+          <div class="comp" id="mComp"></div>
+          <div class="comp-lg" id="mCompLg"></div>
+          <svg class="curve" id="mCurve" viewBox="0 0 400 230" role="img" aria-label="전투 시간에 따른 몬스터 공격력 곡선"></svg>
         </div>
       </div>
       <p class="cap" style="margin-top:14px">정해진 전투 시간 안에 파티의 체력과 회복량을 모두 깎으려면 몬스터 공격력이 얼마나 필요한지 역산합니다. 공식은 원본 시트 그대로이고, 입력값은 예시입니다.</p>
@@ -1243,14 +1262,28 @@ addEventListener('scroll',onScroll,{passive:true});onScroll();
   const st={};P.forEach(p=>st[p[0]]=p[2]);
   $('mCtrls').innerHTML=P.map(([k,l,v,a,b,s])=>'<label><span class="row"><span>'+l+'</span><b id="mv_'+k+'"></b></span><input type="range" min="'+a+'" max="'+b+'" step="'+s+'" value="'+v+'" data-k="'+k+'" aria-label="'+l+'"></label>').join('');
   const atkAt=t=>((st.hp+st.hps*st.n+st.pot)/(t*(1-st.dr/100)))*(1+st.adj/100);
-  const svg=$('mCurve'),W=400,H=180,L=36,B=24,T0=3,T1=60;
+  const svg=$('mCurve'),W=400,H=230,L=44,B=26,T0=3,T1=60;
+  const kfmt=v=>v>=10000?(v/1000).toFixed(0)+'k':Math.round(v).toLocaleString();
   function draw(){
     const a=atkAt(st.t),ymax=atkAt(T0)*1.05,x=t=>L+(t-T0)/(T1-T0)*(W-L-8),y=v=>H-B-(v/ymax)*(H-B-8);
     let d='';for(let t=T0;t<=T1;t+=.5)d+=(d?'L':'M')+x(t).toFixed(1)+' '+y(atkAt(t)).toFixed(1);
-    svg.innerHTML='<line class="ax" x1="'+L+'" y1="'+(H-B)+'" x2="'+W+'" y2="'+(H-B)+'"/><line class="ax" x1="'+L+'" y1="4" x2="'+L+'" y2="'+(H-B)+'"/>'
+    const area=d+'L'+x(T1)+' '+(H-B)+'L'+x(T0)+' '+(H-B)+'Z';
+    // 3초 간격 막대: 각 전투 시간에서 필요한 공격력, 현재 시간과 가장 가까운 막대를 강조
+    const bw=(W-L-8)/20*.62,near=Math.round(st.t/3)*3;let bars='';
+    for(let t=T0;t<=T1;t+=3){const v=atkAt(t);bars+='<rect class="bar'+(t===near?' on':'')+'" x="'+(x(t)-bw/2).toFixed(1)+'" y="'+y(v).toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+(H-B-y(v)).toFixed(1)+'"/>'}
+    let ticks='';for(let k=1;k<=3;k++){const v=ymax/3.15*k;ticks+='<line class="tk" x1="'+L+'" x2="'+(W-8)+'" y1="'+y(v).toFixed(1)+'" y2="'+y(v).toFixed(1)+'"/><text x="'+(L-6)+'" y="'+(y(v)+4).toFixed(1)+'" text-anchor="end">'+kfmt(v)+'</text>'}
+    let xt='';for(const t of [10,20,30,40,50])xt+='<text x="'+x(t)+'" y="'+(H-8)+'" text-anchor="middle">'+t+'</text>';
+    svg.innerHTML='<defs><linearGradient id="mGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--accent)" stop-opacity=".32"/><stop offset="1" stop-color="var(--accent)" stop-opacity="0"/></linearGradient></defs>'
+      +ticks+bars+'<path class="area" d="'+area+'"/>'
+      +'<line class="ax" x1="'+L+'" y1="'+(H-B)+'" x2="'+(W-8)+'" y2="'+(H-B)+'"/><line class="ax" x1="'+L+'" y1="4" x2="'+L+'" y2="'+(H-B)+'"/>'
       +'<line class="gd" x1="'+x(st.t)+'" y1="'+y(a)+'" x2="'+x(st.t)+'" y2="'+(H-B)+'"/><line class="gd" x1="'+L+'" y1="'+y(a)+'" x2="'+x(st.t)+'" y2="'+y(a)+'"/>'
       +'<path class="ln" d="'+d+'"/><circle class="pt" r="5" cx="'+x(st.t)+'" cy="'+y(a)+'"/>'
-      +'<text x="'+L+'" y="'+(H-6)+'">'+T0+'초</text><text x="'+(W-4)+'" y="'+(H-6)+'" text-anchor="end">'+T1+'초 · 전투 시간</text>';
+      +'<text x="'+L+'" y="'+(H-8)+'" text-anchor="middle">'+T0+'</text>'+xt+'<text x="'+(W-8)+'" y="'+(H-8)+'" text-anchor="end">60초</text>';
+    // 깎아야 할 총량 구성
+    const parts=[['공격자 체력',st.hp],['HPS × 인원',st.hps*st.n],['물약 회복',st.pot]],tot=parts.reduce((p,q)=>p+q[1],0);
+    $('mPool').textContent=tot.toLocaleString();
+    $('mComp').innerHTML=parts.map(p=>'<span style="flex-grow:'+p[1]+'"></span>').join('');
+    $('mCompLg').innerHTML=parts.map(p=>'<span><i></i>'+p[0]+' '+p[1].toLocaleString()+'</span>').join('');
   }
   function calc(){
     P.forEach(([k,,,,,,f])=>$('mv_'+k).textContent=f(st[k]));
