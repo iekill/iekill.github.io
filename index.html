@@ -773,13 +773,13 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   <div class="sub">
     <span class="label">03 · 출시 후 · 라이브 보정</span>
     <div class="box rv">
-      <div class="dec-h"><p>에피소드 2 하드 · 1서버 상위 랭커(직업별 200인) 전투력 10분위</p><div class="seg" role="group" aria-label="진입 기준"><button type="button" data-th="98" aria-pressed="false">1안 98만</button><button type="button" data-th="55" aria-pressed="false">최종 55만</button></div></div>
-      <div class="deciles pre" id="deciles" role="img" aria-label="전투력 10분위: 64만부터 174만. 1안 진입 기준 98만, 최종 진입 기준 55만"></div>
+      <div class="dec-h"><p>에피소드 2 하드 · 1서버 상위 랭커(직업별 200인) 전투력 10분위</p><div class="seg" role="group" aria-label="진입 기준"><button type="button" data-th="98" aria-pressed="false">1안 98만</button><button type="button" data-th="52.6" aria-pressed="false">최종 52.6만</button></div></div>
+      <div class="deciles pre" id="deciles" role="img" aria-label="전투력 10분위: 64만부터 174만. 1안 진입 기준 98만, 최종 진입 기준 52.6만"></div>
       <div class="dx" id="dx"></div>
-      <p class="result" id="decRes">1안 98만이면 10개 분위 중 8개가 진입 기준 미달 → 최종 55만</p>
+      <p class="result" id="decRes">1안 98만이면 10개 분위 중 8개가 진입 기준 미달 → 최종 52.6만</p>
       <div class="decide">
-        <div><div class="k">유지</div><b>상위 3단계</b><p>98만 · 116만 · 141만</p></div>
-        <div><div class="k">추가</div><b>하위 2단계</b><p>55만 · 70만</p></div>
+        <div><div class="k">추가</div><b>하위 2단계</b><p>52.6만 · 71.8만</p></div>
+        <div><div class="k">조정</div><b>상위 3단계</b><p>98만 · 116만 · 141만 → 95.7만 · 110만 · 136만</p></div>
         <div><div class="k">제한</div><b>입장 제한</b><p>권장 전투력 70%</p></div>
       </div>
     </div>
@@ -1176,7 +1176,7 @@ $('bossbars').innerHTML=BOSS.map(([n,lv,cp,t])=>`<div class="r"><div class="nm">
 const DEC=[64,67,71,74,77,81,86,92,106,174],DMAX=180;
 const pct=v=>(v/DMAX*100).toFixed(1)+'%';
 $('deciles').innerHTML=DEC.map(v=>`<div class="c" style="--h:${pct(v)}"><b></b><span class="num">${v}만</span></div>`).join('')
-  +`<div class="ln" data-th="98" style="bottom:${pct(98)}"><em>1안 98만</em></div><div class="ln fin" data-th="55" style="bottom:${pct(55)}"><em>최종 55만</em></div>`;
+  +`<div class="ln" data-th="98" style="bottom:${pct(98)}"><em>1안 98만</em></div><div class="ln fin" data-th="52.6" style="bottom:${pct(52.6)}"><em>최종 52.6만</em></div>`;
 $('dx').innerHTML=DEC.map((_,i)=>`<span>${i+1}분위</span>`).join('');
 
 // 등장 애니메이션: 첫 화면 밖 요소만
@@ -1273,12 +1273,12 @@ addEventListener('scroll',onScroll,{passive:true});onScroll();
     let n=0;cells.forEach((c,i)=>{const ok=DEC[i]>=th;c.classList.toggle('ok',ok);if(ok)n++});
     lines.forEach(l=>l.classList.toggle('on',+l.dataset.th===th));
     btns.forEach(b=>b.setAttribute('aria-pressed',+b.dataset.th===th));
-    $('decRes').textContent=th===98?'1안 98만 · 10개 분위 중 '+n+'개만 진입 가능, 8개가 진입 기준 미달':'최종 55만 · 10개 분위 모두 진입 가능. 상위 3단계는 유지하고 하위 2단계를 추가';
+    $('decRes').textContent=th===98?'1안 98만 · 10개 분위 중 '+n+'개만 진입 가능, 8개가 진입 기준 미달':'최종 52.6만 · 10개 분위 모두 진입 가능. 하위 2단계를 추가하고 상위 3단계는 낮춰 조정';
   }
   btns.forEach(b=>b.addEventListener('click',()=>{touched=true;setTh(+b.dataset.th)}));
-  setTh(55);
+  setTh(52.6);
   if(!reduce&&'IntersectionObserver'in window){
-    const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){o.disconnect();setTh(98);setTimeout(()=>{if(!touched)setTh(55)},2200)}}),{rootMargin:'0px 0px -35% 0px'});
+    const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){o.disconnect();setTh(98);setTimeout(()=>{if(!touched)setTh(52.6)},2200)}}),{rootMargin:'0px 0px -35% 0px'});
     o.observe($('deciles'));
   }
 }
