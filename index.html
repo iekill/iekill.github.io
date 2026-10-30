@@ -142,8 +142,9 @@ table{border-collapse:collapse;width:100%}
 
 /* AI 운영 방식: 항목 선택 → 도식 + 활용 · 결과 */
 .ops-h{color:var(--muted);margin-top:40px;display:block}
-.ops-track.scrolly .ops-pin{position:sticky;top:76px;height:calc(100vh - 76px);display:flex;flex-direction:column;justify-content:center}
-.ops-track.scrolly .ops-h{margin-top:0}
+.ops-track{margin-top:48px}
+.ops-track > .feature{margin-top:0}
+.ops-track.scrolly > .feature{position:sticky}
 .ops{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);margin-top:14px;border:1px solid var(--hair);background:var(--canvas)}
 .ops-list{display:flex;flex-direction:column;border-right:1px solid var(--hair)}
 .ops-list .op{flex:1 1 0;align-content:center;transition:flex-grow .45s ease,background .3s ease,border-color .3s ease}
@@ -460,6 +461,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
     </div>
     <div class="scope"><span class="chip">메인 시스템 설계</span><span class="chip">퍼즐 RPG 전투 시스템 · AI 로직 · 수치 밸런싱</span><span class="chip">개발 리드</span><span class="chip">스테이지·밸런스 툴 제작</span><span class="chip">광고·IAP 상품 기획</span><span class="chip">서비스 런칭</span></div>
 
+    <div class="ops-track" id="opsTrack">
     <div class="feature" id="sortmaster">
       <div class="label">대표 작업 · Sort Master: Asian Kitchen</div>
       <h4>AI를 팀원처럼 운영하는 1인 개발과 출시</h4>
@@ -470,8 +472,6 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
         <div><div class="v num">250<small>개</small></div><div class="k">스테이지 (직접 50 + AI 200)</div></div>
         <div><div class="v num">48<small>%</small></div><div class="k">초기 빌드 D1 잔존율</div></div>
       </div>
-      <div class="ops-track" id="opsTrack">
-      <div class="ops-pin">
       <div class="label ops-h">AI 운영 방식 · 항목을 고르면 활용 방식과 결과가 나옵니다</div>
       <div class="ops" id="ops">
         <div class="ops-list" role="tablist" aria-label="AI 운영 방식" aria-orientation="vertical">
@@ -522,12 +522,11 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
           </div>
         </div>
       </div>
-      </div>
-      </div>
       <div class="footnote">
         <div><b>출시 후 확인 지표</b> · CPI · ROAS · 리텐션 · 스테이지 플레이 타임 · 세션 타임</div>
         <div>D1 48%: 초기 빌드, 추가 난이도 조정 없이 기록. 페이스북 테크마케팅으로 D7 리텐션 38%를 확보한 뒤 AOS·iOS 마케팅을 시작한 시점의 수치</div>
       </div>
+    </div>
     </div>
   </article>
 
@@ -913,25 +912,31 @@ if(!reduce&&'IntersectionObserver'in window){
   io.observe($('ops'));
 }
 
-// 스크롤 연동: PC에서 화면 높이만큼의 영역을 고정하고(블록은 제자리), 스크롤 위치로 항목을 넘김
-const track=$('opsTrack'),pin=track.querySelector('.ops-pin'),TOP=76;
-let step=0,cur=0;
+// 스크롤 연동: PC에서 Sort Master 카드 전체를 화면 하단에 맞춰 고정하고, 스크롤 위치로 항목을 넘김
+// 카드가 화면보다 커서 고정되는 동안 빈 공간이 보이지 않음. 카드가 화면보다 작으면 클릭으로만 동작
+const track=$('opsTrack'),card=$('sortmaster'),TOP=76;
+let step=0,cur=0,stick=TOP;
 function layoutOps(){
-  track.classList.remove('scrolly');track.style.height='';
-  const on=innerWidth>900&&pin.offsetHeight+TOP+32<innerHeight;
+  track.classList.remove('scrolly');track.style.height='';card.style.top='';
+  const H=card.offsetHeight,vh=innerHeight;
+  const below=card.getBoundingClientRect().bottom-$('ops').getBoundingClientRect().top;
+  const on=innerWidth>900&&H>=vh-TOP&&below<=vh-TOP-8;
   track.classList.toggle('scrolly',on);
-  step=on?Math.round(innerHeight*.45):0;
-  track.style.height=on?(innerHeight-TOP+step*(ops.length-1))+'px':'';
+  step=on?Math.round(vh*.45):0;
+  const h=card.getBoundingClientRect().height;
+  stick=Math.floor(vh-h);
+  card.style.top=on?stick+'px':'';
+  track.style.height=on?(h+step*(ops.length-1))+'px':'';
   syncOps();
 }
 function syncOps(){
   if(!step)return;
-  const i=Math.max(0,Math.min(ops.length-1,Math.round((TOP-track.getBoundingClientRect().top)/step)));
+  const i=Math.max(0,Math.min(ops.length-1,Math.round((stick-track.getBoundingClientRect().top)/step)));
   if(i!==cur){cur=i;sel(i)}
 }
 ops.forEach((b,i)=>b.addEventListener('click',()=>{
   cur=i;
-  if(step)scrollTo({top:scrollY+track.getBoundingClientRect().top-TOP+i*step,behavior:reduce?'auto':'smooth'});
+  if(step)scrollTo({top:scrollY+track.getBoundingClientRect().top-stick+i*step,behavior:reduce?'auto':'smooth'});
 }));
 addEventListener('scroll',syncOps,{passive:true});
 addEventListener('resize',layoutOps);
