@@ -366,6 +366,35 @@ dialog.work[open]::backdrop{animation:fade .35s ease}
 .model-out .big{font-weight:700;font-size:clamp(40px,5vw,56px);line-height:1;color:var(--ink)}
 .curve{width:100%;height:auto;margin-top:8px;overflow:visible}
 .curve .ax{stroke:var(--hair-strong);stroke-width:1}
+/* 밸런스 02: 전투력 대비 처치 시간 */
+.kpi3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:20px 0 6px;border-top:1px solid var(--hair-strong)}
+.kpi3 > div{padding:14px 14px 0 0}
+.kpi3 > div+div{padding-left:14px;border-left:1px solid var(--hair)}
+.kpi3 .v{font-weight:700;font-size:clamp(22px,2.8vw,32px);line-height:1.1;color:var(--ink)}
+.kpi3 .v small{font-size:.5em;margin:0 2px;color:var(--muted)}
+.kpi3 .k{font-weight:400;font-size:12px;color:var(--muted);margin-top:6px;line-height:1.5}
+.mix{width:100%;height:auto;margin-top:18px;overflow:visible}
+.mix text{font-family:var(--f);font-size:12px;fill:var(--muted)}
+.mix text.nm{fill:var(--ink);font-weight:700}
+.mix text.tv{fill:var(--ink);font-weight:700;font-size:12px}
+.mix .ax{stroke:var(--hair-strong)}
+.mix .gd{stroke:var(--hair);stroke-dasharray:3 4}
+.mix .band{fill:var(--accent);opacity:.08}
+.mix .pb{fill:var(--accent);opacity:.28;transform-box:fill-box;transform-origin:50% 100%}
+.mix .tl{fill:none;stroke:var(--accent);stroke-width:2.5}
+.mix .td{fill:var(--canvas);stroke:var(--accent);stroke-width:2.5}
+.mix.play .pb{animation:barUp .7s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i) * 70ms)}
+.mix.play .tl{stroke-dasharray:1 1;stroke-dashoffset:1;animation:draw 1s ease .7s forwards}
+.mix.play .td,.mix.play .tv{animation:fade .4s ease backwards;animation-delay:calc(800ms + var(--i) * 90ms)}
+.mix.pre .pb{transform:scaleY(0)}
+.mix.pre .tl,.mix.pre .td,.mix.pre .tv{opacity:0}
+@keyframes barUp{from{transform:scaleY(0)}to{transform:none}}
+.mix-lg{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:8px;font-weight:400;font-size:12px;color:var(--muted)}
+.mix-lg i{display:inline-block;width:12px;height:10px;margin-right:6px;vertical-align:-1px}
+.mix-lg i.b{background:var(--accent);opacity:.35}
+.mix-lg i.l{height:3px;vertical-align:3px;background:var(--accent)}
+@media (max-width:640px){.kpi3{grid-template-columns:minmax(0,1fr)}.kpi3 > div+div{padding-left:0;border-left:0}.mix text.nm{font-size:10px}}
+@media (prefers-reduced-motion:reduce){.mix.play .pb,.mix.play .tl,.mix.play .td,.mix.play .tv{animation:none;stroke-dashoffset:0}}
 .curve .ref{fill:none;stroke:var(--muted);stroke-width:1.2;stroke-dasharray:4 4;opacity:.7}
 .curve text.lg{font-size:10px}
 .comp{position:relative;background:var(--strong)}
@@ -788,9 +817,16 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   </div>
 
   <div class="sub">
-    <span class="label">02 · 출시 전 · 실측 검증</span>
+    <div class="sub-h"><span class="label">02 · 출시 전 · 실측 검증</span><button class="wk-btn" type="button" data-work="b02" aria-haspopup="dialog">작업물 보기</button></div>
     <div class="box rv">
       <p>기준 전투력 캐릭터로 인게임에서 보스마다 3회 처치 시간을 측정했습니다.</p>
+      <div class="kpi3">
+        <div><div class="v num">34<small>배</small></div><div class="k">기준 전투력 차이<br>24,560 → 843,062</div></div>
+        <div><div class="v num">137.6<small>~</small>150.3<small>초</small></div><div class="k">보스 8종 처치 시간</div></div>
+        <div><div class="v num">12.7<small>초</small></div><div class="k">가장 빠른 보스와 느린 보스의 차이</div></div>
+      </div>
+      <svg class="mix" id="bossMix" viewBox="0 0 800 280" role="img" aria-label="보스 레벨이 오르며 기준 전투력은 34배 커지지만 처치 시간은 137~150초로 거의 일정함"></svg>
+      <div class="mix-lg"><span><i class="b"></i>기준 전투력 (막대 · 왼쪽 축)</span><span><i class="l"></i>처치 시간 3회 평균 (선 · 오른쪽 축)</span></div>
       <div class="bars pre" id="bossbars"></div>
       <p class="result">보스 8종 137 — 150초 수렴 · 5주간 시트 23개 버전 개정</p>
     </div>
@@ -1155,6 +1191,7 @@ document.querySelectorAll('#ni .cells, #swc .cells').forEach(grid => {
 
 // 작업물 팝업: 원본 기획서 장면 (회사 머리글·대외비 표시 제거)
 const WORKS={
+  b02:{k:'제2의 나라 · 밸런스 · 실측',t:'보스별 처치 시간 실측',src:'테스트_몬스터 체력 20210120 · 2021.01',f:[['b02_sheet','처치 시간 3회 측정','보스별 체력 · 기준 전투력 · 레벨에서 3회 처치 시간을 재고 평균을 기록, 미측정 보스는 테스트 필요로 관리']]},
   b01:{k:'제2의 나라 · 밸런스 · 계산',t:'몬스터 공격력 역산과 클래스별 DPS',src:'00_던전 밸런스 시트 · Battle_골드던전 · DB_User_DPS · 2021 — 2022',f:[['c02_monatk','몬스터 공격력 역산','공격자 체력 · HPS · 공격 인원과 목표 전투 시간, 기준 방어율로 단계별 공격력과 DPS 산출'],['c02_dps','클래스별 DPS 모델','레벨 · 스킬 레벨에 따른 클래스 5종의 속성별 DPS와 평균 DPS']]},
   c01:{k:'제2의 나라 · 전투 수식',t:'전투 수식 정의',src:'00_던전 밸런스 시트 · 전투 수식 · 2021 — 2022',f:[['c01_formula','단계별 피해 계산','최종 피해 → 1차 피해(공격력 · 방어율) → 속성 공방 순으로 Factor와 수식, 참조 OperationType 정의']]},
   c02:{k:'제2의 나라 · PVE 전투 밸런스',t:'DPS · HPS 기반 몬스터 공격력 산출',src:'00_던전 밸런스 시트 · Battle_골드던전 · DB_User_DPS · 2021 — 2022',f:[['c02_monatk','몬스터 공격력 역산','공격자 체력 · HPS · 공격 인원과 목표 전투 시간, 기준 방어율로 보스 공격력과 DPS를 단계별로 산출'],['c02_dps','클래스별 DPS 모델','레벨 · 스킬 레벨에 따른 클래스 5종의 속성별 DPS와 평균 DPS']]},
@@ -1193,6 +1230,23 @@ document.querySelectorAll('[data-work]').forEach(el=>{
 });
 
 // 보스 실측
+// 밸런스 02 복합 차트: 전투력은 막대(왼쪽 축), 처치 시간은 선(오른쪽 축)
+{
+  const D=[['코카트라코',18,24560,137.6],['실바드',47,182077,150.3],['불칸',64,481249,148.4],['기안티',78,631892,146.5],['가디안트',80,649094,146.0],['스텔리아',89,735865,145.0],['메카라곤',98,825029,142.9],['키메라',100,843062,146.7]];
+  const W=800,H=280,L=60,R=56,T=16,B=46,pw=W-L-R,ph=H-T-B,PMAX=900000,TMAX=180,n=D.length,step=pw/n;
+  const x=i=>L+step*(i+.5),yp=v=>T+ph-(v/PMAX)*ph,yt=v=>T+ph-(v/TMAX)*ph;
+  let g='';
+  for(const v of [300000,600000,900000])g+='<line class="gd" x1="'+L+'" x2="'+(W-R)+'" y1="'+yp(v)+'" y2="'+yp(v)+'"/><text x="'+(L-8)+'" y="'+(yp(v)+4)+'" text-anchor="end">'+(v/10000)+'만</text>';
+  for(const v of [60,120,180])g+='<text x="'+(W-R+8)+'" y="'+(yt(v)+4)+'">'+v+'초</text>';
+  g+='<rect class="band" x="'+L+'" width="'+pw+'" y="'+yt(150.3)+'" height="'+(yt(137.6)-yt(150.3))+'"/>';
+  const bw=step*.5;
+  D.forEach((d,i)=>{g+='<rect class="pb" style="--i:'+i+'" x="'+(x(i)-bw/2)+'" y="'+yp(d[2])+'" width="'+bw+'" height="'+(T+ph-yp(d[2]))+'"/>'});
+  g+='<path class="tl" pathLength="1" d="'+D.map((d,i)=>(i?'L':'M')+x(i)+' '+yt(d[3])).join('')+'"/>';
+  D.forEach((d,i)=>{g+='<circle class="td" style="--i:'+i+'" r="5" cx="'+x(i)+'" cy="'+yt(d[3])+'"/><text class="tv" style="--i:'+i+'" x="'+x(i)+'" y="'+(yt(d[3])-12)+'" text-anchor="middle">'+d[3].toFixed(1)+'</text>'
+    +'<text class="nm" x="'+x(i)+'" y="'+(H-B+20)+'" text-anchor="middle">'+d[0]+'</text><text x="'+x(i)+'" y="'+(H-B+36)+'" text-anchor="middle">Lv.'+d[1]+'</text>'});
+  g+='<line class="ax" x1="'+L+'" x2="'+(W-R)+'" y1="'+(T+ph)+'" y2="'+(T+ph)+'"/>';
+  $('bossMix').innerHTML=g;
+}
 const BOSS=[['코카트라코',18,'24,560',137.6],['실바드',47,'182,077',150.3],['불칸',64,'481,249',148.4],['기안티',78,'631,892',146.5],['가디안트',80,'649,094',146.0],['스텔리아',89,'735,865',145.0],['메카라곤',98,'825,029',142.9],['키메라',100,'843,062',146.7]];
 const BMAX=160;
 $('bossbars').innerHTML=BOSS.map(([n,lv,cp,t])=>`<div class="r"><div class="nm"><b>${n}</b><span>Lv.${lv} · ${cp}</span></div><div class="tr"><b style="--w:${(t/BMAX*100).toFixed(1)}%"></b></div><div class="t num">${t.toFixed(1)}초</div></div>`).join('')
@@ -1213,7 +1267,7 @@ if(!reduce&&'IntersectionObserver'in window){
   document.querySelectorAll('.rv').forEach(el=>{if(el.getBoundingClientRect().top>innerHeight){el.classList.add('pre');io.observe(el)}});
   grow.forEach(id=>{const el=$(id);el.classList.add('pre');if(id!=='capmap')io.observe(el)});
   const arrive=el=>{el.classList.add('pre');const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting||e.boundingClientRect.top<0){el.classList.remove('pre');el.classList.add('play');o.disconnect()}}),{rootMargin:'0px 0px -40% 0px'});o.observe(el)};
-  arrive($('capmap'));arrive($('intro'));
+  arrive($('capmap'));arrive($('intro'));arrive($('bossMix'));
   document.querySelectorAll('.cells').forEach(el=>{
     const cols=getComputedStyle(el).gridTemplateColumns.split(' ').length;
     [...el.children].forEach((c,i)=>c.style.setProperty('--d',((i%cols)+Math.floor(i/cols))*90+'ms'));
