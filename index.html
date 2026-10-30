@@ -524,7 +524,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
     <div class="box rv">
       <p>기준 전투력 캐릭터로 인게임에서 보스마다 3회 처치 시간을 측정했습니다.</p>
       <div class="bars pre" id="bossbars"></div>
-      <p class="result">보스 8종 137 — 150초 수렴 · 아르도르(214초) 기준 이탈 · 5주간 시트 23개 버전 개정</p>
+      <p class="result">보스 8종 137 — 150초 수렴 · 5주간 시트 23개 버전 개정</p>
     </div>
   </div>
 
@@ -717,9 +717,9 @@ const MAP=[
 $('maprows').innerHTML=MAP.map(([n,c])=>`<tr><th scope="row">${n}</th>${c.map(v=>`<td><i class="${v?'y':''}" aria-label="${v?'담당':'해당 없음'}"></i></td>`).join('')}</tr>`).join('');
 
 // 보스 실측
-const BOSS=[['코카트라코',18,'24,560',137.6],['실바드',47,'182,077',150.3],['불칸',64,'481,249',148.4],['기안티',78,'631,892',146.5],['가디안트',80,'649,094',146.0],['스텔리아',89,'735,865',145.0],['메카라곤',98,'825,029',142.9],['키메라',100,'843,062',146.7],['아르도르',38,'95,239',214.1]];
-const BMAX=220;
-$('bossbars').innerHTML=BOSS.map(([n,lv,cp,t])=>`<div class="r${t>200?' off':''}"><div class="nm"><b>${n}</b><span>Lv.${lv} · ${cp}</span></div><div class="tr"><b style="--w:${(t/BMAX*100).toFixed(1)}%"></b></div><div class="t num">${t.toFixed(1)}초</div></div>`).join('')
+const BOSS=[['코카트라코',18,'24,560',137.6],['실바드',47,'182,077',150.3],['불칸',64,'481,249',148.4],['기안티',78,'631,892',146.5],['가디안트',80,'649,094',146.0],['스텔리아',89,'735,865',145.0],['메카라곤',98,'825,029',142.9],['키메라',100,'843,062',146.7]];
+const BMAX=160;
+$('bossbars').innerHTML=BOSS.map(([n,lv,cp,t])=>`<div class="r"><div class="nm"><b>${n}</b><span>Lv.${lv} · ${cp}</span></div><div class="tr"><b style="--w:${(t/BMAX*100).toFixed(1)}%"></b></div><div class="t num">${t.toFixed(1)}초</div></div>`).join('')
   +`<div class="cap" style="margin-top:4px">레벨 · 기준 전투력 · 처치 시간 3회 평균</div>`;
 
 // 라이브 10분위
