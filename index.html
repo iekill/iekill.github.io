@@ -441,6 +441,25 @@ dialog.work[open]::backdrop{animation:fade .35s ease}
 .curve .pt{fill:var(--accent)}
 .curve text{font-family:var(--f);font-size:11px;fill:var(--muted)}
 /* 밸런스 03: 1안 / 최종 전환 */
+.lad-h{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;margin-top:22px;padding-top:14px;border-top:1px solid var(--hair)}
+.ladder{display:grid;gap:5px;margin-top:10px}
+.ladder .lr{display:grid;grid-template-columns:150px minmax(0,1fr) 54px;gap:12px;align-items:center;font-size:13px;transition:opacity .35s}
+.ladder .lr.off{opacity:.25}
+.ladder .lr b{font-size:13px}
+.ladder .lr b small{font-weight:400;color:var(--muted);margin-left:6px}
+.ladder .cells10{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:3px}
+.ladder .cells10 i{height:16px;background:var(--strong);transition:background .4s ease}
+.ladder .cells10 i.on{background:var(--accent)}
+.ladder .cnt{text-align:right;font-weight:700;color:var(--ink)}
+.deciles .c[data-lv] b{transition:height .9s cubic-bezier(.2,.7,.2,1),background .45s ease,opacity .45s ease}
+.deciles .c.lv0 b{background:var(--strong)}
+.deciles .c.lv1 b{background:var(--accent)}
+#decTiers{display:contents}
+.deciles .tier{position:absolute;left:0;right:0;border-top:1px dashed var(--hair-strong);pointer-events:none;transition:bottom .5s ease,opacity .35s}
+.deciles .tier.t1{border-top:2px solid var(--accent)}
+.deciles .tier em{position:absolute;right:-2px;top:-9px;min-width:16px;text-align:center;line-height:16px;font-size:10px;border:1px solid var(--hair-strong);font-style:normal;font-weight:700;font-size:11px;color:var(--muted);background:var(--canvas);padding:0 4px}
+.deciles .tier.t1 em{color:var(--accent);left:0;right:auto;top:-20px;border:0;font-size:11px}
+@media (max-width:640px){.ladder .lr{grid-template-columns:96px minmax(0,1fr) 40px;gap:8px}.seg button{padding:7px 9px}}
 .dec-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px 16px}
 .seg{display:inline-flex;border:1px solid var(--hair-strong)}
 .seg button{all:unset;cursor:pointer;padding:8px 14px;font-weight:700;font-size:13px;color:var(--muted);transition:background .25s,color .25s}
@@ -860,10 +879,12 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   <div class="sub">
     <div class="sub-h"><span class="label">03 · 출시 후 · 라이브 보정</span><button class="wk-btn" type="button" data-work="b03" aria-haspopup="dialog">작업물 보기</button></div>
     <div class="box rv">
-      <div class="dec-h"><p>에피소드 2 하드 · 1서버 상위 랭커(직업별 200인) 전투력 10분위</p><div class="seg" role="group" aria-label="진입 기준"><button type="button" data-th="98" aria-pressed="false">1안 98만</button><button type="button" data-th="52.6" aria-pressed="false">최종 52.6만</button></div></div>
-      <div class="deciles pre" id="deciles" role="img" aria-label="전투력 10분위: 64만부터 174만. 1안 진입 기준 98만, 최종 진입 기준 52.6만"></div>
+      <div class="dec-h"><p>에피소드 2 하드 · 1서버 상위 랭커(직업별 200인) 전투력 10분위</p><div class="seg" role="group" aria-label="하드 단계 안"><button type="button" data-p="0" aria-pressed="false">1안</button><button type="button" data-p="1" aria-pressed="false">2안</button><button type="button" data-p="2" aria-pressed="false">최종본</button><button type="button" data-p="3" aria-pressed="false">최종</button></div></div>
+      <div class="deciles pre" id="deciles" role="img" aria-label="전투력 10분위 64만부터 174만과 하드 단계 권장 투력"></div>
       <div class="dx" id="dx"></div>
-      <p class="result" id="decRes">1안 98만이면 10개 분위 중 8개가 진입 기준 미달 → 최종 52.6만</p>
+      <div class="lad-h"><span class="cap">하드 단계별 권장 투력에 도달하는 분위</span><span class="cap" id="ladSum"></span></div>
+      <div class="ladder" id="decLadder"></div>
+      <p class="result" id="decRes"></p>
       <div class="decide">
         <div><div class="k">추가</div><b>하위 2단계</b><p>52.6만 · 71.8만</p></div>
         <div><div class="k">조정</div><b>상위 3단계</b><p>98만 · 116만 · 141만 → 95.7만 · 110만 · 136만</p></div>
@@ -1284,8 +1305,7 @@ $('bossbars').innerHTML=BOSS.map(([n,lv,cp,t])=>`<div class="r"><div class="nm">
 // 라이브 10분위
 const DEC=[64,67,71,74,77,81,86,92,106,174],DMAX=180;
 const pct=v=>(v/DMAX*100).toFixed(1)+'%';
-$('deciles').innerHTML=DEC.map(v=>`<div class="c" style="--h:${pct(v)}"><b></b><span class="num">${v}만</span></div>`).join('')
-  +`<div class="ln" data-th="98" style="bottom:${pct(98)}"><em>1안 98만</em></div><div class="ln fin" data-th="52.6" style="bottom:${pct(52.6)}"><em>최종 52.6만</em></div>`;
+$('deciles').innerHTML=DEC.map(v=>`<div class="c" style="--h:${pct(v)}"><b></b><span class="num">${v}만</span></div>`).join('')+'<div id="decTiers"></div>';
 $('dx').innerHTML=DEC.map((_,i)=>`<span>${i+1}분위</span>`).join('');
 
 // 등장 애니메이션: 첫 화면 밖 요소만
@@ -1405,20 +1425,32 @@ addEventListener('scroll',onScroll,{passive:true});onScroll();
   calc();
 }
 
-// 밸런스 03: 진입 기준 1안 / 최종 전환. 도착하면 1안을 보여 준 뒤 최종으로 넘어감
+// 밸런스 03: 「에피2_하드모드_기준투력」의 하드 단계 권장 투력 4개 안. 도착하면 1안부터 최종까지 차례로 넘김
 {
-  const cells=[...$('deciles').querySelectorAll('.c')],lines=[...$('deciles').querySelectorAll('.ln')],btns=[...document.querySelectorAll('.seg button')];
-  let touched=false;
-  function setTh(th){
-    let n=0;cells.forEach((c,i)=>{const ok=DEC[i]>=th;c.classList.toggle('ok',ok);if(ok)n++});
-    lines.forEach(l=>l.classList.toggle('on',+l.dataset.th===th));
-    btns.forEach(b=>b.setAttribute('aria-pressed',+b.dataset.th===th));
-    $('decRes').textContent=th===98?'1안 98만 · 10개 분위 중 '+n+'개만 진입 가능, 8개가 진입 기준 미달':'최종 52.6만 · 10개 분위 모두 진입 가능. 하위 2단계를 추가하고 상위 3단계는 낮춰 조정';
+  const DV=[639812,673382,707859,739847,773946,811898,860140,924397,1063624,1743439];
+  const PLANS=[
+    {n:'1안',t:[980000,1160000,1410000],m:'하드 3단계 · 1단계 98만이면 10개 분위 중 2개만 진입'},
+    {n:'2안',t:[550000,700000,980000,1160000,1410000],m:'하위 2단계(55만 · 70만)를 추가해 하드 5단계로 확장'},
+    {n:'최종본',t:[565000,718000,980000,1160000,1410000],m:'하위 2단계를 56.5만 · 71.8만으로 조정'},
+    {n:'최종',t:[526000,718000,957000,1100000,1360000],m:'1단계 52.6만, 상위 3단계도 95.7만 · 110만 · 136만으로 낮춰 확정'}];
+  const cells=[...$('deciles').querySelectorAll('.c')],btns=[...document.querySelectorAll('.seg button')];
+  const man=v=>(v/10000).toFixed(v%10000?1:0).replace(/\.0$/,'')+'만';
+  let touched=false,timers=[];
+  function setPlan(k){
+    const p=PLANS[k],t=p.t;
+    cells.forEach((c,i)=>{const lv=t.filter(v=>DV[i]>=v).length;c.dataset.lv=lv;c.className='c lv'+Math.min(lv,1);c.querySelector('b').style.opacity=lv?(.35+lv/t.length*.65).toFixed(2):1});
+    $('decTiers').innerHTML=t.map((v,j)=>'<div class="tier'+(j?'':' t1')+'" style="bottom:'+pct(v/10000)+'"><em>'+(j?(j+1):'하드1 '+man(v))+'</em></div>').join('');
+    let rows='';for(let j=0;j<5;j++){const v=t[j];const on=v?DV.map(d=>d>=v):[];rows+='<div class="lr'+(v?'':' off')+'"><b>하드 '+(j+1)+'단계'+(v?'<small>'+man(v)+'</small>':'<small>없음</small>')+'</b><div class="cells10">'+DV.map((d,i)=>'<i class="'+(on[i]?'on':'')+'"></i>').join('')+'</div><span class="cnt">'+(v?on.filter(Boolean).length+'/10':'—')+'</span></div>'}
+    $('decLadder').innerHTML=rows;
+    const first=DV.filter(d=>d>=t[0]).length;
+    $('ladSum').textContent='1단계 진입 '+first+'/10 분위';
+    btns.forEach((b,j)=>b.setAttribute('aria-pressed',j===k));
+    $('decRes').textContent=p.n+' · '+p.m;
   }
-  btns.forEach(b=>b.addEventListener('click',()=>{touched=true;setTh(+b.dataset.th)}));
-  setTh(52.6);
+  btns.forEach((b,j)=>b.addEventListener('click',()=>{touched=true;timers.forEach(clearTimeout);setPlan(j)}));
+  setPlan(3);
   if(!reduce&&'IntersectionObserver'in window){
-    const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){o.disconnect();setTh(98);setTimeout(()=>{if(!touched)setTh(52.6)},2200)}}),{rootMargin:'0px 0px -35% 0px'});
+    const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){o.disconnect();setPlan(0);[1,2,3].forEach((k,j)=>timers.push(setTimeout(()=>{if(!touched)setPlan(k)},1600*(j+1))))}}),{rootMargin:'0px 0px -35% 0px'});
     o.observe($('deciles'));
   }
 }
