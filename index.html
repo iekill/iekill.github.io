@@ -11,13 +11,14 @@
 :root{
   --canvas:#ffffff; --soft:#f7f7f7; --card:#fafafa; --strong:#ebebeb;
   --ink:#262626; --body:#3c3c3c; --deep:#1a1a1a; --muted:#6b6b6b; --faint:#9a9a9a; --hair:#e6e6e6; --hair-strong:#cccccc;
-  --accent:#1c69d4; --accent-press:#0653b6; --accent-ink:#ffffff; --accent-soft:#e8f0fb;
+  --fig-line:#a7afb8; --accent:#1c69d4; --accent-press:#0653b6; --accent-ink:#ffffff; --accent-soft:#e8f0fb;
   --band:#1a2129; --band-2:#262e38; --on-band:#ffffff; --on-band-soft:#bbbbbb; --band-accent:#6fa3ea;
   --good:#16a34a; --warn:#d97706; --bad:#dc2626;
   --f:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
   --wrap:1120px;
 }
 :root[data-theme="dark"]{
+  --fig-line:#7d8894;
   --canvas:#12171d; --soft:#171d24; --card:#1b222a; --strong:#232b34;
   --ink:#eef1f4; --body:#c9cfd6; --deep:#f4f6f8; --muted:#8d97a3; --faint:#6c7682; --hair:#2a333d; --hair-strong:#3a4552;
   --accent:#5b9aec; --accent-press:#7aaef0; --accent-ink:#0b1016; --accent-soft:#1a2a40;
@@ -138,6 +139,61 @@ table{border-collapse:collapse;width:100%}
 .pipe p{font-size:13px}
 .footnote{margin-top:28px;padding-top:16px;border-top:1px solid var(--hair);font-weight:400;font-size:13px;color:var(--muted);display:grid;gap:6px}
 .footnote b{color:var(--ink);font-size:13px}
+
+/* AI 운영 방식: 항목 선택 → 도식 + 활용 · 결과 */
+.ops-h{color:var(--muted);margin-top:40px;display:block}
+.ops{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);margin-top:14px;border:1px solid var(--hair);background:var(--canvas)}
+.ops-list{display:flex;flex-direction:column;border-right:1px solid var(--hair)}
+.op{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:32px minmax(0,1fr);gap:8px;padding:20px 20px 20px 17px;border-bottom:1px solid var(--hair);border-left:3px solid transparent;transition:background .3s ease,border-color .3s ease}
+.op:last-child{border-bottom:0}
+.op .n{font-weight:700;font-size:13px;color:var(--accent);padding-top:2px}
+.op b{display:block;font-size:15px}
+.op .d{display:block;font-weight:400;font-size:13px;color:var(--muted);margin-top:4px;line-height:1.55}
+.op:hover{background:var(--soft)}
+.op[aria-selected="true"]{background:var(--accent-soft);border-left-color:var(--accent)}
+.op:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.ops-panel{padding:28px;display:grid;gap:16px;align-content:start}
+.ops-panel[hidden]{display:none}
+.ops-panel:not([hidden]){animation:fade .45s ease}
+.fig-k{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:11px;letter-spacing:.14em;color:var(--faint);text-transform:uppercase}
+.fig{display:block;width:100%;height:auto;max-height:300px}
+.fig path{fill:var(--canvas);stroke:var(--fig-line);stroke-width:1.1;stroke-linejoin:round;stroke-linecap:round}
+.fig path.o{fill:none}
+.fig path.hi{stroke:var(--accent)}
+.fig path.da{fill:none;stroke-dasharray:3 4}
+.fig path.ah{fill:none}
+.fig .dot{fill:var(--accent)}
+.fig text{font-family:var(--f);font-weight:400;font-size:13px;fill:var(--muted)}
+.fig text.hi{fill:var(--accent);font-weight:700}
+.fig.draw path:not(.da){stroke-dasharray:1 1;stroke-dashoffset:1;animation:draw 1.1s cubic-bezier(.3,.6,.2,1) var(--d,0s) forwards}
+.fig.draw path.da,.fig.draw text,.fig.draw .dot{opacity:0;animation:fade .6s ease .7s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.ops-panel h5{font-size:17px;line-height:1.45;margin:0}
+.ops-dl{margin:0;display:grid;border-top:1px solid var(--hair)}
+.ops-dl > div{display:grid;grid-template-columns:48px minmax(0,1fr);gap:12px;padding:12px 0;border-bottom:1px solid var(--hair)}
+.ops-dl dt{font-weight:700;font-size:12px;letter-spacing:.1em;color:var(--accent);padding-top:3px}
+.ops-dl dd{margin:0;font-size:14px}
+.ops-res{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 12px;color:var(--ink);font-weight:700}
+.ops-res .v{font-size:30px;line-height:1.1}
+.ops-res .v small{font-size:.45em;margin-left:2px;color:var(--muted)}
+.ops-res span:not(.v){font-size:14px}
+.sbar{display:flex;gap:3px;margin-top:10px;font-weight:700;font-size:12px}
+.sbar span{padding:7px 10px;background:var(--strong);color:var(--ink);white-space:nowrap}
+.sbar span.hi{background:var(--accent);color:var(--accent-ink)}
+@media (prefers-reduced-motion:reduce){
+  .fig.draw path:not(.da){stroke-dasharray:none;stroke-dashoffset:0;animation:none}
+  .fig.draw path.da,.fig.draw text,.fig.draw .dot{opacity:1;animation:none}
+  .ops-panel:not([hidden]){animation:none}
+}
+@media (max-width:900px){
+  .ops{grid-template-columns:minmax(0,1fr)}
+  .ops-list{border-right:0;border-bottom:1px solid var(--hair)}
+}
+@media (max-width:640px){
+  .ops-panel{padding:20px 16px}
+  .op{padding:16px 14px 16px 11px}
+}
 
 /* combat */
 .calc{display:flex;flex-wrap:wrap;align-items:stretch;gap:4px}
@@ -407,22 +463,53 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
         <div><div class="v num">250<small>개</small></div><div class="k">스테이지 (직접 50 + AI 200)</div></div>
         <div><div class="v num">48<small>%</small></div><div class="k">초기 빌드 D1 잔존율</div></div>
       </div>
-      <div class="two">
-        <div>
-          <div class="label" style="color:var(--muted)">AI 운영 방식</div>
-          <ol class="steps">
-            <li><div><b>작업 지침 표준화</b><p>UI 제작, SDK·결제 점검, 리소스 관리를 절차로 문서화해 AI에게 맡김</p></div></li>
-            <li><div><b>코딩 규칙과 역방향 리뷰</b><p>코딩 규칙을 정의해 지키게 하고, 완성 코드는 역방향으로 다시 리뷰</p></div></li>
-            <li><div><b>최종 판단은 직접</b><p>밸런스와 품질은 완전 자동화하지 않고 직접 검수</p></div></li>
-          </ol>
+      <div class="label ops-h">AI 운영 방식 · 항목을 고르면 활용 방식과 결과가 나옵니다</div>
+      <div class="ops" id="ops">
+        <div class="ops-list" role="tablist" aria-label="AI 운영 방식" aria-orientation="vertical">
+          <button class="op" type="button" role="tab" id="op-t1" aria-controls="op-p1" aria-selected="true"><span class="n">01</span><span><b>작업 지침 표준화</b><span class="d">UI 제작, SDK·결제 점검, 리소스 관리를 절차로 문서화해 AI에게 맡김</span></span></button>
+          <button class="op" type="button" role="tab" id="op-t2" aria-controls="op-p2" aria-selected="false" tabindex="-1"><span class="n">02</span><span><b>스테이지 생성 · 밸런스 자동화</b><span class="d">직접 만든 50개를 기준으로 200개 생성, 점수화와 실측 검증</span></span></button>
+          <button class="op" type="button" role="tab" id="op-t3" aria-controls="op-p3" aria-selected="false" tabindex="-1"><span class="n">03</span><span><b>코딩 규칙과 역방향 리뷰</b><span class="d">코딩 규칙을 정의해 지키게 하고, 완성 코드는 역방향으로 다시 리뷰</span></span></button>
+          <button class="op" type="button" role="tab" id="op-t4" aria-controls="op-p4" aria-selected="false" tabindex="-1"><span class="n">04</span><span><b>최종 판단은 직접</b><span class="d">밸런스와 품질은 완전 자동화하지 않고 직접 검수</span></span></button>
         </div>
-        <div>
-          <div class="label" style="color:var(--muted)">스테이지 양산 파이프라인</div>
-          <div class="pipe">
-            <div><span class="n">01</span><b>직접 제작 50개</b><p>패턴 · 제작 방식 · 엔진 툴 기능의 기준</p></div>
-            <div><span class="n">02</span><b>생성 자동화 200개</b><p>데이터 테이블 · 리소스 자동 생성</p></div>
-            <div><span class="n">03</span><b>난이도 점수</b><p>오브젝트 수량 · 빈 슬롯 · 기믹 배치 · 제한 시간을 점수화해 밸런스 툴로 시뮬레이션</p></div>
-            <div><span class="n">04</span><b>성장 곡선 · 검수</b><p>난이도 곡선 검토, 기준을 벗어난 스테이지는 직접 플레이로 원인 확정 후 조정</p></div>
+        <div class="ops-panels">
+          <div class="ops-panel" role="tabpanel" id="op-p1" aria-labelledby="op-t1">
+            <div class="fig-k">FIG 1.1 · 작업 지침 표준화</div>
+            <svg class="fig" id="fig1" role="img" aria-label="작업 지침 문서가 AI 실행으로 이어지고, UI 제작, SDK·결제 점검, 리소스 관리 결과물로 나가는 도식"></svg>
+            <h5>반복 작업을 작업 지침으로 고정해 AI에게 맡기는 방식</h5>
+            <dl class="ops-dl">
+              <div><dt>활용</dt><dd>UI 제작, SDK·결제 점검, 리소스 관리처럼 같은 순서로 반복되는 작업의 절차를 작업 지침(Claude Code 스킬)으로 문서화했습니다. AI는 지침대로 실행하고, 결과물은 직접 확인했습니다. 회사 개발·서비스 때도 같은 방식을 썼습니다.</dd></div>
+              <div><dt>결과</dt><dd class="ops-res"><span class="v num">6<small>주</small></span><span>기획·개발·밸런싱 1인으로 AOS·iOS 출시</span></dd></div>
+            </dl>
+          </div>
+          <div class="ops-panel" role="tabpanel" id="op-p2" aria-labelledby="op-t2" hidden>
+            <div class="fig-k">FIG 1.2 · 스테이지 생성 · 밸런스 자동화</div>
+            <svg class="fig" id="fig2" role="img" aria-label="패턴 학습, 생성 자동화, 스코어링 밸런스, 검증, 데이터 업데이트가 순환하는 도식"></svg>
+            <h5>샘플 50개를 기준으로 한 스테이지 생성 · 밸런스 자동화</h5>
+            <dl class="ops-dl">
+              <div><dt>활용</dt><dd>직접 만든 스테이지 50개로 패턴·제작 방식·엔진 툴 기능을 익히게 한 뒤 데이터 테이블과 리소스 생성을 자동화했습니다. 모델 학습이 아니라 기준 샘플 방식입니다. 생성된 스테이지는 오브젝트 수량, 빈 슬롯, 기믹 배치, 제한 시간으로 점수를 매기고, 실측으로 검증한 뒤 데이터를 업데이트하는 순환으로 운영했습니다.</dd></div>
+              <div><dt>결과</dt><dd>
+                <div class="ops-res"><span class="v num">250<small>개</small></span><span>스테이지</span></div>
+                <div class="sbar" aria-label="직접 제작 50개, 자동화 200개"><span style="flex:50">직접 50</span><span class="hi" style="flex:200">자동화 200</span></div>
+              </dd></div>
+            </dl>
+          </div>
+          <div class="ops-panel" role="tabpanel" id="op-p3" aria-labelledby="op-t3" hidden>
+            <div class="fig-k">FIG 1.3 · 코딩 규칙과 역방향 리뷰</div>
+            <svg class="fig" id="fig3" role="img" aria-label="코딩 규칙에서 생성 코드, 완성 코드로 이어지고, 완성 코드에서 규칙 쪽으로 거꾸로 리뷰하는 도식"></svg>
+            <h5>규칙으로 생성을 제한하고, 완성 코드를 거꾸로 따라가는 리뷰</h5>
+            <dl class="ops-dl">
+              <div><dt>활용</dt><dd>코딩 규칙을 먼저 정의해 AI가 지키게 했습니다. 완성된 코드는 결과에서 입력 쪽으로 거꾸로 따라가며 다시 리뷰했습니다.</dd></div>
+              <div><dt>결과</dt><dd class="ops-res"><span>구조적 결함을 리뷰 단계에서 걸러냄</span></dd></div>
+            </dl>
+          </div>
+          <div class="ops-panel" role="tabpanel" id="op-p4" aria-labelledby="op-t4" hidden>
+            <div class="fig-k">FIG 1.4 · 최종 판단은 직접</div>
+            <svg class="fig" id="fig4" role="img" aria-label="스테이지 난이도가 기준 곡선을 따라 오르고, 기준을 벗어난 스테이지 하나를 직접 플레이로 확인하는 개념도"></svg>
+            <h5>밸런스와 품질의 최종 판단은 사람이 하는 구조</h5>
+            <dl class="ops-dl">
+              <div><dt>활용</dt><dd>자동화는 생성과 점수 계산까지만 맡겼습니다. 난이도 성장 곡선을 검토하고, 기준을 벗어난 스테이지는 직접 플레이해 원인을 확정한 뒤 조정했습니다.</dd></div>
+              <div><dt>결과</dt><dd class="ops-res"><span class="v num">48<small>%</small></span><span>초기 빌드 D1 잔존율 · 추가 난이도 조정 없이 기록</span></dd></div>
+            </dl>
           </div>
         </div>
       </div>
@@ -716,6 +803,104 @@ const MAP=[
   ['AI 활용 개발',[1,0,0,0]],
 ];
 $('maprows').innerHTML=MAP.map(([n,c])=>`<tr><th scope="row">${n}</th>${c.map(v=>`<td><i class="${v?'y':''}" aria-label="${v?'담당':'해당 없음'}"></i></td>`).join('')}</tr>`).join('');
+
+// AI 운영 방식 도식: 등각 투영 선화
+const ISO_C=Math.cos(Math.PI/6);
+const P=(x,y,z=0)=>[(x-y)*ISO_C,(x+y)*.5-z];
+function fig(svg,build){
+  const paths=[],texts=[],pts=[];
+  const f=p=>p.map(v=>v.toFixed(1)).join(' ');
+  const g={
+    poly(ps,cls=''){pts.push(...ps);paths.push({d:'M'+ps.map(f).join('L')+'Z',cls})},
+    line(ps,cls='o'){pts.push(...ps);paths.push({d:'M'+ps.map(f).join('L'),cls})},
+    curve(a,c,b,cls='o'){pts.push(a,c,b);paths.push({d:`M${f(a)}Q${f(c)} ${f(b)}`,cls})},
+    box(x,y,z,w,d,h,cls=''){
+      g.poly([P(x,y+d,z),P(x+w,y+d,z),P(x+w,y+d,z+h),P(x,y+d,z+h)],cls);
+      g.poly([P(x+w,y,z),P(x+w,y+d,z),P(x+w,y+d,z+h),P(x+w,y,z+h)],cls);
+      g.poly([P(x,y,z+h),P(x+w,y,z+h),P(x+w,y+d,z+h),P(x,y+d,z+h)],cls);
+    },
+    arrow(a,b,cls='o'){
+      g.line([a,b],cls);
+      const t=Math.atan2(b[1]-a[1],b[0]-a[0]),k=7;
+      g.line([[b[0]-k*Math.cos(t-.45),b[1]-k*Math.sin(t-.45)],b,[b[0]-k*Math.cos(t+.45),b[1]-k*Math.sin(t+.45)]],cls+' ah');
+    },
+    text(p,s,cls='',dy=0){texts.push({x:p[0],y:p[1]+dy,s,cls});const w=s.length*6.6;pts.push([p[0]-w,p[1]+dy-10],[p[0]+w,p[1]+dy+4])},
+    dot:null,
+  };
+  build(g);
+  const xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]),pad=10;
+  const x0=Math.min(...xs)-pad,y0=Math.min(...ys)-pad,w=Math.max(...xs)-x0+pad,h=Math.max(...ys)-y0+pad;
+  svg.setAttribute('viewBox',`${x0.toFixed(0)} ${y0.toFixed(0)} ${w.toFixed(0)} ${h.toFixed(0)}`);
+  svg.innerHTML=paths.map((p,i)=>`<path d="${p.d}" class="${p.cls}"${p.cls.includes('da')?'':' pathLength="1"'} style="--d:${(i*.025).toFixed(3)}s"/>`).join('')
+    +texts.map(t=>`<text x="${t.x.toFixed(1)}" y="${t.y.toFixed(1)}" text-anchor="middle" class="${t.cls}">${t.s}</text>`).join('')
+    +(g.dot&&!reduce?`<circle r="3.5" class="dot"><animateMotion dur="7s" repeatCount="indefinite" path="${g.dot}"/></circle>`:'');
+}
+const under=(x,y,w,d)=>P(x+w,y+d,0);
+// FIG 1.1 작업 지침 → AI 실행 → 결과물
+fig($('fig1'),g=>{
+  for(let i=0;i<4;i++)g.box(0,0,i*13,80,80,5);
+  g.box(170,0,0,64,64,64,'hi');
+  g.arrow(P(84,40,24),P(164,34,24));
+  const outs=[[-80,'UI 제작'],[0,'SDK·결제 점검'],[80,'리소스 관리']];
+  outs.forEach(([y])=>g.arrow(P(240,32,32),P(318,y+20,18)));
+  outs.forEach(([y])=>g.box(330,y,0,40,40,28));
+  g.text(under(0,0,80,80),'작업 지침','',20);
+  g.text(under(170,0,64,64),'AI 실행','hi',20);
+  outs.forEach(([y,s])=>g.text(P(390,y+40,0),s,'',8));
+});
+// FIG 1.2 스테이지 생성 · 밸런스 순환
+fig($('fig2'),g=>{
+  const R=150,N=5,ring=[];
+  for(let i=0;i<=72;i++){const a=i/72*Math.PI*2-Math.PI*.75;ring.push(P(R*Math.cos(a),R*Math.sin(a),0))}
+  g.line(ring,'da');
+  g.dot='M'+ring.map(p=>p.map(v=>v.toFixed(1)).join(' ')).join('L');
+  const names=[['패턴 학습','샘플 50개',''],['생성 자동화','테이블 · 리소스','hi'],['스코어링 밸런스','난이도 점수','hi'],['검증','실측',''],['데이터 업데이트','다시 순환','']];
+  const tiles=names.map((n,i)=>{const a=i/N*Math.PI*2-Math.PI*.75;return {x:R*Math.cos(a),y:R*Math.sin(a),n}});
+  [...tiles].sort((a,b)=>(a.x+a.y)-(b.x+b.y)).forEach(t=>g.box(t.x-28,t.y-28,0,56,56,12,t.n[2]));
+  tiles.forEach(t=>{const p=P(t.x,t.y,12);g.text(p,t.n[0],t.n[2],-40);g.text(p,t.n[1],'',-26)});
+});
+// FIG 1.3 규칙 → 생성 → 완성, 완성에서 거꾸로 리뷰
+fig($('fig3'),g=>{
+  g.box(0,0,0,90,90,6);
+  for(let i=1;i<4;i++){g.line([P(i*22.5,0,6),P(i*22.5,90,6)]);g.line([P(0,i*22.5,6),P(90,i*22.5,6)])}
+  for(let i=0;i<3;i++)g.box(160,0,i*12,90,90,5);
+  g.box(320,10,0,70,70,50,'hi');
+  g.arrow(P(94,45,3),P(154,45,3));
+  g.arrow(P(254,45,15),P(314,45,15));
+  const a=P(355,45,54),b=P(45,45,12),c=[(a[0]+b[0])/2,Math.min(a[1],b[1])-120];
+  g.curve(a,c,b,'da hi');
+  const t=Math.atan2(b[1]-c[1],b[0]-c[0]),k=8;
+  g.line([[b[0]-k*Math.cos(t-.45),b[1]-k*Math.sin(t-.45)],b,[b[0]-k*Math.cos(t+.45),b[1]-k*Math.sin(t+.45)]],'hi ah');
+  g.text([c[0],(c[1]+Math.min(a[1],b[1]))/2],'역방향 리뷰','hi',-8);
+  g.text(under(0,0,90,90),'코딩 규칙','',20);
+  g.text(under(160,0,90,90),'생성 코드','',20);
+  g.text(under(320,10,70,70),'완성 코드','hi',20);
+});
+// FIG 1.4 난이도 성장 곡선 개념도, 기준 이탈 스테이지
+fig($('fig4'),g=>{
+  const n=18,base=i=>18+i*7+(i%3)*5,out=11,top=[];
+  for(let i=n-1;i>=0;i--){const h=base(i)+(i===out?48:0);g.box(0,-i*20,0,70,4,h,i===out?'hi':'')}
+  for(let i=0;i<n;i++)top.push(P(35,-i*20+2,base(i)));
+  g.line(top,'da');
+  g.text(P(35,-out*20+2,base(out)+48),'기준 이탈 → 직접 플레이','hi',-10);
+  g.text(top[n-1],'기준 곡선','',-12);
+  g.text(P(70,-(n-1)*10,0),'스테이지 진행 · 개념도','',24);
+});
+// 항목 선택
+const ops=[...document.querySelectorAll('.op')];
+function redraw(p){if(reduce)return;const f=p.querySelector('.fig');f.classList.remove('draw');void f.getBoundingClientRect();f.classList.add('draw')}
+function sel(i,focus){
+  ops.forEach((b,j)=>{const on=i===j,p=$(b.getAttribute('aria-controls'));b.setAttribute('aria-selected',on);b.tabIndex=on?0:-1;p.hidden=!on;if(on)redraw(p)});
+  if(focus)ops[i].focus();
+}
+ops.forEach((b,i)=>{
+  b.addEventListener('click',()=>sel(i));
+  b.addEventListener('keydown',e=>{const k={ArrowDown:1,ArrowRight:1,ArrowUp:-1,ArrowLeft:-1}[e.key];if(k){e.preventDefault();sel((i+k+ops.length)%ops.length,true)}});
+});
+if(!reduce&&'IntersectionObserver'in window){
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){redraw(document.querySelector('.ops-panel:not([hidden])'));io.disconnect()}}),{rootMargin:'0px 0px -20% 0px'});
+  io.observe($('ops'));
+}
 
 // 보스 실측
 const BOSS=[['코카트라코',18,'24,560',137.6],['실바드',47,'182,077',150.3],['불칸',64,'481,249',148.4],['기안티',78,'631,892',146.5],['가디안트',80,'649,094',146.0],['스텔리아',89,'735,865',145.0],['메카라곤',98,'825,029',142.9],['키메라',100,'843,062',146.7]];
