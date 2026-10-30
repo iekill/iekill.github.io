@@ -910,24 +910,27 @@ if(!reduce&&'IntersectionObserver'in window){
   io.observe($('ops'));
 }
 
-// 스크롤 연동: PC에서 블록을 화면에 고정하고, 스크롤 위치로 항목을 넘김
+// 스크롤 연동: PC에서 블록 아래쪽을 화면 하단에 맞춰 고정하고, 스크롤 위치로 항목을 넘김
+// (아래에 남는 스크롤 구간이 화면에 보이지 않게)
 const track=$('opsTrack'),opsBox=$('ops'),TOP=76;
-let step=0,cur=0;
+let step=0,cur=0,stick=TOP;
 function layoutOps(){
   const on=innerWidth>900&&opsBox.offsetHeight+TOP+16<innerHeight;
   track.classList.toggle('scrolly',on);
   step=on?Math.round(innerHeight*.45):0;
+  stick=Math.max(TOP,innerHeight-opsBox.offsetHeight-24);
+  opsBox.style.top=on?stick+'px':'';
   track.style.height=on?(opsBox.offsetHeight+step*(ops.length-1))+'px':'';
   syncOps();
 }
 function syncOps(){
   if(!step)return;
-  const i=Math.max(0,Math.min(ops.length-1,Math.round((TOP-track.getBoundingClientRect().top)/step)));
+  const i=Math.max(0,Math.min(ops.length-1,Math.round((stick-track.getBoundingClientRect().top)/step)));
   if(i!==cur){cur=i;sel(i)}
 }
 ops.forEach((b,i)=>b.addEventListener('click',()=>{
   cur=i;
-  if(step)scrollTo({top:scrollY+track.getBoundingClientRect().top-TOP+i*step,behavior:reduce?'auto':'smooth'});
+  if(step)scrollTo({top:scrollY+track.getBoundingClientRect().top-stick+i*step,behavior:reduce?'auto':'smooth'});
 }));
 addEventListener('scroll',syncOps,{passive:true});
 addEventListener('resize',layoutOps);
