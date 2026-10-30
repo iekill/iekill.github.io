@@ -210,6 +210,11 @@ table{border-collapse:collapse;width:100%}
 .fig path.da{fill:none;stroke-dasharray:3 4}
 .fig path.ah{fill:none}
 .fig .dot{fill:var(--accent)}
+#fig4 .slab{transform-box:fill-box;transform-origin:50% 100%}
+#fig4.draw path.sl{animation:none;stroke-dasharray:none;stroke-dashoffset:0}
+#fig4.draw .slab{animation:domino .5s cubic-bezier(.3,1.5,.5,1) both;animation-delay:calc(250ms + var(--s) * 70ms)}
+#fig4.draw path.da,#fig4.draw text{animation-delay:1.6s}
+@keyframes domino{0%{opacity:0;transform:scaleY(0)}100%{opacity:1;transform:none}}
 .fig path.tile{transition:stroke .4s ease,filter .4s ease}
 .fig path.tile.lit{stroke:var(--accent);filter:drop-shadow(0 0 5px var(--accent))}
 .fig text.tlab{transition:fill .4s ease}
@@ -957,13 +962,15 @@ fig($('fig3'),g=>{
 // FIG 1.4 난이도 성장 곡선 개념도, 기준 이탈 스테이지
 fig($('fig4'),g=>{
   const n=18,base=i=>18+i*7+(i%3)*5,out=11,top=[];
-  for(let i=n-1;i>=0;i--){const h=base(i)+(i===out?48:0);g.box(0,-i*20,0,70,4,h,i===out?'hi':'')}
+  for(let i=n-1;i>=0;i--){const h=base(i)+(i===out?48:0);g.box(0,-i*20,0,70,4,h,(i===out?'hi ':'')+'sl s'+i)}
   for(let i=0;i<n;i++)top.push(P(35,-i*20+2,base(i)));
   g.line(top,'da');
   g.text(P(35,-out*20+2,base(out)+48),'기준 이탈 → 직접 플레이','hi',-10);
   g.text(top[n-1],'기준 곡선','',-12);
   g.text(P(70,-(n-1)*10,0),'스테이지 진행 · 개념도','',24);
 });
+// FIG 1.4 판을 하나씩 묶어 왼쪽부터 도미노처럼 세움
+{const svg=$('fig4');for(let i=0;i<18;i++){const ps=svg.querySelectorAll('.s'+i);if(!ps.length)continue;const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.setAttribute('class','slab');g.style.setProperty('--s',i);ps[0].before(g);ps.forEach(p=>g.appendChild(p))}}
 // 항목 선택
 const ops=[...document.querySelectorAll('.op')];
 function redraw(p){if(reduce)return;const f=p.querySelector('.fig');f.classList.remove('draw');void f.getBoundingClientRect();f.classList.add('draw')}
