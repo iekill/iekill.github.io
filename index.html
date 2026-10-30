@@ -210,6 +210,11 @@ table{border-collapse:collapse;width:100%}
 .fig path.da{fill:none;stroke-dasharray:3 4}
 .fig path.ah{fill:none}
 .fig .dot{fill:var(--accent)}
+.fig path.tile{transition:stroke .25s ease,filter .25s ease}
+.fig path.tile.lit{stroke:var(--accent);filter:drop-shadow(0 0 5px var(--accent))}
+.fig text.tlab{transition:fill .25s ease}
+.fig text.tlab.lit{fill:var(--accent)}
+.fig text.tn.lit{font-weight:700}
 .fig text{font-family:var(--f);font-weight:400;font-size:13px;fill:var(--muted)}
 .fig text.hi{fill:var(--accent);font-weight:700}
 .fig.draw path:not(.da){stroke-dasharray:1 1;stroke-dashoffset:1;animation:draw 1.1s cubic-bezier(.3,.6,.2,1) var(--d,0s) forwards}
@@ -910,17 +915,32 @@ fig($('fig1'),g=>{
   g.text(under(170,0,64,64),'AI 실행','hi',20);
   outs.forEach(([y,s])=>g.text(P(390,y+40,0),s,'',8));
 });
-// FIG 1.2 스테이지 생성 · 밸런스 순환
+// FIG 1.2 스테이지 생성 · 밸런스 순환: 점이 지나가는 타일만 점등
+const RING_R=150,RING_A0=-Math.PI*.75,RING_T=7000;
 fig($('fig2'),g=>{
-  const R=150,N=5,ring=[];
-  for(let i=0;i<=72;i++){const a=i/72*Math.PI*2-Math.PI*.75;ring.push(P(R*Math.cos(a),R*Math.sin(a),0))}
+  const R=RING_R,N=5,ring=[];
+  for(let i=0;i<=72;i++){const a=i/72*Math.PI*2+RING_A0;ring.push(P(R*Math.cos(a),R*Math.sin(a),0))}
   g.line(ring,'da');
-  g.dot='M'+ring.map(p=>p.map(v=>v.toFixed(1)).join(' ')).join('L');
-  const names=[['패턴 학습','샘플 50개',''],['생성 자동화','테이블 · 리소스','hi'],['스코어링 밸런스','난이도 점수','hi'],['검증','실측',''],['데이터 업데이트','다시 순환','']];
-  const tiles=names.map((n,i)=>{const a=i/N*Math.PI*2-Math.PI*.75;return {x:R*Math.cos(a),y:R*Math.sin(a),n}});
-  [...tiles].sort((a,b)=>(a.x+a.y)-(b.x+b.y)).forEach(t=>g.box(t.x-28,t.y-28,0,56,56,12,t.n[2]));
-  tiles.forEach(t=>{const p=P(t.x,t.y,12);g.text(p,t.n[0],t.n[2],-40);g.text(p,t.n[1],'',-26)});
+  const names=[['패턴 학습','샘플 50개'],['생성 자동화','테이블 · 리소스'],['스코어링 밸런스','난이도 점수'],['검증','실측'],['데이터 업데이트','다시 순환']];
+  const tiles=names.map((n,i)=>{const a=i/N*Math.PI*2+RING_A0;return {x:R*Math.cos(a),y:R*Math.sin(a),n,i}});
+  [...tiles].sort((a,b)=>(a.x+a.y)-(b.x+b.y)).forEach(t=>g.box(t.x-28,t.y-28,0,56,56,12,'tile t'+t.i));
+  tiles.forEach(t=>{const p=P(t.x,t.y,12);g.text(p,t.n[0],'tlab tn t'+t.i,-40);g.text(p,t.n[1],'tlab t'+t.i,-26)});
 });
+if(!reduce){
+  const svg=$('fig2'),dot=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  dot.setAttribute('r','4');dot.setAttribute('class','dot');svg.appendChild(dot);
+  const groups=[0,1,2,3,4].map(i=>svg.querySelectorAll('.t'+i));
+  let lit=-1;
+  const tick=now=>{
+    const a=RING_A0+(now%RING_T)/RING_T*Math.PI*2,[x,y]=P(RING_R*Math.cos(a),RING_R*Math.sin(a),0);
+    dot.setAttribute('cx',x.toFixed(1));dot.setAttribute('cy',y.toFixed(1));
+    let on=-1;
+    for(let i=0;i<5;i++){let d=Math.abs(((a-(RING_A0+i/5*Math.PI*2))%(Math.PI*2)+Math.PI*3)%(Math.PI*2)-Math.PI);if(d<.32)on=i}
+    if(on!==lit){if(lit>=0)groups[lit].forEach(e=>e.classList.remove('lit'));if(on>=0)groups[on].forEach(e=>e.classList.add('lit'));lit=on}
+    requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
 // FIG 1.3 규칙 → 생성 → 완성, 완성에서 거꾸로 리뷰
 fig($('fig3'),g=>{
   g.box(0,0,0,90,90,6);
