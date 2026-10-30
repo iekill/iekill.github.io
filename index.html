@@ -277,6 +277,20 @@ table{border-collapse:collapse;width:100%}
 .cells > div.lit{background:var(--accent-soft)}
 .cells > div.lit::after{opacity:1}
 .cells > div.lit b{color:var(--deep)}
+/* PDF 다운로드 */
+.dl-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px}
+.hero-dl{margin-top:36px}
+.dl{display:inline-grid;grid-template-columns:auto auto;grid-template-rows:auto auto;column-gap:10px;align-items:center;padding:10px 16px 10px 12px;border:1px solid var(--hair-strong);color:var(--ink);text-decoration:none;transition:border-color .2s,background .2s}
+.hero .dl{border-color:var(--band-2);color:var(--on-band)}
+.dl .dl-i{grid-row:1 / span 2;width:28px;height:28px;display:grid;place-items:center;border:1px solid currentColor;font-weight:700;font-size:14px}
+.dl b{font-size:14px;color:inherit}
+.dl small{font-weight:400;font-size:11px;color:var(--muted)}
+.hero .dl small{color:var(--on-band-soft)}
+.dl:hover,.dl:focus-visible{border-color:var(--accent);background:var(--accent-soft)}
+.dl.main{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+.dl.main small{color:inherit;opacity:.8}
+.dl.main:hover{background:var(--accent-press)}
+@media (max-width:640px){.dl{flex:1 1 calc(50% - 4px)}}
 /* 작업물 팝업 */
 .has-work{cursor:pointer}
 .has-work .wk{justify-self:start;margin-top:8px;font-weight:700;font-size:12px;letter-spacing:.04em;color:var(--accent);border-bottom:1px solid transparent;transition:border-color .2s}
@@ -648,6 +662,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
       <div class="stat"><div class="v num"><span data-count="6">6</span><small>주</small></div><div class="k">1인 개발로 기획부터<br>AOS·iOS 출시까지</div></div>
       <div class="stat"><div class="v num"><span data-count="48">48</span><small>%</small></div><div class="k">Sort Master 초기 빌드<br>D1 잔존율</div></div>
     </div>
+    <div class="dl-row hero-dl"><a class="dl main" href="files/kwon_portfolio.pdf" download="권두현_포트폴리오.pdf"><span class="dl-i" aria-hidden="true">↓</span><b>포트폴리오</b><small>PDF · 0.5MB</small></a><a class="dl" href="files/kwon_resume.pdf" download="권두현_이력서.pdf"><span class="dl-i" aria-hidden="true">↓</span><b>이력서</b><small>PDF · 0.1MB</small></a><a class="dl" href="files/kwon_career.pdf" download="권두현_경력기술서.pdf"><span class="dl-i" aria-hidden="true">↓</span><b>경력기술서</b><small>PDF · 0.2MB</small></a><a class="dl" href="files/kwon_cover_letter.pdf" download="권두현_자기소개서.pdf"><span class="dl-i" aria-hidden="true">↓</span><b>자기소개서</b><small>PDF · 0.1MB</small></a></div>
   </div>
 </header>
 
@@ -1060,7 +1075,8 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
     <div><div class="label">Contact</div></div>
     <div>
       <h2>감사합니다</h2>
-      <p style="margin-top:12px;max-width:36em">이력서, 경력기술서, 포트폴리오 PDF는 메일로 요청하시면 보내드립니다.</p>
+      <p style="margin-top:12px;max-width:36em">포트폴리오, 이력서, 경력기술서, 자기소개서를 PDF로 받으실 수 있습니다.</p>
+      <div class="dl-row"><a class="dl main" href="files/kwon_portfolio.pdf" download="권두현_포트폴리오.pdf"><span class="dl-i" aria-hidden="true">↓</span><b>포트폴리오</b><small>PDF · 0.5MB</small></a><a class="dl" href="files/kwon_resume.pdf" download="권두현_이력서.pdf"><span class="dl-i" aria-hidden="true">↓</span><b>이력서</b><small>PDF · 0.1MB</small></a><a class="dl" href="files/kwon_career.pdf" download="권두현_경력기술서.pdf"><span class="dl-i" aria-hidden="true">↓</span><b>경력기술서</b><small>PDF · 0.2MB</small></a><a class="dl" href="files/kwon_cover_letter.pdf" download="권두현_자기소개서.pdf"><span class="dl-i" aria-hidden="true">↓</span><b>자기소개서</b><small>PDF · 0.1MB</small></a></div>
       <div class="mail"><code id="mail">iekill820112@gmail.com</code><button class="b" id="copy" type="button">주소 복사</button></div>
       <div class="books">
         <div><div class="k">저서 · 출판 계약 완료 · 출간 준비 중</div><b>게임 기획의 언어 1권 : 게임 시스템 설계</b></div>
