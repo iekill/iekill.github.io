@@ -344,6 +344,44 @@ dialog.work[open]::backdrop{animation:fade .35s ease}
 .box{background:var(--canvas);border:1px solid var(--hair);padding:28px}
 .alt .box{background:var(--canvas)}
 
+/* 밸런스 01: 공식 모델 */
+.sub-h{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px;margin-bottom:16px}
+.sub-h .label{color:var(--muted)}
+.sub > .label{display:block}
+.wk-btn{all:unset;cursor:pointer;font-weight:700;font-size:12px;letter-spacing:.04em;color:var(--accent);border-bottom:1px solid transparent}
+.wk-btn::after{content:" ↗"}
+.wk-btn:hover,.wk-btn:focus-visible{border-bottom-color:var(--accent)}
+.fx{padding-bottom:18px;border-bottom:1px solid var(--hair);display:grid;gap:8px}
+.fx-main{font-weight:700;color:var(--ink);font-size:clamp(14px,1.6vw,17px);line-height:1.8}
+.fx-main i{font-style:normal;color:var(--accent);border-bottom:1px dashed var(--accent);padding:0 1px;transition:background .25s}
+.fx-main i.hot{background:var(--accent-soft)}
+.fx-sub{font-size:13px;color:var(--muted)}
+.model-grid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:28px;margin-top:20px}
+.model .ctrls{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px}
+.model .ctrls label{gap:6px}
+.model .ctrls .row{display:flex;justify-content:space-between;gap:8px}
+.model .ctrls .row b{font-size:13px;color:var(--ink)}
+.model input[type=range]{width:100%;accent-color:var(--accent);margin:0}
+.model-out{display:grid;gap:6px;align-content:start}
+.model-out .big{font-weight:700;font-size:clamp(40px,5vw,56px);line-height:1;color:var(--ink)}
+.curve{width:100%;height:auto;margin-top:8px;overflow:visible}
+.curve .ax{stroke:var(--hair-strong);stroke-width:1}
+.curve .ln{fill:none;stroke:var(--accent);stroke-width:2}
+.curve .gd{stroke:var(--hair);stroke-dasharray:3 4}
+.curve .pt{fill:var(--accent)}
+.curve text{font-family:var(--f);font-size:11px;fill:var(--muted)}
+/* 밸런스 03: 1안 / 최종 전환 */
+.dec-h{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px 16px}
+.seg{display:inline-flex;border:1px solid var(--hair-strong)}
+.seg button{all:unset;cursor:pointer;padding:8px 14px;font-weight:700;font-size:13px;color:var(--muted);transition:background .25s,color .25s}
+.seg button+button{border-left:1px solid var(--hair-strong)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.deciles .c b{transition:height .9s cubic-bezier(.2,.7,.2,1),background .45s ease}
+.deciles .ln{opacity:.35;transition:opacity .35s}
+.deciles .ln.on{opacity:1}
+@media (max-width:900px){.model-grid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:640px){.model .ctrls{grid-template-columns:minmax(0,1fr)}}
 /* demo */
 .demo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:start}
 .ctrls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
@@ -703,12 +741,23 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   </div>
 
   <div class="sub" style="margin-top:0">
-    <span class="label">01 · 계산</span>
-    <div class="calc rv">
-      <span><small>기준</small>방어율 50%</span>
-      <span><small>희망 피격 횟수 →</small>몬스터 체력</span>
-      <span><small>희망 타격 횟수 →</small>몬스터 공격력</span>
-      <span><small>결과</small>1:N 사냥 수 · 딜 사이클</span>
+    <div class="sub-h"><span class="label">01 · 계산 · 목표 전투 시간에서 몬스터 공격력 역산</span><button class="wk-btn" type="button" data-work="b01" aria-haspopup="dialog">작업물 보기</button></div>
+    <div class="box model rv" id="model">
+      <div class="fx">
+        <div class="cap">「00_던전 밸런스 시트」 몬스터 공격력 공식</div>
+        <p class="fx-main">몬스터 공격력 = ((<i data-v="hp">공격자 체력</i> + <i data-v="hps">공격자 HPS</i> × <i data-v="n">공격 인원</i> + <i data-v="pot">물약 회복</i>) ÷ (<i data-v="t">전투 시간</i> × (1 − <i data-v="dr">기준 방어율</i>))) × (1 + <i data-v="adj">보정값</i>) + 정수 보정</p>
+        <p class="fx-sub num" id="fxSub"></p>
+      </div>
+      <div class="model-grid">
+        <div class="ctrls" id="mCtrls"></div>
+        <div class="model-out">
+          <div class="cap">몬스터 공격력</div>
+          <div class="big num" id="mAtk">0</div>
+          <p class="cap" id="mNote"></p>
+          <svg class="curve" id="mCurve" viewBox="0 0 400 180" role="img" aria-label="전투 시간에 따른 몬스터 공격력 곡선"></svg>
+        </div>
+      </div>
+      <p class="cap" style="margin-top:14px">정해진 전투 시간 안에 파티의 체력과 회복량을 모두 깎으려면 몬스터 공격력이 얼마나 필요한지 역산합니다. 공식은 원본 시트 그대로이고, 입력값은 예시입니다.</p>
     </div>
   </div>
 
@@ -724,10 +773,10 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   <div class="sub">
     <span class="label">03 · 출시 후 · 라이브 보정</span>
     <div class="box rv">
-      <p>에피소드 2 하드 · 1서버 상위 랭커(직업별 200인) 전투력 10분위</p>
+      <div class="dec-h"><p>에피소드 2 하드 · 1서버 상위 랭커(직업별 200인) 전투력 10분위</p><div class="seg" role="group" aria-label="진입 기준"><button type="button" data-th="98" aria-pressed="false">1안 98만</button><button type="button" data-th="55" aria-pressed="false">최종 55만</button></div></div>
       <div class="deciles pre" id="deciles" role="img" aria-label="전투력 10분위: 64만부터 174만. 1안 진입 기준 98만, 최종 진입 기준 55만"></div>
       <div class="dx" id="dx"></div>
-      <p class="result">1안 98만이면 10개 분위 중 8개가 진입 기준 미달 → 최종 55만</p>
+      <p class="result" id="decRes">1안 98만이면 10개 분위 중 8개가 진입 기준 미달 → 최종 55만</p>
       <div class="decide">
         <div><div class="k">유지</div><b>상위 3단계</b><p>98만 · 116만 · 141만</p></div>
         <div><div class="k">추가</div><b>하위 2단계</b><p>55만 · 70만</p></div>
@@ -737,30 +786,6 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
     <p class="src">「M4 밸런스」 필드보스 시트, 「던전 밸런스」 ver1.0 — 7.1, 「테스트_몬스터 체력」(2021.01.20), 「에피2_하드모드_기준투력」(2021.08.23) 재구성</p>
   </div>
 
-  <div class="sub" id="demo">
-    <span class="label">Demo · 보스전 시간 계산기</span>
-    <div class="box demo rv">
-      <div>
-        <p style="margin-bottom:18px">파티 DPS로 처치 시간을, 보스 DPS와 파티 회복량으로 버틸 수 있는 시간을 계산해 어느 쪽이 먼저 끝나는지 봅니다. 수치는 예시이며 실제 서비스 데이터가 아닙니다.</p>
-        <div class="ctrls">
-          <label for="bHP">보스 체력<input id="bHP" type="number" inputmode="numeric" value="2400000" min="1" step="10000"></label>
-          <label for="pDPS">파티 DPS (5인 합)<input id="pDPS" type="number" inputmode="numeric" value="20000" min="1" step="500"></label>
-          <label for="bDPS">보스 DPS<input id="bDPS" type="number" inputmode="numeric" value="2400" min="0" step="100"></label>
-          <label for="pHP">파티 체력 합<input id="pHP" type="number" inputmode="numeric" value="150000" min="1" step="1000"></label>
-          <label for="pHPS">파티 회복 HPS<input id="pHPS" type="number" inputmode="numeric" value="1200" min="0" step="100"></label>
-          <label for="tgt">목표 전투 시간 (초)<input id="tgt" type="number" inputmode="numeric" value="120" min="1" step="5"></label>
-        </div>
-      </div>
-      <div>
-        <div class="race">
-          <div class="r"><span>처치 시간</span><span class="track"><b id="kBar"></b><i class="tgt" id="tMark"></i></span><span class="t num" id="kT"></span></div>
-          <div class="r surv"><span>버티는 시간</span><span class="track"><b id="sBar"></b></span><span class="t num" id="sT"></span></div>
-        </div>
-        <p class="cap" style="margin-top:8px">세로선: 목표 전투 시간</p>
-        <div class="verdict" id="verdict"></div>
-      </div>
-    </div>
-  </div>
 </div></section>
 
 <section class="sec" id="lead"><div class="wrap">
@@ -1104,6 +1129,7 @@ document.querySelectorAll('#ni .cells, #swc .cells').forEach(grid => {
 
 // 작업물 팝업: 원본 기획서 장면 (회사 머리글·대외비 표시 제거)
 const WORKS={
+  b01:{k:'제2의 나라 · 밸런스 · 계산',t:'몬스터 공격력 역산과 클래스별 DPS',src:'00_던전 밸런스 시트 · Battle_골드던전 · DB_User_DPS · 2021 — 2022',f:[['c02_monatk','몬스터 공격력 역산','공격자 체력 · HPS · 공격 인원과 목표 전투 시간, 기준 방어율로 단계별 공격력과 DPS 산출'],['c02_dps','클래스별 DPS 모델','레벨 · 스킬 레벨에 따른 클래스 5종의 속성별 DPS와 평균 DPS']]},
   c01:{k:'제2의 나라 · 전투 수식',t:'전투 수식 정의',src:'00_던전 밸런스 시트 · 전투 수식 · 2021 — 2022',f:[['c01_formula','단계별 피해 계산','최종 피해 → 1차 피해(공격력 · 방어율) → 속성 공방 순으로 Factor와 수식, 참조 OperationType 정의']]},
   c02:{k:'제2의 나라 · PVE 전투 밸런스',t:'DPS · HPS 기반 몬스터 공격력 산출',src:'00_던전 밸런스 시트 · Battle_골드던전 · DB_User_DPS · 2021 — 2022',f:[['c02_monatk','몬스터 공격력 역산','공격자 체력 · HPS · 공격 인원과 목표 전투 시간, 기준 방어율로 보스 공격력과 DPS를 단계별로 산출'],['c02_dps','클래스별 DPS 모델','레벨 · 스킬 레벨에 따른 클래스 5종의 속성별 DPS와 평균 DPS']]},
   c03:{k:'제2의 나라 · 전투 구조',t:'데미지 압축 · 제한 보정',src:'00_던전 밸런스 시트 · 유물전장_데미지압축율 · 월드이벤트_데미지제한 · 2021 — 2022',f:[['c03_compress','데미지 압축율','레벨별 예상 피해에 압축 지수 Damage^(변수/10000)를 적용해 처치 시간과 1인 데미지 효율을 검증'],['c03_cap','데미지 제한','HP의 Param1% 초과 피해에는 Param2%만 적용하고, 적용 전후 처치 시간을 비교']]},
@@ -1149,8 +1175,8 @@ $('bossbars').innerHTML=BOSS.map(([n,lv,cp,t])=>`<div class="r"><div class="nm">
 // 라이브 10분위
 const DEC=[64,67,71,74,77,81,86,92,106,174],DMAX=180;
 const pct=v=>(v/DMAX*100).toFixed(1)+'%';
-$('deciles').innerHTML=DEC.map(v=>`<div class="c${v>=98?' ok':''}" style="--h:${pct(v)}"><b></b><span class="num">${v}만</span></div>`).join('')
-  +`<div class="ln" style="bottom:${pct(98)}"><em>1안 98만</em></div><div class="ln fin" style="bottom:${pct(55)}"><em>최종 55만</em></div>`;
+$('deciles').innerHTML=DEC.map(v=>`<div class="c" style="--h:${pct(v)}"><b></b><span class="num">${v}만</span></div>`).join('')
+  +`<div class="ln" data-th="98" style="bottom:${pct(98)}"><em>1안 98만</em></div><div class="ln fin" data-th="55" style="bottom:${pct(55)}"><em>최종 55만</em></div>`;
 $('dx').innerHTML=DEC.map((_,i)=>`<span>${i+1}분위</span>`).join('');
 
 // 등장 애니메이션: 첫 화면 밖 요소만
@@ -1210,25 +1236,52 @@ function onScroll(){
 }
 addEventListener('scroll',onScroll,{passive:true});onScroll();
 
-// 보스전 계산기
-const ids=['bHP','pDPS','bDPS','pHP','pHPS','tgt'];
-const fmt=s=>!isFinite(s)?'무한':s>=600?Math.round(s/60)+'분':Math.round(s)+'초';
-function calc(){
-  const v=Object.fromEntries(ids.map(k=>[k,Math.max(0,+$(k).value||0)]));
-  const kill=v.bHP/Math.max(1,v.pDPS);
-  const net=v.bDPS-v.pHPS;const surv=net<=0?Infinity:v.pHP/net;
-  const max=Math.max(kill,isFinite(surv)?surv:kill*1.6,v.tgt)*1.05;
-  $('kBar').style.width=(kill/max*100)+'%';
-  $('sBar').style.width=(isFinite(surv)?surv/max*100:100)+'%';
-  $('tMark').style.left=(v.tgt/max*100)+'%';
-  $('kT').textContent=fmt(kill);$('sT').textContent=fmt(surv);
-  const vd=$('verdict'),ratio=surv/kill;vd.className='verdict';
-  if(!isFinite(surv)){vd.textContent=`회복이 보스 피해를 넘어서 생존 압박이 없습니다. 목표 ${v.tgt}초 대비 처치 ${fmt(kill)}.`;vd.classList.add('warn')}
-  else if(ratio<1){vd.textContent='버티는 시간이 처치 시간보다 짧습니다. 파티가 먼저 쓰러집니다.';vd.classList.add('bad')}
-  else if(ratio<1.3){vd.textContent=`여유 ${Math.round((ratio-1)*100)}% · 실수 한 번이 패배로 이어지는 긴장 구간입니다. 목표 ${v.tgt}초 대비 처치 ${fmt(kill)}.`}
-  else{vd.textContent=`여유 ${Math.round((ratio-1)*100)}% · 생존 압박이 약합니다. 보스 DPS를 올리거나 회복을 줄여 보세요.`;vd.classList.add('warn')}
+
+// 밸런스 01: 원본 시트 공식으로 몬스터 공격력 역산 (입력값은 예시)
+{
+  const P=[['hp','공격자 체력',30000,5000,200000,1000,v=>v.toLocaleString()],['hps','공격자 HPS',1160,0,5000,10,v=>v.toLocaleString()],['n','공격 인원',5,1,10,1,v=>v+'명'],['pot','물약 회복',0,0,20000,500,v=>v.toLocaleString()],['t','전투 시간',10,3,60,1,v=>v+'초'],['dr','기준 방어율',60,0,90,1,v=>v+'%'],['adj','보정값',0,-50,100,1,v=>(v>0?'+':'')+v+'%']];
+  const st={};P.forEach(p=>st[p[0]]=p[2]);
+  $('mCtrls').innerHTML=P.map(([k,l,v,a,b,s])=>'<label><span class="row"><span>'+l+'</span><b id="mv_'+k+'"></b></span><input type="range" min="'+a+'" max="'+b+'" step="'+s+'" value="'+v+'" data-k="'+k+'" aria-label="'+l+'"></label>').join('');
+  const atkAt=t=>((st.hp+st.hps*st.n+st.pot)/(t*(1-st.dr/100)))*(1+st.adj/100);
+  const svg=$('mCurve'),W=400,H=180,L=36,B=24,T0=3,T1=60;
+  function draw(){
+    const a=atkAt(st.t),ymax=atkAt(T0)*1.05,x=t=>L+(t-T0)/(T1-T0)*(W-L-8),y=v=>H-B-(v/ymax)*(H-B-8);
+    let d='';for(let t=T0;t<=T1;t+=.5)d+=(d?'L':'M')+x(t).toFixed(1)+' '+y(atkAt(t)).toFixed(1);
+    svg.innerHTML='<line class="ax" x1="'+L+'" y1="'+(H-B)+'" x2="'+W+'" y2="'+(H-B)+'"/><line class="ax" x1="'+L+'" y1="4" x2="'+L+'" y2="'+(H-B)+'"/>'
+      +'<line class="gd" x1="'+x(st.t)+'" y1="'+y(a)+'" x2="'+x(st.t)+'" y2="'+(H-B)+'"/><line class="gd" x1="'+L+'" y1="'+y(a)+'" x2="'+x(st.t)+'" y2="'+y(a)+'"/>'
+      +'<path class="ln" d="'+d+'"/><circle class="pt" r="5" cx="'+x(st.t)+'" cy="'+y(a)+'"/>'
+      +'<text x="'+L+'" y="'+(H-6)+'">'+T0+'초</text><text x="'+(W-4)+'" y="'+(H-6)+'" text-anchor="end">'+T1+'초 · 전투 시간</text>';
+  }
+  function calc(){
+    P.forEach(([k,,,,,,f])=>$('mv_'+k).textContent=f(st[k]));
+    const a=atkAt(st.t);
+    $('mAtk').textContent=Math.round(a).toLocaleString();
+    $('fxSub').textContent='= (('+st.hp.toLocaleString()+' + '+st.hps.toLocaleString()+' × '+st.n+' + '+st.pot.toLocaleString()+') ÷ ('+st.t+' × (1 − '+(st.dr/100).toFixed(2)+'))) × (1 + '+(st.adj/100).toFixed(2)+')';
+    $('mNote').textContent='전투 시간을 '+st.t+'초에서 '+(st.t*2)+'초로 늘리면 '+Math.round(atkAt(st.t*2)).toLocaleString()+'으로 절반이 됩니다.';
+    draw();
+  }
+  $('mCtrls').addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;st[k]=+e.target.value;calc();
+    document.querySelectorAll('.fx-main i').forEach(i=>i.classList.toggle('hot',i.dataset.v===k))});
+  calc();
 }
-ids.forEach(k=>$(k).addEventListener('input',calc));calc();
+
+// 밸런스 03: 진입 기준 1안 / 최종 전환. 도착하면 1안을 보여 준 뒤 최종으로 넘어감
+{
+  const cells=[...$('deciles').querySelectorAll('.c')],lines=[...$('deciles').querySelectorAll('.ln')],btns=[...document.querySelectorAll('.seg button')];
+  let touched=false;
+  function setTh(th){
+    let n=0;cells.forEach((c,i)=>{const ok=DEC[i]>=th;c.classList.toggle('ok',ok);if(ok)n++});
+    lines.forEach(l=>l.classList.toggle('on',+l.dataset.th===th));
+    btns.forEach(b=>b.setAttribute('aria-pressed',+b.dataset.th===th));
+    $('decRes').textContent=th===98?'1안 98만 · 10개 분위 중 '+n+'개만 진입 가능, 8개가 진입 기준 미달':'최종 55만 · 10개 분위 모두 진입 가능. 상위 3단계는 유지하고 하위 2단계를 추가';
+  }
+  btns.forEach(b=>b.addEventListener('click',()=>{touched=true;setTh(+b.dataset.th)}));
+  setTh(55);
+  if(!reduce&&'IntersectionObserver'in window){
+    const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){o.disconnect();setTh(98);setTimeout(()=>{if(!touched)setTh(55)},2200)}}),{rootMargin:'0px 0px -35% 0px'});
+    o.observe($('deciles'));
+  }
+}
 
 // 메일 복사
 $('copy').onclick=async e=>{
