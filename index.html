@@ -674,15 +674,15 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
       </div>
     </div>
     <div class="cells">
-      <div><span class="n">01</span><b>전투</b></div>
-      <div><span class="n">02</span><b>월드</b></div>
+      <div class="has-work" data-work="d01" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">01</span><b>전투</b><span class="wk">작업물 보기</span></div>
+      <div class="has-work" data-work="d02" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">02</span><b>월드</b><span class="wk">작업물 보기</span></div>
       <div><span class="n">03</span><b>퀘스트</b></div>
-      <div><span class="n">04</span><b>아이템</b></div>
-      <div><span class="n">05</span><b>캐릭터</b></div>
+      <div class="has-work" data-work="d04" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">04</span><b>아이템</b><span class="wk">작업물 보기</span></div>
+      <div class="has-work" data-work="d05" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">05</span><b>캐릭터</b><span class="wk">작업물 보기</span></div>
       <div><span class="n">06</span><b>성장</b></div>
       <div><span class="n">07</span><b>전투 수식</b></div>
-      <div><span class="n">08</span><b>AI 시스템</b></div>
-      <div><span class="n">09</span><b>프로토타입 개발</b></div>
+      <div class="has-work" data-work="d08" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">08</span><b>AI 시스템</b><span class="wk">작업물 보기</span></div>
+      <div class="has-work" data-work="d09" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">09</span><b>프로토타입 개발</b><span class="wk">작업물 보기</span></div>
     </div>
     <div class="feature">
       <div class="label">Com2us · 함께 맡은 프로젝트</div>
@@ -1113,6 +1113,12 @@ const WORKS={
   c07:{k:'제2의 나라 · 탑승물',t:'탈것 마스터 시스템 방향 제안',src:'탈것 마스터 시스템 방향 제안 v1.0.6 · 2019.05',f:[['c07_s04','성장 구조 정리','흩어진 성장 요소를 수집과 성장 중심으로 통합'],['c07_s13','교감 · 진화 순환','교감 성장과 진화(랭크업)로 이어지는 순환 구조']]},
   c08:{k:'제2의 나라 · 크로스 필드',t:'크로스 필드 개선안과 보스 체력 공유',src:'크로스필드 개선 초안 1.0.0 · 2021.11 / 4UD 시스템 문서 v2.0.0 · 2022.04',f:[['c08_s04','입장 UI 개선','입장 화면에서 매칭 서버와 점령 타워 상태를 바로 확인'],['c08_s15','점령전 PK 전환','점령전 중 타 서버 사용자를 강제 적대 대상으로 전환'],['c08_hpshare','채널 간 보스 체력 공유','같은 월드의 모든 채널에 스폰된 보스가 하나의 체력을 공유 · 채널 확장 후에도 다수가 같은 보스를 공략']]},
   c09:{k:'제2의 나라 · 레벨 디자인',t:'정예 던전 공적단 조선소 레벨 기획',src:'정예던전 공적단조선소01 레벨기획 · 2020.10',f:[['c09_s12','주요 동선','일반 · 선택 · 일방 통행 동선 설계'],['c09_s13','던전 규모','사냥터 8곳의 크기와 배치']]},
+  d01:{k:'서머너즈워 크로니클 · 전투',t:'자동 전투 시스템',src:'Auto_Battle 20181031_02 · 2018.10',f:[['d01_auto1','자동 전투 사용과 탐지 범위','자동 전투 버튼, 활성화 지점 기준 Range Detect 생성과 적 탐색'],['d01_auto2','상황별 예외 처리','평화 지역 진입 시 일시 정지, 이동 이벤트 난입 후 재개 기준']]},
+  d02:{k:'서머너즈워 크로니클 · 월드',t:'월드맵 시스템 개선 제안',src:'World_Map 20180328_01 · 2018.03',f:[['d02_simple','월드맵 단순화','캡슐 정보 중심으로 맵 표현을 줄이고 실제 배치와의 싱크를 정리'],['d02_auto','목적지 선택 자동 이동','선택한 캡슐까지 가장 가까운 경로로 자동 이동']]},
+  d04:{k:'서머너즈워 크로니클 · 아이템',t:'장비 파츠 구성',src:'Item_List 20180730_01 · 2018.07',f:[['d04_parts','캐릭터 파츠 구성','투구 · 갑옷 · 장갑 · 신발 · 장신구 파츠와 장비 구성 기준']]},
+  d05:{k:'서머너즈워 크로니클 · 캐릭터',t:'캐릭터 시스템',src:'Character_System 20180806_03 · 2018.08',f:[['d05_table','테이블 데이터 분리','PC를 기존 Actors 테이블에서 분리하고 몬스터 · 소환수 · NPC · 오브젝트를 4개 테이블로 구성'],['d05_compose','캐릭터 구성 정보','외형 · 스탯 · 아이템 · 전투 정보로 나눈 Player Character 데이터 구성']]},
+  d08:{k:'서머너즈워 크로니클 · AI 시스템',t:'AI 시스템 설계',src:'Ai_Formation 20180906_06 · 2018.09',f:[['d08_split','AI 시스템 분리','Battle AI · Skill AI · Pattern AI로 역할을 나눈 구조'],['d08_formation','Formation 유지와 추적','소환수가 소환사 주변 Formation 영역을 유지하며 추적하는 규칙']]},
+  d09:{k:'서머너즈워 크로니클 · 프로토타입 개발',t:'1-1 빌드 리뷰',src:'1_1_빌드 리뷰 · 2018',f:[['d09_review','빌드 플레이 리뷰','이동 · 스킬 예약 · 평타 · 원거리 대시 · 소환수 전투 개선점 정리'],['d09_log','전투 로그 제안','전투 중 일어난 일을 채팅창 로그로 확인하는 기능 제안']]},
 };
 const dlg=$('work');
 function openWork(key,from){
