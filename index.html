@@ -292,6 +292,11 @@ dialog.work[open]::backdrop{animation:fade .35s ease}
 .work-body img{display:block;width:100%;height:auto;background:#fff}
 .work-body figcaption{font-weight:400;font-size:14px;color:var(--muted)}
 .work-body figcaption b{color:var(--ink);font-size:15px;margin-right:8px}
+.work-body pre.code{margin:0;padding:20px 22px;background:#0b0f14;border:1px solid var(--hair);overflow-x:auto;font-family:ui-monospace,SFMono-Regular,Consolas,"D2Coding",monospace;font-size:13px;line-height:1.65;color:#d6dde6}
+.work-body pre.code i{font-style:normal}
+.work-body pre.code .cm{color:#6a9955}
+.work-body pre.code .kw{color:#c586c0}
+.work-body pre.code .nu{color:#b5cea8}
 .work-body .note{font-size:15px;line-height:1.75;padding:16px 18px;background:var(--soft);border-left:3px solid var(--accent)}
 @media (max-width:640px){.work-head{padding:16px}.work-body{padding:16px 16px 24px}.work-head h3{font-size:18px}}
 @media (prefers-reduced-motion:reduce){dialog.work[open],dialog.work[open]::backdrop{animation:none}}
@@ -639,9 +644,9 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
       </div>
     </div>
     <div class="cells">
-      <div><span class="n">01</span><b>전투 수식</b><p>스킬 피해 → 속성·등급·종족 배율 → 상성 → 피해 편차 → 치명타로 이어지는 계층형 데미지 구조, 5속성 상성</p></div>
-      <div><span class="n">02</span><b>PVE 전투 밸런스</b><p>클래스 5종 DPS · 유저 HPS 모델로 필드 보스 · 월드 보스 · 던전의 전투 시간과 생존 압박 설계 <a href="#combat" style="color:var(--accent)">→ 밸런스</a></p></div>
-      <div><span class="n">03</span><b>전투 구조</b><p>콘텐츠별 데미지 압축 · 제한 보정 구조 설계</p></div>
+      <div class="has-work" data-work="c01" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">01</span><b>전투 수식</b><p>스킬 피해 → 속성·등급·종족 배율 → 상성 → 피해 편차 → 치명타로 이어지는 계층형 데미지 구조, 5속성 상성</p><span class="wk">작업물 보기</span></div>
+      <div class="has-work" data-work="c02" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">02</span><b>PVE 전투 밸런스</b><p>클래스 5종 DPS · 유저 HPS 모델로 필드 보스 · 월드 보스 · 던전의 전투 시간과 생존 압박 설계 <a href="#combat" style="color:var(--accent)">→ 밸런스</a></p><span class="wk">작업물 보기</span></div>
+      <div class="has-work" data-work="c03" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">03</span><b>전투 구조</b><p>콘텐츠별 데미지 압축 · 제한 보정 구조 설계</p><span class="wk">작업물 보기</span></div>
       <div class="has-work" data-work="c04" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">04</span><b>보스 전투 패턴</b><p>루아 스크립트 기반 PVE 보스 패턴 설계</p><span class="wk">작업물 보기</span></div>
       <div class="has-work" data-work="c05" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">05</span><b>성장 던전</b><p>메타 성장 콘텐츠 기획</p><span class="wk">작업물 보기</span></div>
       <div class="has-work" data-work="c06" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">06</span><b>카오스 필드</b><p>방치 성장 콘텐츠 기획</p><span class="wk">작업물 보기</span></div>
@@ -1070,18 +1075,23 @@ if(document.fonts)document.fonts.ready.then(layoutOps);
 
 // 작업물 팝업: 원본 기획서 장면 (회사 머리글·대외비 표시 제거)
 const WORKS={
-  c04:{k:'제2의 나라 · 보스 전투 패턴',t:'필드 보스 메카라곤 패턴 기획',src:'필드보스06_메카라곤 패턴 v1.0.1 · 2020.04',f:[['c04_s18','스킬 범위 명세','도넛형 장판 스킬의 범위·효과·연출 정의'],['c04_s23','페이즈별 스킬 사용 비율','HP 구간마다 사용 스킬과 비율을 바꾸는 Battle Pattern AI']]},
+  c01:{k:'제2의 나라 · 전투 수식',t:'전투 수식 정의',src:'00_던전 밸런스 시트 · 전투 수식 · 2021 — 2022',f:[['c01_formula','단계별 피해 계산','최종 피해 → 1차 피해(공격력 · 방어율) → 속성 공방 순으로 Factor와 수식, 참조 OperationType 정의']]},
+  c02:{k:'제2의 나라 · PVE 전투 밸런스',t:'DPS · HPS 기반 몬스터 공격력 산출',src:'00_던전 밸런스 시트 · Battle_골드던전 · DB_User_DPS · 2021 — 2022',f:[['c02_monatk','몬스터 공격력 역산','공격자 체력 · HPS · 공격 인원과 목표 전투 시간, 기준 방어율로 보스 공격력과 DPS를 단계별로 산출'],['c02_dps','클래스별 DPS 모델','레벨 · 스킬 레벨에 따른 클래스 5종의 속성별 DPS와 평균 DPS']]},
+  c03:{k:'제2의 나라 · 전투 구조',t:'데미지 압축 · 제한 보정',src:'00_던전 밸런스 시트 · 유물전장_데미지압축율 · 월드이벤트_데미지제한 · 2021 — 2022',f:[['c03_compress','데미지 압축율','레벨별 예상 피해에 압축 지수 Damage^(변수/10000)를 적용해 처치 시간과 1인 데미지 효율을 검증'],['c03_cap','데미지 제한','HP의 Param1% 초과 피해에는 Param2%만 적용하고, 적용 전후 처치 시간을 비교']]},
+  c04:{k:'제2의 나라 · 보스 전투 패턴',t:'필드 보스 패턴 기획과 AI 스크립트',src:'필드보스06_메카라곤 패턴 v1.0.1 · 2020.04 / Monster_Guardiant.lua · 2021',f:[['c04_s18','스킬 범위 명세','도넛형 장판 스킬의 범위 · 효과 · 연출 정의'],['c04_s23','페이즈별 스킬 사용 비율','HP 구간마다 사용 스킬과 비율을 바꾸는 Battle Pattern AI']],code:{h:'루아 스크립트 · 필드 보스 가디안트',c:'기획서의 페이즈 · 확률 설계를 그대로 옮긴 Battle AI (일부 발췌)',s:"-- Ai 페이즈 설정 : 체력 구간(만분율)으로 페이즈 분류\nPHASE_01 = 9100;   -- 1 페이즈 : 100 ~ 91%  일반 공격만 사용\nPHASE_02 = 7100;   -- 2 페이즈 : 90 ~ 71%\nPHASE_03 = 5100;   -- 3 페이즈 : 70 ~ 51%\nPHASE_04 = 3100;   -- 4 페이즈 : 50 ~ 31%\nPHASE_05 = 3000;   -- 5 페이즈 : 30 ~ 0%  광폭화 모드\n\n-- 페이즈 별 스킬 목록 : {스킬 Id, 확률}, 확률 합산은 100\nPHASE_03_SKILL_LIST =\n{\n    {NORMAR_ATTACK_01, 10},\n    {NORMAR_ATTACK_02, 15},\n    {ACTIVE_SKILL_01, 25},   -- 전방 3회 폭발\n    {ACTIVE_SKILL_02, 25},   -- 힐윈드\n    {ACTIVE_SKILL_03, 25},   -- 도넛 3회 공격\n    {ACTIVE_SKILL_04, 0}     -- 랜덤 장판 소환\n};\n\nfunction SelectSkill(npc, npcInfo)\n    local SKILL_ID = 0;\n    PHASE_CHECK(npc)\n    if BATTLE_PHASE == 5 then\n        SKILL_ID = PHASE_05_SKILL()\n    elseif BATTLE_PHASE == 4 then\n        SKILL_ID = PHASE_04_SKILL()\n    elseif BATTLE_PHASE == 3 then\n        SKILL_ID = PHASE_03_SKILL()\n    ...\n    return SKILL_ID\nend"}},
   c05:{k:'제2의 나라 · 성장 던전',t:'장비 던전 개선',src:'장비 던전 개선 v2.1.1 · 2020.07',f:[['c05_s07','던전 흐름 개선','장벽을 걷어내고 NPC 호위 중심으로 흐름 단순화'],['c05_s16','점수 계산 방식 개선','타임 어택 대신 처치 누적 점수로 랭크 산정']]},
-  c06:{k:'제2의 나라 · 카오스 필드',t:'보스 체력 공유 시스템',src:'4UD 시스템_카오스필드 v2.0.0 · 2022.04',note:'<b>기획 의도</b> · 카오스 필드가 입장 제한 없는 1채널 형태에서 채널 확장 형태로 바뀌면서, 기존 게임 경험을 유지하고 다수의 사용자가 보스 공략에 참여할 수 있도록 크로스 필드와 같은 보스 체력 공유 시스템을 도입했습니다. 입장 인원 제한으로 생기던 부정적 효과를 없애고, 시스템을 정규화해 로컬 서버 전역에서 쓸 수 있게 했습니다.',f:[['c06_fig','채널 간 체력 공유','같은 월드의 모든 채널에 스폰된 보스가 하나의 체력을 공유']]},
+  c06:{k:'제2의 나라 · 카오스 필드',t:'카오스 필드 아트라시아 왕성 레벨 컨셉',src:'카오스필드_아트라시아_레벨컨셉 1.0.4 · 2021.11',f:[['c06_s05','층 연결 구조','1층을 중심으로 2 · 3층이 서로 이어져 하나의 공간으로 느껴지도록 구성'],['c06_s06','대형 사냥터 배치 기준','군집 수량 · 군집당 전투 인원 · 정원을 정한 몬스터 배치 기준']]},
   c07:{k:'제2의 나라 · 탑승물',t:'탈것 마스터 시스템 방향 제안',src:'탈것 마스터 시스템 방향 제안 v1.0.6 · 2019.05',f:[['c07_s04','성장 구조 정리','흩어진 성장 요소를 수집과 성장 중심으로 통합'],['c07_s13','교감 · 진화 순환','교감 성장과 진화(랭크업)로 이어지는 순환 구조']]},
-  c08:{k:'제2의 나라 · 크로스 필드',t:'크로스 필드 개선안',src:'크로스필드 개선 초안 1.0.0 · 2021.11',f:[['c08_s04','입장 UI 개선','입장 화면에서 매칭 서버와 점령 타워 상태를 바로 확인'],['c08_s15','점령전 PK 전환','점령전 중 타 서버 사용자를 강제 적대 대상으로 전환']]},
+  c08:{k:'제2의 나라 · 크로스 필드',t:'크로스 필드 개선안과 보스 체력 공유',src:'크로스필드 개선 초안 1.0.0 · 2021.11 / 4UD 시스템 문서 v2.0.0 · 2022.04',f:[['c08_s04','입장 UI 개선','입장 화면에서 매칭 서버와 점령 타워 상태를 바로 확인'],['c08_s15','점령전 PK 전환','점령전 중 타 서버 사용자를 강제 적대 대상으로 전환'],['c08_hpshare','채널 간 보스 체력 공유','같은 월드의 모든 채널에 스폰된 보스가 하나의 체력을 공유 · 채널 확장 후에도 다수가 같은 보스를 공략']]},
   c09:{k:'제2의 나라 · 레벨 디자인',t:'정예 던전 공적단 조선소 레벨 기획',src:'정예던전 공적단조선소01 레벨기획 · 2020.10',f:[['c09_s12','주요 동선','일반 · 선택 · 일방 통행 동선 설계'],['c09_s13','던전 규모','사냥터 8곳의 크기와 배치']]},
 };
 const dlg=$('work');
 function openWork(key,from){
   const w=WORKS[key];if(!w)return;
   $('workKicker').textContent=w.k;$('workTitle').textContent=w.t;$('workSrc').textContent='원본 · '+w.src;
-  $('workBody').innerHTML=(w.note?'<p class="note">'+w.note+'</p>':'')+w.f.map(([img,h,c])=>'<figure><img src="work/'+img+'.webp" alt="'+h+'" decoding="async"><figcaption><b>'+h+'</b>'+c+'</figcaption></figure>').join('');
+  const esc=t=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  const lua=t=>esc(t).split('\n').map(l=>{const i=l.indexOf('--');const code=i<0?l:l.slice(0,i),cm=i<0?'':l.slice(i);return code.replace(/\b(function|local|if|elseif|then|end|return)\b/g,'<i class="kw">$1</i>').replace(/\b(\d+)\b/g,'<i class="nu">$1</i>')+(cm?'<i class="cm">'+cm+'</i>':'')}).join('\n');
+  $('workBody').innerHTML=(w.note?'<p class="note">'+w.note+'</p>':'')+w.f.map(([img,h,c])=>'<figure><img src="work/'+img+'.webp" alt="'+h+'" decoding="async"><figcaption><b>'+h+'</b>'+c+'</figcaption></figure>').join('')+(w.code?'<figure><pre class="code"><code>'+lua(w.code.s)+'</code></pre><figcaption><b>'+w.code.h+'</b>'+w.code.c+'</figcaption></figure>':'');
   dlg.returnTo=from;dlg.scrollTop=0;dlg.showModal();document.documentElement.style.overflow='hidden';
 }
 dlg.addEventListener('close',()=>{if(dlg.open)return;document.documentElement.style.overflow='';if(dlg.returnTo)dlg.returnTo.focus()});
