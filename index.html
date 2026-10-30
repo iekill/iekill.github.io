@@ -88,9 +88,14 @@ table{border-collapse:collapse;width:100%}
 .map thead th{font-weight:700;color:var(--ink);vertical-align:bottom;line-height:1.35;border-bottom:2px solid var(--ink)}
 .map thead th small{display:block;font-weight:400;color:var(--muted);font-size:12px}
 .map tbody th{text-align:left;font-weight:700;color:var(--ink);white-space:nowrap}
-.map i{display:inline-block;width:16px;height:16px;background:var(--strong);vertical-align:middle;transition:background .5s ease,transform .5s ease}
+.map i{display:inline-block;width:16px;height:16px;background:var(--strong);vertical-align:middle;transform-origin:50% 100%}
 .map i.y{background:var(--accent)}
-.map.pre i.y{background:var(--strong);transform:scale(.6)}
+/* 피아노 건반을 훑듯이: 칸이 순서대로 눌리며 켜짐 */
+.map.pre i{opacity:0}
+.map.play i{animation:key .38s cubic-bezier(.3,1.5,.5,1) both;animation-delay:calc(var(--i) * 32ms)}
+.map.play i.y{animation-name:keyOn;animation-duration:.6s}
+@keyframes key{0%{opacity:0;transform:translateY(-10px) scaleY(.3)}55%{opacity:1;transform:translateY(2px) scaleY(1.2)}100%{opacity:1;transform:none}}
+@keyframes keyOn{0%{opacity:0;transform:translateY(-10px) scaleY(.3);background:#fff}35%{opacity:1;transform:translateY(3px) scaleY(1.3);background:#fff;box-shadow:0 0 14px 2px var(--accent)}100%{opacity:1;transform:none;background:var(--accent);box-shadow:0 0 0 0 transparent}}
 
 /* project */
 .proj{border-top:2px solid var(--ink);padding-top:28px}
@@ -332,7 +337,8 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
 .rv.pre{opacity:0;transform:translateY(18px)}
 @media (prefers-reduced-motion:reduce){
   .rv,.rv.pre{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}
-  .bars .tr b,.deciles .c b,.map i{transition:none}
+  .bars .tr b,.deciles .c b{transition:none}
+  .map.play i,.map.pre i{animation:none;opacity:1}
 }
 
 /* responsive */
@@ -823,7 +829,7 @@ const MAP=[
   ['개발 리드 · 런칭',[1,0,0,1]],
   ['AI 활용 개발',[1,0,0,0]],
 ];
-$('maprows').innerHTML=MAP.map(([n,c])=>`<tr><th scope="row">${n}</th>${c.map(v=>`<td><i class="${v?'y':''}" aria-label="${v?'담당':'해당 없음'}"></i></td>`).join('')}</tr>`).join('');
+$('maprows').innerHTML=MAP.map(([n,c],r)=>`<tr><th scope="row">${n}</th>${c.map((v,k)=>`<td><i style="--i:${r*c.length+k}" class="${v?'y':''}" aria-label="${v?'담당':'해당 없음'}"></i></td>`).join('')}</tr>`).join('');
 
 // AI 운영 방식 도식: 등각 투영 선화
 const ISO_C=Math.cos(Math.PI/6);
@@ -980,7 +986,7 @@ $('dx').innerHTML=DEC.map((_,i)=>`<span>${i+1}분위</span>`).join('');
 // 등장 애니메이션: 첫 화면 밖 요소만
 const grow=['capmap','bossbars','deciles'];
 if(!reduce&&'IntersectionObserver'in window){
-  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target)}}),{rootMargin:'0px 0px -10% 0px'});
+  const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('pre');if(e.target.id==='capmap')e.target.classList.add('play');io.unobserve(e.target)}}),{rootMargin:'0px 0px -10% 0px'});
   document.querySelectorAll('.rv').forEach(el=>{if(el.getBoundingClientRect().top>innerHeight){el.classList.add('pre');io.observe(el)}});
   grow.forEach(id=>{const el=$(id);el.classList.add('pre');io.observe(el)});
 }else grow.forEach(id=>$(id).classList.remove('pre'));
