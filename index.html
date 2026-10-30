@@ -142,6 +142,7 @@ table{border-collapse:collapse;width:100%}
 
 /* AI 운영 방식: 항목 선택 → 도식 + 활용 · 결과 */
 .ops-h{color:var(--muted);margin-top:40px;display:block}
+.ops-track.scrolly .ops{position:sticky;top:76px}
 .ops{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);margin-top:14px;border:1px solid var(--hair);background:var(--canvas)}
 .ops-list{display:flex;flex-direction:column;border-right:1px solid var(--hair)}
 .ops-list .op{flex:1 1 0;align-content:center;transition:flex-grow .45s ease,background .3s ease,border-color .3s ease}
@@ -469,6 +470,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
         <div><div class="v num">48<small>%</small></div><div class="k">초기 빌드 D1 잔존율</div></div>
       </div>
       <div class="label ops-h">AI 운영 방식 · 항목을 고르면 활용 방식과 결과가 나옵니다</div>
+      <div class="ops-track" id="opsTrack">
       <div class="ops" id="ops">
         <div class="ops-list" role="tablist" aria-label="AI 운영 방식" aria-orientation="vertical">
           <button class="op" type="button" role="tab" id="op-t1" aria-controls="op-p1" aria-selected="true"><span class="n">01</span><span><b>작업 지침 표준화</b><span class="d">UI 제작, SDK·결제 점검, 리소스 관리를 절차로 문서화해 AI에게 맡김</span></span></button>
@@ -517,6 +519,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
             </dl>
           </div>
         </div>
+      </div>
       </div>
       <div class="footnote">
         <div><b>출시 후 확인 지표</b> · CPI · ROAS · 리텐션 · 스테이지 플레이 타임 · 세션 타임</div>
@@ -906,6 +909,29 @@ if(!reduce&&'IntersectionObserver'in window){
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){redraw(document.querySelector('.ops-panel.on'));io.disconnect()}}),{rootMargin:'0px 0px -20% 0px'});
   io.observe($('ops'));
 }
+
+// 스크롤 연동: PC에서 블록을 화면에 고정하고, 스크롤 위치로 항목을 넘김
+const track=$('opsTrack'),opsBox=$('ops'),TOP=76;
+let step=0,cur=0;
+function layoutOps(){
+  const on=innerWidth>900&&opsBox.offsetHeight+TOP+16<innerHeight;
+  track.classList.toggle('scrolly',on);
+  step=on?Math.round(innerHeight*.45):0;
+  track.style.height=on?(opsBox.offsetHeight+step*(ops.length-1))+'px':'';
+  syncOps();
+}
+function syncOps(){
+  if(!step)return;
+  const i=Math.max(0,Math.min(ops.length-1,Math.round((TOP-track.getBoundingClientRect().top)/step)));
+  if(i!==cur){cur=i;sel(i)}
+}
+ops.forEach((b,i)=>b.addEventListener('click',()=>{
+  cur=i;
+  if(step)scrollTo({top:scrollY+track.getBoundingClientRect().top-TOP+i*step,behavior:reduce?'auto':'smooth'});
+}));
+addEventListener('scroll',syncOps,{passive:true});
+addEventListener('resize',layoutOps);
+layoutOps();
 
 // 보스 실측
 const BOSS=[['코카트라코',18,'24,560',137.6],['실바드',47,'182,077',150.3],['불칸',64,'481,249',148.4],['기안티',78,'631,892',146.5],['가디안트',80,'649,094',146.0],['스텔리아',89,'735,865',145.0],['메카라곤',98,'825,029',142.9],['키메라',100,'843,062',146.7]];
