@@ -74,11 +74,32 @@ section.sec.alt{background:var(--soft)}
 /* profile */
 .prose{display:grid;gap:18px;max-width:44em;font-size:17px}
 .prose p:first-child{font-size:20px;color:var(--ink);line-height:1.6}
-.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:44px 0 0;border-top:1px solid var(--hair)}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:44px 0 0;background:linear-gradient(var(--hair),var(--hair)) no-repeat left top/100% 1px}
 .facts div{padding:18px 18px 0 0}
-.facts div+div{padding-left:18px;border-left:1px solid var(--hair)}
+.facts div+div{padding-left:18px;background:linear-gradient(var(--hair),var(--hair)) no-repeat left top/1px 100%}
 .facts dt{font-weight:700;font-size:12px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
 .facts dd{margin:6px 0 0;color:var(--ink);font-weight:700}
+mark.u{background:linear-gradient(var(--accent),var(--accent)) no-repeat 0 100%/100% 2px;color:var(--deep);padding-bottom:2px}
+/* 프로필 도착 연출: 키워드 점등 → 문단 훑기 → 밑줄 → 칸 선과 글자 */
+.kw{display:inline-block}
+.intro.pre .kw,.intro.pre .facts dt,.intro.pre .facts dd{opacity:0}
+.intro.pre .tx{clip-path:inset(0 100% 0 0)}
+.intro.pre mark.u{background-size:0 2px}
+.intro.pre .facts{background-size:0 1px}
+.intro.pre .facts div+div{background-size:1px 0}
+.intro.play .kw{animation:kwOn .7s cubic-bezier(.3,1.4,.5,1) both;animation-delay:var(--l)}
+.intro.play .tx{animation:wipe .9s cubic-bezier(.6,0,.2,1) both;animation-delay:var(--l)}
+.intro.play mark.u{animation:ul .6s ease both;animation-delay:var(--l)}
+.intro.play .facts{animation:lineT .8s ease both;animation-delay:var(--l)}
+.intro.play .facts div+div{animation:lineV .6s ease both;animation-delay:var(--l)}
+.intro.play .facts dt{animation:drop .5s ease both;animation-delay:var(--l)}
+.intro.play .facts dd{animation:rise .5s ease both;animation-delay:calc(var(--l) + 80ms)}
+@keyframes kwOn{0%{opacity:0;transform:translateY(-12px);color:#fff}40%{opacity:1;transform:translateY(2px);color:#fff;text-shadow:0 0 18px var(--accent)}100%{opacity:1;transform:none;color:var(--ink);text-shadow:none}}
+@keyframes wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+@keyframes ul{from{background-size:0 2px}to{background-size:100% 2px}}
+@keyframes lineT{from{background-size:0 1px}to{background-size:100% 1px}}
+@keyframes lineV{from{background-size:1px 0}to{background-size:1px 100%}}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
 /* capability map */
 .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -349,6 +370,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   .rv,.rv.pre{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}
   .bars .tr b,.deciles .c b{transition:none}
   .map.play i,.map.pre i,.map.play th,.map.play td{animation:none;opacity:1}
+  .intro.play *,.intro.play .facts{animation:none}
 }
 
 /* responsive */
@@ -374,6 +396,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   .facts,.decide,.decide.four,.books{grid-template-columns:minmax(0,1fr)}
   .decide.four div{margin-top:0;padding-top:16px}
   .facts div+div,.decide div+div,.books div+div{padding-left:0;border-left:0}
+  .facts div+div{background:none}
   .cells,.titles{grid-template-columns:minmax(0,1fr)}
   .feature{padding:22px 16px}
   .box{padding:20px 16px}
@@ -426,17 +449,19 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   <div class="split">
     <div><div class="label">Profile</div></div>
     <div>
-      <div class="prose rv">
-        <p>코어 시스템 설계, 콘텐츠, 밸런스, 라이브 서비스 운영 경험</p>
-        <p>18년간 전투 밸런스와 코어 시스템 설계를 맡아 왔습니다. MMORPG, 수집형 RPG, 퍼즐 장르의 시스템을 설계했고, 런칭 이후에는 지표를 근거로 라이브 업데이트를 운영했습니다.</p>
-        <p>6인 이하의 소규모 팀부터 30인 이상의 조직까지 리드했습니다. 리드할 때도 일정·업무 조율과 함께 핵심 실무를 직접 맡습니다.</p>
-        <p>반복 작업을 절차로 문서화해 AI에게 맡기고, 최종 판단은 직접 하는 방식으로 일합니다.</p>
+      <div class="intro" id="intro">
+      <div class="prose">
+        <p><span class="kw" style="--l:0ms">코어 시스템 설계</span>, <span class="kw" style="--l:140ms">콘텐츠</span>, <span class="kw" style="--l:280ms">밸런스</span>, <span class="kw" style="--l:420ms">라이브 서비스 운영 경험</span></p>
+        <p class="tx" style="--l:650ms">18년간 <mark class="u" style="--l:1250ms">전투 밸런스와 코어 시스템 설계</mark>를 맡아 왔습니다. MMORPG, 수집형 RPG, 퍼즐 장르의 시스템을 설계했고, 런칭 이후에는 지표를 근거로 라이브 업데이트를 운영했습니다.</p>
+        <p class="tx" style="--l:850ms">6인 이하의 소규모 팀부터 <mark class="u" style="--l:1450ms">30인 이상의 조직</mark>까지 리드했습니다. 리드할 때도 일정·업무 조율과 함께 핵심 실무를 직접 맡습니다.</p>
+        <p class="tx" style="--l:1050ms">반복 작업을 절차로 문서화해 AI에게 맡기고, <mark class="u" style="--l:1650ms">최종 판단은 직접</mark> 하는 방식으로 일합니다.</p>
       </div>
-      <dl class="facts rv">
-        <div><dt>Focus</dt><dd>전투·수치 · 코어 시스템</dd></div>
-        <div><dt>Genres</dt><dd>MMORPG · 수집형 RPG · ARPG · 퍼즐</dd></div>
-        <div><dt>Tools</dt><dd>Excel · Unity · Unreal · Claude Code</dd></div>
+      <dl class="facts" style="--l:1500ms">
+        <div style="--l:1650ms"><dt>Focus</dt><dd>전투·수치 · 코어 시스템</dd></div>
+        <div style="--l:1770ms"><dt>Genres</dt><dd>MMORPG · 수집형 RPG · ARPG · 퍼즐</dd></div>
+        <div style="--l:1890ms"><dt>Tools</dt><dd>Excel · Unity · Unreal · Claude Code</dd></div>
       </dl>
+      </div>
     </div>
   </div>
 </div></section>
@@ -1000,8 +1025,8 @@ if(!reduce&&'IntersectionObserver'in window){
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target)}}),{rootMargin:'0px 0px -10% 0px'});
   document.querySelectorAll('.rv').forEach(el=>{if(el.getBoundingClientRect().top>innerHeight){el.classList.add('pre');io.observe(el)}});
   grow.forEach(id=>{const el=$(id);el.classList.add('pre');if(id!=='capmap')io.observe(el)});
-  const mapIo=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('pre');e.target.classList.add('play');mapIo.disconnect()}}),{rootMargin:'0px 0px -40% 0px'});
-  mapIo.observe($('capmap'));
+  const arrive=el=>{el.classList.add('pre');const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting||e.boundingClientRect.top<0){el.classList.remove('pre');el.classList.add('play');o.disconnect()}}),{rootMargin:'0px 0px -40% 0px'});o.observe(el)};
+  arrive($('capmap'));arrive($('intro'));
 }else grow.forEach(id=>$(id).classList.remove('pre'));
 
 // 숫자 카운트업
