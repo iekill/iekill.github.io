@@ -271,6 +271,11 @@ table{border-collapse:collapse;width:100%}
   .op[aria-selected="true"] .d{font-size:14px}
 }
 
+/* 칸 점등: 선택 항목과 같은 면 + 한 줄 테두리 */
+.cells > div::after{content:"";position:absolute;inset:-1px;border:1px solid var(--accent);border-left-width:3px;opacity:0;pointer-events:none;z-index:1;transition:opacity .45s ease}
+.cells > div.lit{background:var(--accent-soft)}
+.cells > div.lit::after{opacity:1}
+.cells > div.lit b{color:var(--deep)}
 /* 작업물 팝업 */
 .has-work{cursor:pointer}
 .has-work .wk{justify-self:start;margin-top:8px;font-weight:700;font-size:12px;letter-spacing:.04em;color:var(--accent);border-bottom:1px solid transparent;transition:border-color .2s}
@@ -1072,6 +1077,29 @@ addEventListener('scroll',syncOps,{passive:true});
 addEventListener('resize',layoutOps);
 layoutOps();
 if(document.fonts)document.fonts.ready.then(layoutOps);
+
+// 칸 순차 점등: 화면에 머무는 동안 한 칸씩 돌아가며 켜고, 마우스를 올리거나 누르면 그 칸에 고정
+{
+  const grid = document.querySelector('#ni .cells'), cells = [...grid.children];
+  let idx = -1, timer = 0, chosen = -1;
+  const light = i => cells.forEach((c, j) => c.classList.toggle('lit', j === i));
+  const stop = () => { clearInterval(timer); timer = 0 };
+  const start = () => {
+    if (reduce || timer || chosen >= 0) return;
+    timer = setInterval(() => { idx = (idx + 1) % cells.length; light(idx) }, 1400);
+  };
+  new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) start(); else { stop(); if (chosen < 0) light(-1) }
+  }), { threshold: .5 }).observe(grid);
+  cells.forEach((c, i) => {
+    c.addEventListener('mouseenter', () => { stop(); light(i) });
+    const pick = () => { chosen = i; stop(); light(i) };
+    c.addEventListener('click', pick);
+    c.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') pick() });
+    c.addEventListener('focus', () => { stop(); light(i) });
+  });
+  grid.addEventListener('mouseleave', () => { if (chosen >= 0) light(chosen); else { light(idx); start() } });
+}
 
 // 작업물 팝업: 원본 기획서 장면 (회사 머리글·대외비 표시 제거)
 const WORKS={
