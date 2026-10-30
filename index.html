@@ -926,19 +926,19 @@ if(!reduce&&'IntersectionObserver'in window){
 // 스크롤 연동 (PC 전 화면 크기)
 // 카드가 화면보다 작으면 블록 높이를 늘려 카드가 화면을 꽉 채우게 한 뒤 고정 → 빈 공간 없음
 // 카드가 화면보다 크면 카드 아래 끝을 화면 바닥에 맞춰 고정
-// 블록이 화면에 다 안 들어가는 낮은 화면은 고정 없이 스크롤 위치로만 항목을 넘김
+// 블록이 화면에 다 안 들어가는 화면(낮은 PC, 좁은 창, 모바일)은 고정 없이 스크롤 위치로만 항목을 넘김
 const track=$('opsTrack'),card=$('sortmaster'),box=$('ops'),TOP=56;
 let step=0,cur=0,stick=TOP,pinned=false;
 function layoutOps(){
   track.classList.remove('scrolly');track.style.height='';card.style.top='';box.style.minHeight='';
   pinned=false;step=0;
-  if(innerWidth<=900){return}
-  const vh=innerHeight,room=vh-TOP;
+  const vh=innerHeight,room=vh-TOP,narrow=innerWidth<=900;
   let h=card.getBoundingClientRect().height;
-  if(h<room){box.style.minHeight=(box.offsetHeight+room-h)+'px';h=card.getBoundingClientRect().height}
+  // 가로 배치에서만 블록을 늘려 카드가 화면을 채우게 함 (세로 배치는 늘리면 패널 아래가 비어 보임)
+  if(!narrow&&h<room){box.style.minHeight=(box.offsetHeight+room-h)+'px';h=card.getBoundingClientRect().height}
   const below=card.getBoundingClientRect().bottom-box.getBoundingClientRect().top;
   step=Math.round(vh*.45);
-  if(below<=room){
+  if(h>=room&&below<=room){
     pinned=true;
     track.classList.add('scrolly');
     stick=Math.floor(vh-h);
