@@ -271,6 +271,30 @@ table{border-collapse:collapse;width:100%}
   .op[aria-selected="true"] .d{font-size:14px}
 }
 
+/* 작업물 팝업 */
+.has-work{cursor:pointer}
+.has-work .wk{justify-self:start;margin-top:8px;font-weight:700;font-size:12px;letter-spacing:.04em;color:var(--accent);border-bottom:1px solid transparent;transition:border-color .2s}
+.has-work .wk::after{content:" ↗"}
+.has-work:hover .wk,.has-work:focus-visible .wk{border-bottom-color:var(--accent)}
+.has-work:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+dialog.work{border:1px solid var(--hair-strong);padding:0;background:var(--canvas);color:var(--body);width:min(1120px,calc(100vw - 32px));max-height:calc(100vh - 48px);overflow:auto;overscroll-behavior:contain}
+dialog.work::backdrop{background:rgba(5,8,12,.8);backdrop-filter:blur(3px)}
+dialog.work[open]{animation:workIn .35s cubic-bezier(.2,.8,.2,1)}
+dialog.work[open]::backdrop{animation:fade .35s ease}
+@keyframes workIn{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
+.work-head{position:sticky;top:0;z-index:1;display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding:22px 28px;background:var(--canvas);border-bottom:1px solid var(--hair)}
+.work-head h3{font-size:22px;margin-top:6px}
+.work-head .cap{margin-top:6px}
+.work-x{all:unset;cursor:pointer;width:40px;height:40px;display:grid;place-items:center;font-size:18px;color:var(--ink);border:1px solid var(--hair-strong);flex:none}
+.work-x:hover{border-color:var(--accent);color:var(--accent)}
+.work-body{padding:24px 28px 32px;display:grid;gap:28px}
+.work-body figure{margin:0;display:grid;gap:10px}
+.work-body img{display:block;width:100%;height:auto;background:#fff}
+.work-body figcaption{font-weight:400;font-size:14px;color:var(--muted)}
+.work-body figcaption b{color:var(--ink);font-size:15px;margin-right:8px}
+.work-body .note{font-size:15px;line-height:1.75;padding:16px 18px;background:var(--soft);border-left:3px solid var(--accent)}
+@media (max-width:640px){.work-head{padding:16px}.work-body{padding:16px 16px 24px}.work-head h3{font-size:18px}}
+@media (prefers-reduced-motion:reduce){dialog.work[open],dialog.work[open]::backdrop{animation:none}}
 /* combat */
 .calc{display:flex;flex-wrap:wrap;align-items:stretch;gap:4px}
 .calc span{flex:1 1 160px;padding:16px;background:var(--canvas);border:1px solid var(--hair);font-weight:700;color:var(--ink);font-size:15px;line-height:1.45}
@@ -618,12 +642,12 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
       <div><span class="n">01</span><b>전투 수식</b><p>스킬 피해 → 속성·등급·종족 배율 → 상성 → 피해 편차 → 치명타로 이어지는 계층형 데미지 구조, 5속성 상성</p></div>
       <div><span class="n">02</span><b>PVE 전투 밸런스</b><p>클래스 5종 DPS · 유저 HPS 모델로 필드 보스 · 월드 보스 · 던전의 전투 시간과 생존 압박 설계 <a href="#combat" style="color:var(--accent)">→ 밸런스</a></p></div>
       <div><span class="n">03</span><b>전투 구조</b><p>콘텐츠별 데미지 압축 · 제한 보정 구조 설계</p></div>
-      <div><span class="n">04</span><b>보스 전투 패턴</b><p>루아 스크립트 기반 PVE 보스 패턴 설계</p></div>
-      <div><span class="n">05</span><b>성장 던전</b><p>메타 성장 콘텐츠 기획</p></div>
-      <div><span class="n">06</span><b>카오스 필드</b><p>방치 성장 콘텐츠 기획</p></div>
-      <div><span class="n">07</span><b>탑승물</b><p>메타 성장 시스템 설계</p></div>
-      <div><span class="n">08</span><b>크로스 필드</b><p>서버 대항 경쟁 콘텐츠 단독 설계, 출시 후 개선안 반영 <a href="#cross" style="color:var(--accent)">→ 사례</a></p></div>
-      <div><span class="n">09</span><b>레벨 디자인</b><p>핵심 콘텐츠 레벨 디자인</p></div>
+      <div class="has-work" data-work="c04" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">04</span><b>보스 전투 패턴</b><p>루아 스크립트 기반 PVE 보스 패턴 설계</p><span class="wk">작업물 보기</span></div>
+      <div class="has-work" data-work="c05" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">05</span><b>성장 던전</b><p>메타 성장 콘텐츠 기획</p><span class="wk">작업물 보기</span></div>
+      <div class="has-work" data-work="c06" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">06</span><b>카오스 필드</b><p>방치 성장 콘텐츠 기획</p><span class="wk">작업물 보기</span></div>
+      <div class="has-work" data-work="c07" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">07</span><b>탑승물</b><p>메타 성장 시스템 설계</p><span class="wk">작업물 보기</span></div>
+      <div class="has-work" data-work="c08" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">08</span><b>크로스 필드</b><p>서버 대항 경쟁 콘텐츠 단독 설계, 출시 후 개선안 반영 <a href="#cross" style="color:var(--accent)">→ 사례</a></p><span class="wk">작업물 보기</span></div>
+      <div class="has-work" data-work="c09" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">09</span><b>레벨 디자인</b><p>핵심 콘텐츠 레벨 디자인</p><span class="wk">작업물 보기</span></div>
     </div>
   </article>
 
@@ -869,6 +893,10 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   </div>
 </div></section>
 </main>
+<dialog class="work" id="work" aria-labelledby="workTitle">
+  <div class="work-head"><div><div class="label" id="workKicker"></div><h3 id="workTitle"></h3><p class="cap" id="workSrc"></p></div><button class="work-x" type="button" aria-label="닫기">✕</button></div>
+  <div class="work-body" id="workBody"></div>
+</dialog>
 <footer><div class="wrap">© 2026 권두현</div></footer>
 
 <script>
@@ -1039,6 +1067,30 @@ addEventListener('scroll',syncOps,{passive:true});
 addEventListener('resize',layoutOps);
 layoutOps();
 if(document.fonts)document.fonts.ready.then(layoutOps);
+
+// 작업물 팝업: 원본 기획서 장면 (회사 머리글·대외비 표시 제거)
+const WORKS={
+  c04:{k:'제2의 나라 · 보스 전투 패턴',t:'필드 보스 메카라곤 패턴 기획',src:'필드보스06_메카라곤 패턴 v1.0.1 · 2020.04',f:[['c04_s18','스킬 범위 명세','도넛형 장판 스킬의 범위·효과·연출 정의'],['c04_s23','페이즈별 스킬 사용 비율','HP 구간마다 사용 스킬과 비율을 바꾸는 Battle Pattern AI']]},
+  c05:{k:'제2의 나라 · 성장 던전',t:'장비 던전 개선',src:'장비 던전 개선 v2.1.1 · 2020.07',f:[['c05_s07','던전 흐름 개선','장벽을 걷어내고 NPC 호위 중심으로 흐름 단순화'],['c05_s16','점수 계산 방식 개선','타임 어택 대신 처치 누적 점수로 랭크 산정']]},
+  c06:{k:'제2의 나라 · 카오스 필드',t:'보스 체력 공유 시스템',src:'4UD 시스템_카오스필드 v2.0.0 · 2022.04',note:'<b>기획 의도</b> · 카오스 필드가 입장 제한 없는 1채널 형태에서 채널 확장 형태로 바뀌면서, 기존 게임 경험을 유지하고 다수의 사용자가 보스 공략에 참여할 수 있도록 크로스 필드와 같은 보스 체력 공유 시스템을 도입했습니다. 입장 인원 제한으로 생기던 부정적 효과를 없애고, 시스템을 정규화해 로컬 서버 전역에서 쓸 수 있게 했습니다.',f:[['c06_fig','채널 간 체력 공유','같은 월드의 모든 채널에 스폰된 보스가 하나의 체력을 공유']]},
+  c07:{k:'제2의 나라 · 탑승물',t:'탈것 마스터 시스템 방향 제안',src:'탈것 마스터 시스템 방향 제안 v1.0.6 · 2019.05',f:[['c07_s04','성장 구조 정리','흩어진 성장 요소를 수집과 성장 중심으로 통합'],['c07_s13','교감 · 진화 순환','교감 성장과 진화(랭크업)로 이어지는 순환 구조']]},
+  c08:{k:'제2의 나라 · 크로스 필드',t:'크로스 필드 개선안',src:'크로스필드 개선 초안 1.0.0 · 2021.11',f:[['c08_s04','입장 UI 개선','입장 화면에서 매칭 서버와 점령 타워 상태를 바로 확인'],['c08_s15','점령전 PK 전환','점령전 중 타 서버 사용자를 강제 적대 대상으로 전환']]},
+  c09:{k:'제2의 나라 · 레벨 디자인',t:'정예 던전 공적단 조선소 레벨 기획',src:'정예던전 공적단조선소01 레벨기획 · 2020.10',f:[['c09_s12','주요 동선','일반 · 선택 · 일방 통행 동선 설계'],['c09_s13','던전 규모','사냥터 8곳의 크기와 배치']]},
+};
+const dlg=$('work');
+function openWork(key,from){
+  const w=WORKS[key];if(!w)return;
+  $('workKicker').textContent=w.k;$('workTitle').textContent=w.t;$('workSrc').textContent='원본 · '+w.src;
+  $('workBody').innerHTML=(w.note?'<p class="note">'+w.note+'</p>':'')+w.f.map(([img,h,c])=>'<figure><img src="work/'+img+'.webp" alt="'+h+'" decoding="async"><figcaption><b>'+h+'</b>'+c+'</figcaption></figure>').join('');
+  dlg.returnTo=from;dlg.scrollTop=0;dlg.showModal();document.documentElement.style.overflow='hidden';
+}
+dlg.addEventListener('close',()=>{if(dlg.open)return;document.documentElement.style.overflow='';if(dlg.returnTo)dlg.returnTo.focus()});
+dlg.querySelector('.work-x').addEventListener('click',()=>dlg.close());
+dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
+document.querySelectorAll('[data-work]').forEach(el=>{
+  el.addEventListener('click',e=>{if(e.target.closest('a'))return;openWork(el.dataset.work,el)});
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openWork(el.dataset.work,el)}});
+});
 
 // 보스 실측
 const BOSS=[['코카트라코',18,'24,560',137.6],['실바드',47,'182,077',150.3],['불칸',64,'481,249',148.4],['기안티',78,'631,892',146.5],['가디안트',80,'649,094',146.0],['스텔리아',89,'735,865',145.0],['메카라곤',98,'825,029',142.9],['키메라',100,'843,062',146.7]];
