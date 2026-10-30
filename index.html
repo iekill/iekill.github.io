@@ -138,6 +138,17 @@ table{border-collapse:collapse;width:100%}
 .cells{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--hair);border-left:1px solid var(--hair);margin-top:32px}
 .cells > div{border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);padding:20px;background:var(--canvas);display:grid;gap:6px;align-content:start}
 .cells .n{font-weight:700;font-size:12px;color:var(--accent);letter-spacing:.1em}
+/* 프로젝트 칸 도착 연출: 대각선 물결로 칸이 눌리듯 나타나고, 윗변에 선이 스치며, 번호가 번쩍임 */
+.cells > div{position:relative;transition:background .3s ease}
+.cells > div:hover{background:var(--soft)}
+.cells > div::before{content:"";position:absolute;left:-1px;right:-1px;top:-1px;height:2px;background:var(--accent);transform:scaleX(0);transform-origin:left;opacity:0;pointer-events:none}
+.cells.pre > div{opacity:0}
+.cells.play > div{animation:cellIn .6s cubic-bezier(.3,1.3,.5,1) backwards;animation-delay:var(--d)}
+.cells.play > div::before{animation:edge .8s ease;animation-delay:calc(var(--d) + 80ms)}
+.cells.play .n{animation:numOn .7s ease backwards;animation-delay:calc(var(--d) + 120ms)}
+@keyframes cellIn{0%{opacity:0;transform:translateY(12px) scale(.97);background:var(--accent-soft)}60%{opacity:1;transform:none;background:var(--accent-soft)}100%{opacity:1;background:var(--canvas)}}
+@keyframes edge{0%{transform:scaleX(0);opacity:1}60%{transform:scaleX(1);opacity:1}100%{transform:scaleX(1);opacity:0}}
+@keyframes numOn{0%{color:#fff;text-shadow:0 0 12px var(--accent)}100%{color:var(--accent);text-shadow:none}}
 .cells b{font-size:16px}
 .cells p{font-size:14px;color:var(--body)}
 .st{justify-self:start;font-weight:700;font-size:11px;letter-spacing:.08em;padding:3px 8px;margin-top:4px}
@@ -381,6 +392,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   .bars .tr b,.deciles .c b{transition:none}
   .map.play i,.map.pre i,.map.play th,.map.play td{animation:none;opacity:1}
   .intro.play *,.intro.play .facts{animation:none}
+  .cells.play > div,.cells.play > div::before,.cells.play .n{animation:none}
 }
 
 /* responsive */
@@ -1050,6 +1062,11 @@ if(!reduce&&'IntersectionObserver'in window){
   grow.forEach(id=>{const el=$(id);el.classList.add('pre');if(id!=='capmap')io.observe(el)});
   const arrive=el=>{el.classList.add('pre');const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting||e.boundingClientRect.top<0){el.classList.remove('pre');el.classList.add('play');o.disconnect()}}),{rootMargin:'0px 0px -40% 0px'});o.observe(el)};
   arrive($('capmap'));arrive($('intro'));
+  document.querySelectorAll('.cells').forEach(el=>{
+    const cols=getComputedStyle(el).gridTemplateColumns.split(' ').length;
+    [...el.children].forEach((c,i)=>c.style.setProperty('--d',((i%cols)+Math.floor(i/cols))*90+'ms'));
+    arrive(el);
+  });
 }else grow.forEach(id=>$(id).classList.remove('pre'));
 
 // 숫자 카운트업
