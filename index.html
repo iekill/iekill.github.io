@@ -375,6 +375,8 @@ dialog.work[open]::backdrop{animation:fade .35s ease}
 .ratio-res{font-weight:700;font-size:14px;color:var(--ink)}
 .ratio-res .out{color:#e5795f}
 .ratio-res .in{color:#5fbf8a}
+.mix .pbase{fill:none;stroke:var(--ink);stroke-width:1.2;stroke-dasharray:4 3;opacity:.55}
+.mix-lg i.o{background:none;border:1px dashed var(--ink);opacity:.7}
 .mix .ghost{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-dasharray:4 4;opacity:.8}
 .mix .td.out{stroke:#e5795f}
 .mix.done *{animation:none!important}
@@ -848,7 +850,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
         <p class="ratio-res" id="pRatioRes"></p>
       </div>
       <svg class="mix" id="bossMix" viewBox="0 0 800 280" role="img" aria-label="보스 레벨이 오르며 기준 전투력은 34배 커지지만 처치 시간은 137~150초로 거의 일정함"></svg>
-      <div class="mix-lg"><span><i class="b"></i>기준 전투력 (막대 · 왼쪽 축)</span><span><i class="l"></i>처치 시간 (선 · 오른쪽 축)</span><span><i class="g"></i>실측 3회 평균 (점선)</span></div>
+      <div class="mix-lg"><span><i class="b"></i>캐릭터 전투력 (막대 · 왼쪽 축)</span><span><i class="o"></i>기준 전투력 (윤곽)</span><span><i class="l"></i>처치 시간 (선 · 오른쪽 축)</span><span><i class="g"></i>실측 3회 평균 (점선)</span></div>
       <p class="cap" style="margin-top:6px">100%는 실측값이고, 나머지는 DPS가 전투력에 비례한다고 가정한 개념 시뮬레이션입니다.</p>
       <div class="bars pre" id="bossbars"></div>
       <p class="result">보스 8종 137 — 150초 수렴 · 5주간 시트 23개 버전 개정</p>
@@ -1258,14 +1260,14 @@ document.querySelectorAll('[data-work]').forEach(el=>{
 const MIXD=[['코카트라코',18,24560,137.6],['실바드',47,182077,150.3],['불칸',64,481249,148.4],['기안티',78,631892,146.5],['가디안트',80,649094,146.0],['스텔리아',89,735865,145.0],['메카라곤',98,825029,142.9],['키메라',100,843062,146.7]];
 const BAND=[137.6,150.3];
 function drawMix(ratio){
-  const D=MIXD,W=800,H=280,L=60,R=56,T=16,B=46,pw=W-L-R,ph=H-T-B,PMAX=900000,TMAX=260,n=D.length,step=pw/n;
+  const D=MIXD,W=800,H=280,L=60,R=56,T=16,B=46,pw=W-L-R,ph=H-T-B,PMAX=1200000,TMAX=260,n=D.length,step=pw/n;
   const x=i=>L+step*(i+.5),yp=v=>T+ph-(v/PMAX)*ph,yt=v=>T+ph-(Math.min(v,TMAX)/TMAX)*ph,tm=t=>t/ratio;
   let g='';
-  for(const v of [300000,600000,900000])g+='<line class="gd" x1="'+L+'" x2="'+(W-R)+'" y1="'+yp(v)+'" y2="'+yp(v)+'"/><text x="'+(L-8)+'" y="'+(yp(v)+4)+'" text-anchor="end">'+(v/10000)+'만</text>';
+  for(const v of [400000,800000,1200000])g+='<line class="gd" x1="'+L+'" x2="'+(W-R)+'" y1="'+yp(v)+'" y2="'+yp(v)+'"/><text x="'+(L-8)+'" y="'+(yp(v)+4)+'" text-anchor="end">'+(v/10000)+'만</text>';
   for(const v of [60,120,180,240])g+='<text x="'+(W-R+8)+'" y="'+(yt(v)+4)+'">'+v+'초</text>';
   g+='<rect class="band" x="'+L+'" width="'+pw+'" y="'+yt(BAND[1])+'" height="'+(yt(BAND[0])-yt(BAND[1]))+'"/>';
   const bw=step*.5;
-  D.forEach((d,i)=>{g+='<rect class="pb" style="--i:'+i+'" x="'+(x(i)-bw/2)+'" y="'+yp(d[2])+'" width="'+bw+'" height="'+(T+ph-yp(d[2]))+'"/>'});
+  D.forEach((d,i)=>{const cp=d[2]*ratio;g+='<rect class="pb" style="--i:'+i+'" x="'+(x(i)-bw/2)+'" y="'+yp(cp)+'" width="'+bw+'" height="'+(T+ph-yp(cp))+'"/>';if(Math.abs(ratio-1)>.001)g+='<rect class="pbase" x="'+(x(i)-bw/2)+'" y="'+yp(d[2])+'" width="'+bw+'" height="'+(T+ph-yp(d[2]))+'"/>'});
   if(Math.abs(ratio-1)>.001)g+='<path class="ghost" d="'+D.map((d,i)=>(i?'L':'M')+x(i)+' '+yt(d[3])).join('')+'"/>';
   g+='<path class="tl" pathLength="1" d="'+D.map((d,i)=>(i?'L':'M')+x(i)+' '+yt(tm(d[3]))).join('')+'"/>';
   D.forEach((d,i)=>{const t=tm(d[3]),out=t<BAND[0]-.05||t>BAND[1]+.05;g+='<circle class="td'+(out?' out':'')+'" style="--i:'+i+'" r="5" cx="'+x(i)+'" cy="'+yt(t)+'"/><text class="tv" style="--i:'+i+'" x="'+x(i)+'" y="'+(yt(t)-12)+'" text-anchor="middle">'+t.toFixed(1)+'</text>'
