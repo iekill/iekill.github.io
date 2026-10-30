@@ -367,6 +367,22 @@ dialog.work[open]::backdrop{animation:fade .35s ease}
 .curve{width:100%;height:auto;margin-top:8px;overflow:visible}
 .curve .ax{stroke:var(--hair-strong);stroke-width:1}
 /* 밸런스 02: 전투력 대비 처치 시간 */
+.ratio{margin-top:18px;padding:16px 18px;background:var(--soft);border:1px solid var(--hair);display:grid;gap:8px}
+.ratio label{display:flex;justify-content:space-between;align-items:baseline;font-weight:400;font-size:13px;color:var(--muted)}
+.ratio label b{font-size:22px;color:var(--ink)}
+.ratio input{width:100%;accent-color:var(--accent);margin:0}
+.ratio-ticks{display:flex;justify-content:space-between;font-weight:400;font-size:11px;color:var(--faint)}
+.ratio-res{font-weight:700;font-size:14px;color:var(--ink)}
+.ratio-res .out{color:#e5795f}
+.ratio-res .in{color:#5fbf8a}
+.mix .ghost{fill:none;stroke:var(--muted);stroke-width:1.5;stroke-dasharray:4 4;opacity:.8}
+.mix .td.out{stroke:#e5795f}
+.mix.done *{animation:none!important}
+#bossMix.done .tl{stroke-dasharray:none;stroke-dashoffset:0}
+#bossMix.done .pb{transform:none}
+#bossMix.done .tl,#bossMix.done .td,#bossMix.done .tv{opacity:1}
+.mix-lg i.g{height:0;border-top:2px dashed var(--muted);vertical-align:3px}
+.bars .r .t.out{color:#e5795f}
 .kpi3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:20px 0 6px;border-top:1px solid var(--hair-strong)}
 .kpi3 > div{padding:14px 14px 0 0}
 .kpi3 > div+div{padding-left:14px;border-left:1px solid var(--hair)}
@@ -819,14 +835,21 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   <div class="sub">
     <div class="sub-h"><span class="label">02 · 출시 전 · 실측 검증</span><button class="wk-btn" type="button" data-work="b02" aria-haspopup="dialog">작업물 보기</button></div>
     <div class="box rv">
-      <p>기준 전투력 캐릭터로 인게임에서 보스마다 3회 처치 시간을 측정했습니다.</p>
+      <p>기준 전투력 기준 시뮬레이션과 인게임 보스 실측 테스트로 고도화</p>
       <div class="kpi3">
         <div><div class="v num">34<small>배</small></div><div class="k">기준 전투력 차이<br>24,560 → 843,062</div></div>
         <div><div class="v num">137.6<small>~</small>150.3<small>초</small></div><div class="k">보스 8종 처치 시간</div></div>
         <div><div class="v num">12.7<small>초</small></div><div class="k">가장 빠른 보스와 느린 보스의 차이</div></div>
       </div>
+      <div class="ratio">
+        <label for="pRatio"><span>캐릭터 전투력 · 기준 전투력 대비</span><b class="num" id="pRatioV">100%</b></label>
+        <input type="range" id="pRatio" min="60" max="140" step="5" value="100" aria-describedby="pRatioRes">
+        <div class="ratio-ticks"><span>60%</span><span>100% · 실측</span><span>140%</span></div>
+        <p class="ratio-res" id="pRatioRes"></p>
+      </div>
       <svg class="mix" id="bossMix" viewBox="0 0 800 280" role="img" aria-label="보스 레벨이 오르며 기준 전투력은 34배 커지지만 처치 시간은 137~150초로 거의 일정함"></svg>
-      <div class="mix-lg"><span><i class="b"></i>기준 전투력 (막대 · 왼쪽 축)</span><span><i class="l"></i>처치 시간 3회 평균 (선 · 오른쪽 축)</span></div>
+      <div class="mix-lg"><span><i class="b"></i>기준 전투력 (막대 · 왼쪽 축)</span><span><i class="l"></i>처치 시간 (선 · 오른쪽 축)</span><span><i class="g"></i>실측 3회 평균 (점선)</span></div>
+      <p class="cap" style="margin-top:6px">100%는 실측값이고, 나머지는 DPS가 전투력에 비례한다고 가정한 개념 시뮬레이션입니다.</p>
       <div class="bars pre" id="bossbars"></div>
       <p class="result">보스 8종 137 — 150초 수렴 · 5주간 시트 23개 버전 개정</p>
     </div>
@@ -1231,25 +1254,28 @@ document.querySelectorAll('[data-work]').forEach(el=>{
 });
 
 // 보스 실측
-// 밸런스 02 복합 차트: 전투력은 막대(왼쪽 축), 처치 시간은 선(오른쪽 축)
-{
-  const D=[['코카트라코',18,24560,137.6],['실바드',47,182077,150.3],['불칸',64,481249,148.4],['기안티',78,631892,146.5],['가디안트',80,649094,146.0],['스텔리아',89,735865,145.0],['메카라곤',98,825029,142.9],['키메라',100,843062,146.7]];
-  const W=800,H=280,L=60,R=56,T=16,B=46,pw=W-L-R,ph=H-T-B,PMAX=900000,TMAX=180,n=D.length,step=pw/n;
-  const x=i=>L+step*(i+.5),yp=v=>T+ph-(v/PMAX)*ph,yt=v=>T+ph-(v/TMAX)*ph;
+// 밸런스 02 복합 차트: 전투력은 막대(왼쪽 축), 처치 시간은 선(오른쪽 축). 전투력 비율에 따라 처치 시간 선이 움직임
+const MIXD=[['코카트라코',18,24560,137.6],['실바드',47,182077,150.3],['불칸',64,481249,148.4],['기안티',78,631892,146.5],['가디안트',80,649094,146.0],['스텔리아',89,735865,145.0],['메카라곤',98,825029,142.9],['키메라',100,843062,146.7]];
+const BAND=[137.6,150.3];
+function drawMix(ratio){
+  const D=MIXD,W=800,H=280,L=60,R=56,T=16,B=46,pw=W-L-R,ph=H-T-B,PMAX=900000,TMAX=260,n=D.length,step=pw/n;
+  const x=i=>L+step*(i+.5),yp=v=>T+ph-(v/PMAX)*ph,yt=v=>T+ph-(Math.min(v,TMAX)/TMAX)*ph,tm=t=>t/ratio;
   let g='';
   for(const v of [300000,600000,900000])g+='<line class="gd" x1="'+L+'" x2="'+(W-R)+'" y1="'+yp(v)+'" y2="'+yp(v)+'"/><text x="'+(L-8)+'" y="'+(yp(v)+4)+'" text-anchor="end">'+(v/10000)+'만</text>';
-  for(const v of [60,120,180])g+='<text x="'+(W-R+8)+'" y="'+(yt(v)+4)+'">'+v+'초</text>';
-  g+='<rect class="band" x="'+L+'" width="'+pw+'" y="'+yt(150.3)+'" height="'+(yt(137.6)-yt(150.3))+'"/>';
+  for(const v of [60,120,180,240])g+='<text x="'+(W-R+8)+'" y="'+(yt(v)+4)+'">'+v+'초</text>';
+  g+='<rect class="band" x="'+L+'" width="'+pw+'" y="'+yt(BAND[1])+'" height="'+(yt(BAND[0])-yt(BAND[1]))+'"/>';
   const bw=step*.5;
   D.forEach((d,i)=>{g+='<rect class="pb" style="--i:'+i+'" x="'+(x(i)-bw/2)+'" y="'+yp(d[2])+'" width="'+bw+'" height="'+(T+ph-yp(d[2]))+'"/>'});
-  g+='<path class="tl" pathLength="1" d="'+D.map((d,i)=>(i?'L':'M')+x(i)+' '+yt(d[3])).join('')+'"/>';
-  D.forEach((d,i)=>{g+='<circle class="td" style="--i:'+i+'" r="5" cx="'+x(i)+'" cy="'+yt(d[3])+'"/><text class="tv" style="--i:'+i+'" x="'+x(i)+'" y="'+(yt(d[3])-12)+'" text-anchor="middle">'+d[3].toFixed(1)+'</text>'
+  if(Math.abs(ratio-1)>.001)g+='<path class="ghost" d="'+D.map((d,i)=>(i?'L':'M')+x(i)+' '+yt(d[3])).join('')+'"/>';
+  g+='<path class="tl" pathLength="1" d="'+D.map((d,i)=>(i?'L':'M')+x(i)+' '+yt(tm(d[3]))).join('')+'"/>';
+  D.forEach((d,i)=>{const t=tm(d[3]),out=t<BAND[0]-.05||t>BAND[1]+.05;g+='<circle class="td'+(out?' out':'')+'" style="--i:'+i+'" r="5" cx="'+x(i)+'" cy="'+yt(t)+'"/><text class="tv" style="--i:'+i+'" x="'+x(i)+'" y="'+(yt(t)-12)+'" text-anchor="middle">'+t.toFixed(1)+'</text>'
     +'<text class="nm" x="'+x(i)+'" y="'+(H-B+20)+'" text-anchor="middle">'+d[0]+'</text><text x="'+x(i)+'" y="'+(H-B+36)+'" text-anchor="middle">Lv.'+d[1]+'</text>'});
   g+='<line class="ax" x1="'+L+'" x2="'+(W-R)+'" y1="'+(T+ph)+'" y2="'+(T+ph)+'"/>';
   $('bossMix').innerHTML=g;
 }
+drawMix(1);
 const BOSS=[['코카트라코',18,'24,560',137.6],['실바드',47,'182,077',150.3],['불칸',64,'481,249',148.4],['기안티',78,'631,892',146.5],['가디안트',80,'649,094',146.0],['스텔리아',89,'735,865',145.0],['메카라곤',98,'825,029',142.9],['키메라',100,'843,062',146.7]];
-const BMAX=160;
+const BMAX=260;
 $('bossbars').innerHTML=BOSS.map(([n,lv,cp,t])=>`<div class="r"><div class="nm"><b>${n}</b><span>Lv.${lv} · ${cp}</span></div><div class="tr"><b style="--w:${(t/BMAX*100).toFixed(1)}%"></b></div><div class="t num">${t.toFixed(1)}초</div></div>`).join('')
   +`<div class="cap" style="margin-top:4px">레벨 · 기준 전투력 · 처치 시간 3회 평균</div>`;
 
@@ -1393,6 +1419,29 @@ addEventListener('scroll',onScroll,{passive:true});onScroll();
     const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){o.disconnect();setTh(98);setTimeout(()=>{if(!touched)setTh(52.6)},2200)}}),{rootMargin:'0px 0px -35% 0px'});
     o.observe($('deciles'));
   }
+}
+
+// 밸런스 02 비율 옵션
+{
+  const inp=$('pRatio'),mean=MIXD.reduce((p,d)=>p+d[3],0)/MIXD.length;let cur=1,tw=0;
+  const rows=[...$('bossbars').querySelectorAll('.r')];
+  function apply(rt){
+    drawMix(rt);
+    rows.forEach((row,i)=>{const t=MIXD[i][3]/rt,out=t<BAND[0]-.05||t>BAND[1]+.05;row.querySelector('.tr b').style.setProperty('--w',Math.min(100,t/260*100).toFixed(1)+'%');const tt=row.querySelector('.t');tt.textContent=t.toFixed(1)+'초';tt.classList.toggle('out',out)});
+  }
+  function update(){
+    const target=+inp.value/100,from=cur,t0=performance.now(),D=reduce?0:300;
+    $('bossMix').classList.add('done');
+    $('pRatioV').textContent=inp.value+'%';
+    const m=mean/target,inBand=MIXD.every(d=>{const t=d[3]/target;return t>=BAND[0]-.05&&t<=BAND[1]+.05});
+    $('pRatioRes').innerHTML=target===1?'평균 '+mean.toFixed(1)+'초 · 실측 구간 137.6 ~ 150.3초'
+      :'평균 '+m.toFixed(1)+'초 ('+(m>mean?'+':'−')+Math.abs(m-mean).toFixed(1)+'초) · <span class="'+(inBand?'in':'out')+'">'+(inBand?'실측 구간 안':'실측 구간 밖, 의도한 전투 시간을 벗어남')+'</span>';
+    cancelAnimationFrame(tw);
+    const stepf=now=>{const k=D?Math.min(1,(now-t0)/D):1,e=1-Math.pow(1-k,3);cur=from+(target-from)*e;apply(cur);if(k<1)tw=requestAnimationFrame(stepf)};
+    tw=requestAnimationFrame(stepf);
+  }
+  inp.addEventListener('input',update);
+  $('pRatioRes').textContent='평균 '+mean.toFixed(1)+'초 · 실측 구간 137.6 ~ 150.3초';
 }
 
 // 메일 복사
