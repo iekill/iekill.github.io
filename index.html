@@ -909,8 +909,8 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   <div class="sec-head">
     <div><div class="label">Balance · 밸런스</div></div>
     <div>
-      <h2>계산, 실측, 라이브 데이터로 검증하고 보정하는 밸런스</h2>
-      <p class="desc">넷마블 네오 · 제2의 나라 · 2차 QA (2020.12 — 2021.02) · 라이브 에피소드 2 하드 (2021.08) · 전투 밸런스 담당</p>
+      <h2>계산과 실측으로 검증하는 밸런스</h2>
+      <p class="desc">넷마블 네오 · 제2의 나라 · 2차 QA (2020.12 — 2021.02) · 전투 밸런스 담당</p>
     </div>
   </div>
 
@@ -958,33 +958,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
       <p class="cap" style="margin-top:6px">100%는 실측값이고, 나머지는 DPS가 전투력에 비례한다고 가정한 개념 시뮬레이션입니다.</p>
       <p class="result">보스 8종 137 — 150초 수렴 · 5주간 시트 23개 버전 개정</p>
     </div>
-  </div>
-
-  <div class="sub">
-    <div class="sub-h"><span class="label">03 · 출시 후 · 라이브 보정</span><button class="wk-btn" type="button" data-work="b03" aria-haspopup="dialog">작업물 보기</button></div>
-    <div class="box rv">
-      <h4 class="msg">라이브 투력 분포 기반 하드 모드 진입 기준 재설계</h4>
-      <p class="ctx">에피소드 2 하드 모드는 단계마다 <b>권장 전투력</b>이 정해진 고난도 콘텐츠입니다. 출시 후 1서버 직업별 상위 200인의 전투력을 모아 낮은 순서대로 <b>10개 구간</b>으로 나누고, 각 구간이 어느 단계까지 도전할 수 있는지 확인해 기준을 다시 정했습니다.</p>
-      <dl class="pjr">
-        <div><dt>문제</dt><dd>같은 상위 랭커 안에서도 전투력이 최대 2.9배 차이 났습니다 (59.9만 ~ 174.3만). 처음 안대로 하드 1단계를 98만으로 열면 상위 랭커의 80%가 하드 모드에 들어가지도 못합니다.</dd></div>
-        <div><dt>판단</dt><dd>전투력 차이 폭에 맞춰 낮은 단계 2개(52.6만 · 71.8만)를 새로 만들고, 위쪽 3개 단계의 기준도 조금씩 낮췄습니다.</dd></div>
-        <div><dt>결과</dt><dd>상위 랭커라면 누구나 하드 1단계에 들어갈 수 있게 됐고, 3단계 이상은 전투력 상위 20% 안쪽만 도전할 수 있는 목표로 남겼습니다.</dd></div>
-      </dl>
-      <div class="dec-h"><p class="cap">기획 과정에서 검토한 4개 안을 눌러 비교해 보세요</p><div class="seg" role="group" aria-label="하드 단계 안"><button type="button" data-p="0" aria-pressed="false">1안</button><button type="button" data-p="1" aria-pressed="false">2안</button><button type="button" data-p="2" aria-pressed="false">최종본</button><button type="button" data-p="3" aria-pressed="false">최종</button></div></div>
-      <div class="lad-h" style="border-top:0;margin-top:14px;padding-top:0"><span class="cap"><b>① 전투력 차이와 단계 기준</b></span><span class="cap" id="spreadSum"></span></div>
-      <p class="howto">위 줄의 점 10개는 상위 랭커를 전투력 순으로 10등분한 구간별 평균, 아래 줄은 하드 단계별 권장 전투력입니다. 1단계 기준선보다 왼쪽에 있는 <span class="neg">빨간 점</span>은 하드 모드에 들어갈 수 없는 구간입니다.</p>
-      <svg class="spread" id="spread" viewBox="0 0 800 200" role="img" aria-label="상위 랭커 투력 분포와 선택한 안의 하드 단계 권장 투력 범위"></svg>
-      <div class="lad-h"><span class="cap"><b>② 단계별로 도전 가능한 구간</b></span><span class="cap" id="ladSum"></span></div>
-      <p class="howto">한 줄이 한 단계입니다. 칸 10개는 왼쪽부터 1구간(하위) ~ 10구간(상위)이고, 켜진 칸이 그 단계의 권장 전투력을 넘는 구간입니다.</p>
-      <div class="ladder" id="decLadder"></div>
-      <p class="result" id="decRes"></p>
-      <div class="decide">
-        <div><div class="k">추가</div><b>하위 2단계</b><p>52.6만 · 71.8만</p></div>
-        <div><div class="k">조정</div><b>상위 3단계</b><p>98만 · 116만 · 141만 → 95.7만 · 110만 · 136만</p></div>
-        <div><div class="k">제한</div><b>입장 제한</b><p>권장 전투력 70%</p></div>
-      </div>
-    </div>
-    <p class="src">「던전 밸런스」 ver1.0 — 7.1, 「테스트_몬스터 체력」(2021.01.20), 「에피2_하드모드_기준투력」(2021.08.23) 재구성</p>
+    <p class="src">「던전 밸런스」 ver1.0 — 7.1, 「테스트_몬스터 체력」(2021.01.20) 재구성</p>
   </div>
 
 </div></section>
@@ -1285,7 +1259,6 @@ document.querySelectorAll('#ni .cells, #swc .cells').forEach(grid => {
 
 // 작업물 팝업: 원본 기획서 장면 (회사 머리글·대외비 표시 제거)
 const WORKS={
-  b03:{k:'제2의 나라 · 밸런스 · 라이브 보정',t:'에피소드 2 하드 진입 기준 조정',src:'에피2_하드모드_기준투력 · 2021.08.23',f:[['b03_sheet','10개 구간 분포와 단계별 권장 전투력','1서버 직업별 상위 200인 평균 전투력을 10개 구간으로 나눈 분포를 근거로 1안 → 2안 → 최종본 순으로 하드 단계 권장 투력과 입장 제한(70%)을 조정']]},
   b02:{k:'제2의 나라 · 밸런스 · 실측',t:'보스별 처치 시간 실측',src:'테스트_몬스터 체력 20210120 · 2021.01',f:[['b02_sheet','처치 시간 3회 측정','보스별 체력 · 기준 전투력 · 레벨에서 3회 처치 시간을 재고 평균을 기록, 미측정 보스는 테스트 필요로 관리']]},
   b01:{k:'제2의 나라 · 밸런스 · 계산',t:'몬스터 공격력 역산과 클래스별 DPS',src:'00_던전 밸런스 시트 · Battle_골드던전 · DB_User_DPS · 2021 — 2022',f:[['c02_monatk','몬스터 공격력 역산','공격자 체력 · HPS · 공격 인원과 목표 전투 시간, 기준 방어율로 단계별 공격력과 DPS 산출'],['c02_dps','클래스별 DPS 모델','레벨 · 스킬 레벨에 따른 클래스 5종의 속성별 DPS와 평균 DPS']]},
   c01:{k:'제2의 나라 · 전투 수식',t:'전투 수식 정의',src:'00_던전 밸런스 시트 · 전투 수식 · 2021 — 2022',f:[['c01_formula','단계별 피해 계산','최종 피해 → 1차 피해(공격력 · 방어율) → 속성 공방 순으로 Factor와 수식, 참조 OperationType 정의']]},
@@ -1347,10 +1320,6 @@ function drawMix(ratio){
 drawMix(1);
 const BOSS=[['코카트라코',18,'24,560',137.6],['실바드',47,'182,077',150.3],['불칸',64,'481,249',148.4],['기안티',78,'631,892',146.5],['가디안트',80,'649,094',146.0],['스텔리아',89,'735,865',145.0],['메카라곤',98,'825,029',142.9],['키메라',100,'843,062',146.7]];
 const BMAX=260;
-
-// 라이브 10분위
-const DEC=[64,67,71,74,77,81,86,92,106,174],DMAX=180;
-const pct=v=>(v/DMAX*100).toFixed(1)+'%';
 
 
 // 등장 애니메이션: 첫 화면 밖 요소만
@@ -1468,56 +1437,6 @@ addEventListener('scroll',onScroll,{passive:true});onScroll();
   $('mCtrls').addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;st[k]=+e.target.value;calc();
     document.querySelectorAll('.fx-main i').forEach(i=>i.classList.toggle('hot',i.dataset.v===k))});
   calc();
-}
-
-// 밸런스 03: 「에피2_하드모드_기준투력」의 하드 단계 권장 투력 4개 안. 도착하면 1안부터 최종까지 차례로 넘김
-{
-  const DV=[639812,673382,707859,739847,773946,811898,860140,924397,1063624,1743439];
-  const PLANS=[
-    {n:'1안',t:[980000,1160000,1410000],m:'3단계 구성 · 1단계가 98만이라 상위 2개 구간만 하드 모드에 들어감'},
-    {n:'2안',t:[550000,700000,980000,1160000,1410000],m:'아래에 55만 · 70만 단계를 추가해 5단계로 확장, 모든 구간이 1단계에 들어감'},
-    {n:'최종본',t:[565000,718000,980000,1160000,1410000],m:'추가한 두 단계를 56.5만 · 71.8만으로 미세 조정'},
-    {n:'최종',t:[526000,718000,957000,1100000,1360000],m:'1단계 52.6만으로 낮추고, 위쪽 단계도 95.7만 · 110만 · 136만으로 낮춰 확정'}];
-  const btns=[...document.querySelectorAll('.seg button')];
-  // 편차 차트: 위 줄은 상위 랭커 분포(최소~최대와 10분위 점), 아래 줄은 선택한 안의 하드 단계 범위
-  const SMIN=599401,SMAX=1743439;
-  function drawSpread(p){
-    const t=p.t,W=800,L=118,R=24,A0=450000,A1=1850000,x=v=>L+(v-A0)/(A1-A0)*(W-L-R),yA=58,yB=138;
-    const m=v=>(v/10000).toFixed(1).replace(/\.0$/,'')+'만';
-    const below=DV.filter(d=>d<t[0]).length;
-    let g='<text class="rl" x="0" y="'+(yA+4)+'">상위 랭커 전투력</text><text class="rl" x="0" y="'+(yB+4)+'">하드 단계 · '+p.n+'</text>';
-    g+='<rect class="trk" x="'+x(SMIN)+'" y="'+(yA-6)+'" width="'+(x(SMAX)-x(SMIN))+'" height="12"/>';
-    if(t[0]>SMIN)g+='<rect class="no" x="'+x(SMIN)+'" y="'+(yA-6)+'" width="'+(x(Math.min(t[0],SMAX))-x(SMIN))+'" height="12"/>';
-    g+='<text x="'+x(SMIN)+'" y="'+(yA-16)+'" text-anchor="middle">최소 '+m(SMIN)+'</text><text x="'+x(SMAX)+'" y="'+(yA-16)+'" text-anchor="middle">최대 '+m(SMAX)+'</text>';
-    g+='<text class="hv" x="'+((x(SMIN)+x(SMAX))/2)+'" y="'+(yA-16)+'" text-anchor="middle">최대 2.9배 차이</text>';
-    DV.forEach(d=>{g+='<circle class="dot '+(d>=t[0]?'ok':'ng')+'" r="6" cx="'+x(d)+'" cy="'+yA+'"/>'});
-    if(below)g+='<text class="bad" x="'+x(SMIN)+'" y="'+(yA+26)+'">하드 진입 불가 '+below+'개 구간</text>';
-    g+='<line class="gl" x1="'+x(t[0])+'" x2="'+x(t[0])+'" y1="'+(yA+8)+'" y2="'+(yB-8)+'"/>';
-    g+='<rect class="rng" x="'+x(t[0])+'" y="'+(yB-6)+'" width="'+(x(t[t.length-1])-x(t[0]))+'" height="12"/>';
-    t.forEach((v,j)=>{g+='<line class="tk" x1="'+x(v)+'" x2="'+x(v)+'" y1="'+(yB-11)+'" y2="'+(yB+11)+'"/><text class="hv" x="'+x(v)+'" y="'+(yB-16)+'" text-anchor="middle">'+(j+1)+'</text><text x="'+x(v)+'" y="'+(yB+28)+'" text-anchor="middle">'+m(v)+'</text>'});
-    g+='<line class="ax" x1="'+L+'" x2="'+(W-R)+'" y1="190" y2="190"/>';
-    for(const v of [500000,1000000,1500000])g+='<line class="ax" x1="'+x(v)+'" x2="'+x(v)+'" y1="186" y2="194"/><text x="'+x(v)+'" y="'+(yB+56)+'" text-anchor="middle" style="display:none">'+m(v)+'</text>';
-    $('spread').innerHTML=g;
-    $('spreadSum').textContent=below?'1단계 '+m(t[0])+' · 상위 랭커의 '+below+'0%가 진입 불가':'1단계 '+m(t[0])+' · 모든 구간 진입 가능';
-  }
-  const man=v=>(v/10000).toFixed(v%10000?1:0).replace(/\.0$/,'')+'만';
-  let touched=false,timers=[];
-  function setPlan(k){
-    const p=PLANS[k],t=p.t;
-    let rows='';for(let j=0;j<5;j++){const v=t[j];const on=v?DV.map(d=>d>=v):[];rows+='<div class="lr'+(v?'':' off')+'"><b>하드 '+(j+1)+'단계'+(v?'<small>'+man(v)+'</small>':'<small>없음</small>')+'</b><div class="cells10">'+DV.map((d,i)=>'<i class="'+(on[i]?'on':'')+'"></i>').join('')+'</div><span class="cnt">'+(v?on.filter(Boolean).length+'/10':'—')+'</span></div>'}
-    $('decLadder').innerHTML=rows;
-    const first=DV.filter(d=>d>=t[0]).length;
-    $('ladSum').textContent='1단계 진입 '+first+'/10 구간';
-    btns.forEach((b,j)=>b.setAttribute('aria-pressed',j===k));
-    $('decRes').textContent=p.n+' · '+p.m;
-    drawSpread(p);
-  }
-  btns.forEach((b,j)=>b.addEventListener('click',()=>{touched=true;timers.forEach(clearTimeout);setPlan(j)}));
-  setPlan(3);
-  if(!reduce&&'IntersectionObserver'in window){
-    const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){o.disconnect();setPlan(0);[1,2,3].forEach((k,j)=>timers.push(setTimeout(()=>{if(!touched)setPlan(k)},1600*(j+1))))}}),{rootMargin:'0px 0px -35% 0px'});
-    o.observe($('spread'));
-  }
 }
 
 // 밸런스 02 비율 옵션
