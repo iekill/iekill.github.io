@@ -584,6 +584,11 @@ dialog.work[open]::backdrop{animation:fade .35s ease}
 .story dd strong{color:var(--deep)}
 .quote{margin:40px 0 0;padding:24px 28px;background:var(--band);color:var(--on-band);font-weight:700;font-size:clamp(17px,2vw,20px);line-height:1.55}
 .quote small{display:block;font-weight:400;font-size:12px;color:var(--on-band-soft);margin-top:8px;letter-spacing:.06em}
+.case-2{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:48px;align-items:start;margin-top:32px}
+.case-2 .story,.case-2 .sub{margin-top:0}
+.case-2 .story > div{grid-template-columns:64px minmax(0,1fr);gap:16px}
+.case-2 .sprint li{grid-template-columns:88px minmax(0,1fr);gap:12px}
+@media (max-width:900px){.case-2{grid-template-columns:minmax(0,1fr);gap:32px}}
 .sprint{list-style:none;margin:14px 0 0;padding:0;position:relative}
 .sprint::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--hair)}
 .sprint .fill{position:absolute;left:5px;top:6px;width:2px;height:var(--p,0%);background:var(--accent);transition:height .15s linear}
@@ -987,29 +992,30 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
     <div class="label">사례 01 · AI War 전투 코어 리뉴얼</div>
     <h3>브랜치 통합 불가로 멈춘 프로젝트의 코어 재구축과 런칭</h3>
     <p class="meta">DoubleuGames 스튜디오N · 퍼즐 RPG · 2022.09 — 2023.06 · 실무 5명 (기획 1 · 연출 2 · 개발 2) · 기획 리드</p>
-    <dl class="story rv">
-      <div><dt>상황</dt><dd><p>개발은 계속되는데 결과물이 쌓이지 않았고, 팀 안에서도 무엇이 문제인지 정의되지 않은 상태였습니다. 2022년 11월 스프린트를 시작할 때 총 진행률은 8.1%였습니다.</p></dd></div>
-      <div><dt>진단</dt><dd><p>원인은 코어였습니다. 스탯·수식을 바꾼 리뉴얼 브랜치(Stat_Renewal)가 기존 전투 브랜치와 통합할 수 없는 상태여서, 그 위에 쌓아야 할 성장·전투·밸런스 작업이 전부 막혀 있었습니다.</p></dd></div>
-      <div><dt>해결</dt><dd>
-        <p>위층 작업을 멈추고 코어부터 다시 세우는 순서로 바꿨습니다. 월 단위 스프린트마다 실행 가능한 결과물을 목표로 두고, 일간 회의로 매일 진행을 점검했습니다.</p>
-        <p>리드와 함께 기획 실무도 직접 맡았습니다. 캐릭터 데이터, 스킬 연출 8단계 명세(v1.1, 2023.05.23), 이뮨 시스템을 기획했고, 이뮨 시스템은 5월 16일 기획 다음 날인 17일에 개발로 넘겼습니다.</p>
-      </dd></div>
-      <div><dt>결과</dt><dd><p><strong>코어 완성 뒤 성장·전투·밸런스 작업이 이어졌고, 고도화 2차를 마친 뒤 3개월 만에 런칭했습니다.</strong></p></dd></div>
-    </dl>
-    <div class="sub">
-      <span class="label">스프린트 목표 · 매회 실행 가능한 결과물</span>
-      <ol class="sprint" id="sprint">
-        <i class="fill" aria-hidden="true"></i>
-        <li><span class="d">2022.09</span><p>리뉴얼 브랜치에서 전투 밸런스 씬 실행</p></li>
-        <li><span class="d">2022.10</span><p>로그인 → 전투 종료까지 실행, 신규 리소스 규약 적용</p></li>
-        <li><span class="d">2022.11</span><p>단일 브랜치 구성, 영웅·몬스터·위인 전투 시스템 구성<small>스프린트 시작 시 총 진행률 8.1%</small></p></li>
-        <li><span class="d">2022.12</span><p>전 브랜치 일괄 통합, 빌드 구성 및 배포</p></li>
-        <li><span class="d">고도화 1차</span><p>영웅·위인 스킬 퀄리티 상향, 전투 조작 감도 상향<small>2023.04.19 — 05.03 · 진행률 99%</small></p></li>
-        <li><span class="d">고도화 2차</span><p>인게임 전투 연출 정리, 전투 구성 고도화<small>2023.05.15 — 06.02</small></p></li>
-        <li class="end"><span class="d">+ 3개월</span><p>런칭</p></li>
-      </ol>
+    <div class="case-2">
+      <dl class="story rv">
+        <div><dt>상황</dt><dd><p>개발은 계속되는데 결과물이 쌓이지 않았고, 팀 안에서도 무엇이 문제인지 정의되지 않은 상태였습니다. 2022년 11월 스프린트를 시작할 때 총 진행률은 8.1%였습니다.</p></dd></div>
+        <div><dt>진단</dt><dd><p>원인은 코어였습니다. 스탯·수식을 바꾼 리뉴얼 브랜치(Stat_Renewal)가 기존 전투 브랜치와 통합할 수 없는 상태여서, 그 위에 쌓아야 할 성장·전투·밸런스 작업이 전부 막혀 있었습니다.</p></dd></div>
+        <div><dt>해결</dt><dd>
+          <p>위층 작업을 멈추고 코어부터 다시 세우는 순서로 바꿨습니다. 월 단위 스프린트마다 실행 가능한 결과물을 목표로 두고, 일간 회의로 매일 진행을 점검했습니다.</p>
+          <p>리드와 함께 기획 실무도 직접 맡았습니다. 캐릭터 데이터, 스킬 연출 8단계 명세(v1.1, 2023.05.23), 이뮨 시스템을 기획했고, 이뮨 시스템은 5월 16일 기획 다음 날인 17일에 개발로 넘겼습니다.</p>
+        </dd></div>
+        <div><dt>결과</dt><dd><p><strong>코어 완성 뒤 성장·전투·밸런스 작업이 이어졌고, 고도화 2차를 마친 뒤 3개월 만에 런칭했습니다.</strong></p></dd></div>
+      </dl>
+      <div class="sub">
+        <span class="label">스프린트 목표 · 매회 실행 가능한 결과물</span>
+        <ol class="sprint" id="sprint">
+          <i class="fill" aria-hidden="true"></i>
+          <li><span class="d">2022.09</span><p>리뉴얼 브랜치에서 전투 밸런스 씬 실행</p></li>
+          <li><span class="d">2022.10</span><p>로그인 → 전투 종료까지 실행, 신규 리소스 규약 적용</p></li>
+          <li><span class="d">2022.11</span><p>단일 브랜치 구성, 영웅·몬스터·위인 전투 시스템 구성<small>스프린트 시작 시 총 진행률 8.1%</small></p></li>
+          <li><span class="d">2022.12</span><p>전 브랜치 일괄 통합, 빌드 구성 및 배포</p></li>
+          <li><span class="d">고도화 1차</span><p>영웅·위인 스킬 퀄리티 상향, 전투 조작 감도 상향<small>2023.04.19 — 05.03 · 진행률 99%</small></p></li>
+          <li><span class="d">고도화 2차</span><p>인게임 전투 연출 정리, 전투 구성 고도화<small>2023.05.15 — 06.02</small></p></li>
+          <li class="end"><span class="d">+ 3개월</span><p>런칭</p></li>
+        </ol>
+      </div>
     </div>
-    <blockquote class="quote rv">지어진 건물의 중간을 들어 올리고, 지하부터 다시 지어 완공한 사례<small>스프린트 백로그 문서, 기획서 「전투 고도화 2차 : 스킬 연출 정리」 v1.1.0 (2023.05.23) 재구성</small></blockquote>
   </article>
 
   <!-- 사례 02 정예던전 -->
