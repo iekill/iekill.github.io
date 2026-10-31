@@ -591,6 +591,8 @@ dialog.work[open]::backdrop{animation:fade .35s ease}
 .case-2 .story,.case-2 .sub{margin-top:0}
 .case-2 .story > div{grid-template-columns:64px minmax(0,1fr);gap:16px}
 .case-2 .sprint li{grid-template-columns:88px minmax(0,1fr);gap:12px}
+/* 좌우 높이 맞춤: 진행 흐름 라벨 높이만큼 내리고, 네 칸을 타임라인 높이에 맞춰 균등 배분 */
+@media (min-width:901px){.case-2{align-items:stretch}.case-2 .story{margin:var(--lab,34px) 0 0;grid-template-rows:repeat(4,1fr)}.case-2 .story > div{align-content:center}.case-2 .sprint li:last-child{padding-bottom:0}}
 @media (max-width:900px){.case-2{grid-template-columns:minmax(0,1fr);gap:32px}}
 .sprint{list-style:none;margin:14px 0 0;padding:0;position:relative}
 .sprint::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:2px;background:var(--hair)}
@@ -988,7 +990,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
     <div class="case-2">
       <dl class="story rv">
         <div><dt>상황</dt><dd><p>킥오프 이후 약 3년 동안 개발 진행율 8.1%로 프로젝트 진행이 불투명했음.</p></dd></div>
-        <div><dt>진단</dt><dd><p>원인은 핵심 시스템이 상호 연동하지 않고 독립적으로 동작하여 중복 기능 개발 반복</p></dd></div>
+        <div><dt>진단</dt><dd><p>핵심 시스템이 상호 연동하지 않고 독립적으로 동작하여 중복 기능 개발 반복</p></dd></div>
         <div><dt>해결</dt><dd><p>단일 TF 구성을 통해 핵심 시스템을 개편하고 시스템간 유기적인 연결성을 확보하며 개발 확장</p></dd></div>
         <div><dt>결과</dt><dd><p><strong>TF 구성 6개월 만에 핵심 시스템 개편과 리팩토링 완료 후 AOS · iOS 정식 출시.</strong></p></dd></div>
       </dl>
