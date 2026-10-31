@@ -101,6 +101,37 @@ mark.u{background:linear-gradient(var(--accent),var(--accent)) no-repeat 0 100%/
 @keyframes lineV{from{background-size:1px 0}to{background-size:1px 100%}}
 @keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
+/* 주요 참여 프로젝트 */
+.bento{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);grid-template-rows:auto auto;gap:12px}
+.kp{position:relative;display:block;overflow:hidden;border:1px solid var(--hair);background:var(--card);text-decoration:none;color:inherit}
+.kp-main{grid-row:1 / span 2;min-height:520px}
+.kp-wide{aspect-ratio:16/8.2}
+.kp .kp-img,.kp-tile .kp-img{position:absolute;inset:0;display:block}
+.kp img,.kp-tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.kp-main img{object-position:50% 30%}
+.kp::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,13,18,0) 45%,rgba(10,13,18,.92) 100%);pointer-events:none}
+.kp-t{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:22px 24px;display:grid;gap:6px}
+.kp-t .label{color:#8fb8f2}
+.kp-t b{font-size:clamp(22px,2.6vw,30px);color:#fff;line-height:1.2}
+.kp-wide .kp-t b{font-size:clamp(20px,2.2vw,26px)}
+.kp-d{font-weight:400;font-size:13px;color:#cfd6de;line-height:1.55}
+.kp:hover img,.kp:focus-visible img,.kp-tile:hover img,.kp-tile:focus-visible img{transform:scale(1.05)}
+.kp:hover,.kp:focus-visible{border-color:var(--accent)}
+.kp-group{border:1px solid var(--hair);background:var(--card);padding:16px;display:grid;gap:12px;align-content:start}
+.kp-gh{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 12px}
+.kp-gh b{font-size:17px}
+.kp-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.kp-tile{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;text-decoration:none;color:inherit;border:1px solid var(--hair);background:#000}
+.kp-tile::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,13,18,0) 40%,rgba(10,13,18,.9) 100%);pointer-events:none}
+.kp-tile.contain .kp-img::before{content:"";position:absolute;inset:-20px;background:url(img/kp_sm.webp) center/cover;filter:blur(18px) brightness(.7)}
+.kp-tile.contain img{position:relative;object-fit:contain}
+.kp-cap{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:10px 12px;display:grid;gap:2px}
+.kp-cap b{font-size:13px;color:#fff;line-height:1.3}
+.kp-cap small{font-weight:400;font-size:11px;color:#cfd6de}
+.kp-tile:hover,.kp-tile:focus-visible{border-color:var(--accent)}
+@media (max-width:900px){.bento{grid-template-columns:minmax(0,1fr)}.kp-main{grid-row:auto;min-height:0;aspect-ratio:4/5}}
+@media (max-width:640px){.kp-grid{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){.kp img,.kp-tile img{transition:none}}
 /* capability map */
 .scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 table{border-collapse:collapse;width:100%}
@@ -640,6 +671,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   <a class="brand" href="#top">권두현</a>
   <ul>
     <li><a class="l" href="#profile">프로필</a></li>
+    <li><a class="l" href="#key">주요 프로젝트</a></li>
     <li><a class="l" href="#map">역량 맵</a></li>
     <li><a class="l" href="#projects">프로젝트</a></li>
     <li><a class="l" href="#combat">밸런스</a></li>
@@ -684,6 +716,32 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
         <div style="--l:1770ms"><dt>Genres</dt><dd>MMORPG · 수집형 RPG · ARPG · 퍼즐</dd></div>
         <div style="--l:1890ms"><dt>Tools</dt><dd>Excel · Unity · Unreal · Claude Code</dd></div>
       </dl>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<section class="sec" id="key"><div class="wrap">
+  <div class="sec-head">
+    <div><div class="label">Key Projects</div></div>
+    <div><h2>주요 참여 프로젝트</h2><p class="desc">카드를 누르면 프로젝트별 상세 설명과 작업물로 이동합니다.</p></div>
+  </div>
+  <div class="bento">
+    <a class="kp kp-main rv" href="#ni">
+      <span class="kp-img"><img src="img/kp_ni.webp" alt="제2의 나라" loading="lazy"></span>
+      <span class="kp-t"><span class="label">Netmarble Neo · 2019 — 2022</span><b>제2의 나라</b><span class="kp-d">모바일 MMORPG · 프로토타입부터 참여 · 전투 수식 · PVE 밸런스 · 콘텐츠 기획</span></span>
+    </a>
+    <a class="kp kp-wide rv" href="#swc">
+      <span class="kp-img"><img src="img/kp_swc.webp" alt="서머너즈워 크로니클" loading="lazy"></span>
+      <span class="kp-t"><span class="label">Com2us · 2016 — 2019</span><b>서머너즈워 크로니클</b><span class="kp-d">모바일 MMORPG · 코어 전투 시스템 설계 · 전투 기획 리드</span></span>
+    </a>
+    <div class="kp-group rv">
+      <div class="kp-gh"><span class="label">DoubleuGames · 2022 — 2026</span><b>퍼즐 · 하이퍼캐주얼 4종</b></div>
+      <div class="kp-grid">
+        <a class="kp-tile contain" href="#dug"><span class="kp-img"><img src="img/kp_sm.webp" alt="Sort Master: Asian Kitchen" loading="lazy"></span><span class="kp-cap"><b>Sort Master: Asian Kitchen</b><small>1인 개발 · 런칭</small></span></a>
+        <a class="kp-tile" href="#dug"><span class="kp-img"><img src="img/kp_bw.webp" alt="Block Wonder Magic Puzzle" loading="lazy"></span><span class="kp-cap"><b>Block Wonder Magic Puzzle</b><small>시스템 설계 · 개발 리드</small></span></a>
+        <a class="kp-tile" href="#dug"><span class="kp-img"><img src="img/kp_db.webp" alt="Dessert Bliss Sorting Puzzle" loading="lazy"></span><span class="kp-cap"><b>Dessert Bliss Sorting Puzzle</b><small>시스템 설계 · 개발 리드</small></span></a>
+        <a class="kp-tile" href="#dug"><span class="kp-img"><img src="img/kp_lo.webp" alt="LeonOut" loading="lazy"></span><span class="kp-cap"><b>LeonOut</b><small>시스템 설계 · 개발 리드</small></span></a>
       </div>
     </div>
   </div>
