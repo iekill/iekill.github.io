@@ -874,7 +874,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
       <div class="has-work" data-work="c05" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">05</span><b>성장 던전</b><p>메타 성장 콘텐츠 기획</p><span class="wk">작업물 보기</span></div>
       <div class="has-work" data-work="c06" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">06</span><b>카오스 필드</b><p>방치 성장 콘텐츠 기획</p><span class="wk">작업물 보기</span></div>
       <div class="has-work" data-work="c07" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">07</span><b>탑승물</b><p>메타 성장 시스템과 BM 결합, 지속적인 성장 요구 서브 콘텐츠 기획</p><span class="wk">작업물 보기</span></div>
-      <div class="has-work" data-work="c08" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">08</span><b>크로스 필드</b><p>서버 대항 경쟁 콘텐츠 단독 설계 <a href="#cross" style="color:var(--accent)">→ 사례</a></p><span class="wk">작업물 보기</span></div>
+      <div class="has-work" data-work="c08" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">08</span><b>크로스 필드</b><p>서버 대항 경쟁 콘텐츠 단독 설계</p><span class="wk">작업물 보기</span></div>
       <div class="has-work" data-work="c09" role="button" tabindex="0" aria-haspopup="dialog"><span class="n">09</span><b>레벨 디자인</b><p>카오스 필드, 크로스 필드, 강림 던전 레벨 디자인</p><span class="wk">작업물 보기</span></div>
     </div>
   </article>
@@ -956,7 +956,6 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
       <svg class="mix" id="bossMix" viewBox="0 0 800 280" role="img" aria-label="보스 레벨이 오르며 기준 전투력은 34배 커지지만 처치 시간은 137~150초로 거의 일정함"></svg>
       <div class="mix-lg"><span><i class="b"></i>캐릭터 전투력 (막대 · 왼쪽 축)</span><span><i class="o"></i>기준 전투력 (윤곽)</span><span><i class="l"></i>처치 시간 (선 · 오른쪽 축)</span><span><i class="g"></i>실측 3회 평균 (점선)</span></div>
       <p class="cap" style="margin-top:6px">100%는 실측값이고, 나머지는 DPS가 전투력에 비례한다고 가정한 개념 시뮬레이션입니다.</p>
-      <div class="bars pre" id="bossbars"></div>
       <p class="result">보스 8종 137 — 150초 수렴 · 5주간 시트 23개 버전 개정</p>
     </div>
   </div>
@@ -975,11 +974,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
       <div class="lad-h" style="border-top:0;margin-top:14px;padding-top:0"><span class="cap"><b>① 전투력 차이와 단계 기준</b></span><span class="cap" id="spreadSum"></span></div>
       <p class="howto">위 줄의 점 10개는 상위 랭커를 전투력 순으로 10등분한 구간별 평균, 아래 줄은 하드 단계별 권장 전투력입니다. 1단계 기준선보다 왼쪽에 있는 <span class="neg">빨간 점</span>은 하드 모드에 들어갈 수 없는 구간입니다.</p>
       <svg class="spread" id="spread" viewBox="0 0 800 200" role="img" aria-label="상위 랭커 투력 분포와 선택한 안의 하드 단계 권장 투력 범위"></svg>
-      <div class="lad-h" style="margin-top:18px"><span class="cap"><b>② 구간별 전투력과 단계 기준선</b></span></div>
-      <p class="howto">막대는 구간별 평균 전투력, 가로선은 단계별 권장 전투력입니다. 막대가 선보다 높으면 그 단계까지 도전할 수 있고, 진할수록 도전 가능한 단계가 많습니다.</p>
-      <div class="deciles pre" id="deciles" role="img" aria-label="상위 랭커 전투력 10개 구간 64만부터 174만과 하드 단계 권장 전투력"></div>
-      <div class="dx" id="dx"></div>
-      <div class="lad-h"><span class="cap"><b>③ 단계별로 도전 가능한 구간</b></span><span class="cap" id="ladSum"></span></div>
+      <div class="lad-h"><span class="cap"><b>② 단계별로 도전 가능한 구간</b></span><span class="cap" id="ladSum"></span></div>
       <p class="howto">한 줄이 한 단계입니다. 칸 10개는 왼쪽부터 1구간(하위) ~ 10구간(상위)이고, 켜진 칸이 그 단계의 권장 전투력을 넘는 구간입니다.</p>
       <div class="ladder" id="decLadder"></div>
       <p class="result" id="decRes"></p>
@@ -999,7 +994,7 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
     <div><div class="label">Leadership · 프로젝트 리드</div></div>
     <div>
       <h2>문제의 원인을 정확히 파악하고, 근본적인 해결책을 제시하고 실행하는 프로젝트 리드</h2>
-      <p class="desc">6인 이하 팀부터 30인 이상 조직까지 리드 · 근거 사례: AI War 전투 코어 리뉴얼, 제2의 나라 정예던전, 크로스 필드</p>
+      <p class="desc">6인 이하 팀부터 30인 이상 조직까지 리드 · 근거 사례: AI War 전투 코어 리뉴얼, 제2의 나라 정예던전</p>
     </div>
   </div>
 
@@ -1010,17 +1005,6 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
       <div><div class="k">EK GAMES · 2014</div><b>6개월 런칭</b><p>프로젝트 리드 · 네모네모 로사 시스템 설계부터 밸런싱까지</p></div>
       <div><div class="k">넷마블 네오 · 2020</div><b>기획 5명</b><p>정예던전 · 3주가 되지 않아 개발 단계로 넘김</p></div>
       <div><div class="k">DoubleuGames · 2022 — 2023</div><b>실무 5명</b><p>AI War · 코어 재구축 후 런칭</p></div>
-    </div>
-  </div>
-
-  <div class="split">
-    <div><div class="label" style="color:var(--muted)">리드 방식</div></div>
-    <div class="ways rv">
-      <div class="w"><span class="n">01</span><div><b>원인 진단</b><p>결과물이 쌓이지 않는 이유를 구조에서 찾아 특정</p></div><div class="ev">AI War · 리뉴얼 브랜치와 기존 전투 브랜치의 통합 불가</div></div>
-      <div class="w"><span class="n">02</span><div><b>작업 순서 재설정</b><p>막힌 원인부터 풀리도록 전체 작업 순서를 다시 짬</p></div><div class="ev">AI War · 위층 작업 중단, 코어부터 재구축</div></div>
-      <div class="w"><span class="n">03</span><div><b>실행 가능한 단기 목표</b><p>스프린트마다 실행되는 결과물을 목표로 두어, 팀이 성과를 체감하고 참여를 이어 가게 함</p></div><div class="ev">AI War · 월 단위 스프린트 4회, 매회 실행 빌드</div></div>
-      <div class="w"><span class="n">04</span><div><b>매일 점검과 결정 기록</b><p>진행과 결정을 매일 공유해 다음 작업을 바로 엶</p></div><div class="ev">AI War 일간 회의 · 정예던전 개발일지 8회</div></div>
-      <div class="w"><span class="n">05</span><div><b>일정·업무·테스트 조율과 실무 병행</b><p>전체 일정과 업무·테스트를 조율하면서 핵심 실무를 직접 맡음</p></div><div class="ev">AI War 캐릭터 데이터·스킬 연출 · 정예던전 시스템 기획</div></div>
     </div>
   </div>
 
@@ -1060,9 +1044,8 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
     <h3>런칭 일정 안에서 개발 비용을 줄이는 결정으로 끝낸 메인 콘텐츠 기획</h3>
     <p class="meta">넷마블 네오 · 제2의 나라 · 2020.09 — 10 · 기획 5명 (본인 · 몬스터 1 · 컨셉·레벨 2 · 시나리오 1) · 기획 리드</p>
     <dl class="story rv">
-      <div><dt>상황</dt><dd><p>런칭 일정 안에 메인 콘텐츠의 기획을 끝내고 아트·레벨 발주까지 넘겨야 했습니다.</p></dd></div>
-      <div><dt>진행</dt><dd><p>몬스터, 컨셉·레벨, 시나리오 담당이 병렬로 움직이도록 나누고, 결정 사항은 개발일지(2020.09.24 — 10.12, 8회)에 남겨 다음 작업을 바로 열었습니다. 3주가 되지 않아 개발 단계로 넘겼습니다.</p></dd></div>
-      <div><dt>결과</dt><dd><p><strong>제2의 나라 출시와 함께 서비스했습니다.</strong> 개발 이후 출시 전까지는 디벨롭 작업으로 이어졌습니다.</p></dd></div>
+      <div><dt>진행</dt><dd><p>런칭 일정 안에 기획을 끝내기 위해 담당을 병렬로 나누고 결정은 개발일지(8회)에 남겨, 3주가 되지 않아 개발 단계로 넘겼습니다.</p></dd></div>
+      <div><dt>결과</dt><dd><p><strong>제2의 나라 출시와 함께 서비스했습니다.</strong></p></dd></div>
     </dl>
     <div class="sub">
       <span class="label">개발 비용을 줄인 결정</span>
@@ -1076,27 +1059,6 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
         </tbody>
       </table></div>
       <p class="src">「정예던전 개발일지」 (2020.09.24 — 10.12, 8회) 결정 기록을 재구성</p>
-    </div>
-  </article>
-
-  <!-- 사례 03 크로스 서버 -->
-  <article class="case" id="cross">
-    <div class="label">사례 03 · 제2의 나라 크로스 필드</div>
-    <h3>서버 대항 경쟁 콘텐츠의 단독 설계와 출시 후 개선안 반영</h3>
-    <p class="meta">넷마블 네오 · 제2의 나라 · 2021.09 — 11 · 단독 기획 · 리드</p>
-    <dl class="story rv">
-      <div><dt>역할</dt><dd><p>기획을 혼자 맡아 설계하고 개발까지 리드했습니다.</p></dd></div>
-      <div><dt>결과</dt><dd><p><strong>문서 마지막 버전을 기준으로 다음 주에 업데이트됐습니다.</strong></p></dd></div>
-    </dl>
-    <div class="sub">
-      <span class="label">기획서 개정 흐름</span>
-      <div class="vers rv">
-        <div><b>v1.0.0</b><span>2021.09.02 · 최초 설계</span></div>
-        <div><b>v1.4.2</b><span>2021.09.17</span></div>
-        <div><b>개선안 1.0.0</b><span>2021.11.01</span></div>
-        <div><b>v2.0.0</b><span>2021.11.03</span></div>
-        <div><b>v2.2.1</b><span>업데이트 기준 버전</span></div>
-      </div>
     </div>
   </article>
 </div></section>
@@ -1385,18 +1347,15 @@ function drawMix(ratio){
 drawMix(1);
 const BOSS=[['코카트라코',18,'24,560',137.6],['실바드',47,'182,077',150.3],['불칸',64,'481,249',148.4],['기안티',78,'631,892',146.5],['가디안트',80,'649,094',146.0],['스텔리아',89,'735,865',145.0],['메카라곤',98,'825,029',142.9],['키메라',100,'843,062',146.7]];
 const BMAX=260;
-$('bossbars').innerHTML=BOSS.map(([n,lv,cp,t])=>`<div class="r"><div class="nm"><b>${n}</b><span>Lv.${lv} · ${cp}</span></div><div class="tr"><b style="--w:${(t/BMAX*100).toFixed(1)}%"></b></div><div class="t num">${t.toFixed(1)}초</div></div>`).join('')
-  +`<div class="cap" style="margin-top:4px">레벨 · 기준 전투력 · 처치 시간 3회 평균</div>`;
 
 // 라이브 10분위
 const DEC=[64,67,71,74,77,81,86,92,106,174],DMAX=180;
 const pct=v=>(v/DMAX*100).toFixed(1)+'%';
-$('deciles').innerHTML=DEC.map(v=>`<div class="c" style="--h:${pct(v)}"><b></b><span class="num">${v}만</span></div>`).join('')+'<div id="decTiers"></div>';
-$('dx').innerHTML=DEC.map((_,i)=>`<span>${i?i+1+'구간':'1구간 · 하위'}</span>`).join('').replace('<span>10구간</span>','<span>10구간 · 상위</span>');
+
 
 // 등장 애니메이션: 첫 화면 밖 요소만
 document.querySelectorAll('#capmap thead th').forEach((th,k)=>th.style.setProperty('--l',k*70+'ms'));
-const grow=['capmap','bossbars','deciles'];
+const grow=['capmap'];
 if(!reduce&&'IntersectionObserver'in window){
   const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('pre');io.unobserve(e.target)}}),{rootMargin:'0px 0px -10% 0px'});
   document.querySelectorAll('.rv').forEach(el=>{if(el.getBoundingClientRect().top>innerHeight){el.classList.add('pre');io.observe(el)}});
@@ -1519,7 +1478,7 @@ addEventListener('scroll',onScroll,{passive:true});onScroll();
     {n:'2안',t:[550000,700000,980000,1160000,1410000],m:'아래에 55만 · 70만 단계를 추가해 5단계로 확장, 모든 구간이 1단계에 들어감'},
     {n:'최종본',t:[565000,718000,980000,1160000,1410000],m:'추가한 두 단계를 56.5만 · 71.8만으로 미세 조정'},
     {n:'최종',t:[526000,718000,957000,1100000,1360000],m:'1단계 52.6만으로 낮추고, 위쪽 단계도 95.7만 · 110만 · 136만으로 낮춰 확정'}];
-  const cells=[...$('deciles').querySelectorAll('.c')],btns=[...document.querySelectorAll('.seg button')];
+  const btns=[...document.querySelectorAll('.seg button')];
   // 편차 차트: 위 줄은 상위 랭커 분포(최소~최대와 10분위 점), 아래 줄은 선택한 안의 하드 단계 범위
   const SMIN=599401,SMAX=1743439;
   function drawSpread(p){
@@ -1545,8 +1504,6 @@ addEventListener('scroll',onScroll,{passive:true});onScroll();
   let touched=false,timers=[];
   function setPlan(k){
     const p=PLANS[k],t=p.t;
-    cells.forEach((c,i)=>{const lv=t.filter(v=>DV[i]>=v).length;c.dataset.lv=lv;c.className='c lv'+Math.min(lv,1);c.querySelector('b').style.opacity=lv?(.35+lv/t.length*.65).toFixed(2):1});
-    $('decTiers').innerHTML=t.map((v,j)=>'<div class="tier'+(j?'':' t1')+'" style="bottom:'+pct(v/10000)+'"><em>'+(j?(j+1):'1단계 '+man(v))+'</em></div>').join('');
     let rows='';for(let j=0;j<5;j++){const v=t[j];const on=v?DV.map(d=>d>=v):[];rows+='<div class="lr'+(v?'':' off')+'"><b>하드 '+(j+1)+'단계'+(v?'<small>'+man(v)+'</small>':'<small>없음</small>')+'</b><div class="cells10">'+DV.map((d,i)=>'<i class="'+(on[i]?'on':'')+'"></i>').join('')+'</div><span class="cnt">'+(v?on.filter(Boolean).length+'/10':'—')+'</span></div>'}
     $('decLadder').innerHTML=rows;
     const first=DV.filter(d=>d>=t[0]).length;
@@ -1559,17 +1516,15 @@ addEventListener('scroll',onScroll,{passive:true});onScroll();
   setPlan(3);
   if(!reduce&&'IntersectionObserver'in window){
     const o=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){o.disconnect();setPlan(0);[1,2,3].forEach((k,j)=>timers.push(setTimeout(()=>{if(!touched)setPlan(k)},1600*(j+1))))}}),{rootMargin:'0px 0px -35% 0px'});
-    o.observe($('deciles'));
+    o.observe($('spread'));
   }
 }
 
 // 밸런스 02 비율 옵션
 {
   const inp=$('pRatio'),mean=MIXD.reduce((p,d)=>p+d[3],0)/MIXD.length;let cur=1,tw=0;
-  const rows=[...$('bossbars').querySelectorAll('.r')];
   function apply(rt){
     drawMix(rt);
-    rows.forEach((row,i)=>{const t=MIXD[i][3]/rt,out=t<BAND[0]-.05||t>BAND[1]+.05;row.querySelector('.tr b').style.setProperty('--w',Math.min(100,t/260*100).toFixed(1)+'%');const tt=row.querySelector('.t');tt.textContent=t.toFixed(1)+'초';tt.classList.toggle('out',out)});
   }
   function update(){
     const target=+inp.value/100,from=cur,t0=performance.now(),D=reduce?0:300;
