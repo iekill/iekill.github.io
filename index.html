@@ -362,6 +362,16 @@ dialog.work[open]::backdrop{animation:fade .35s ease}
 .work-body pre.code .kw{color:#c586c0}
 .work-body pre.code .nu{color:#b5cea8}
 .work-body .note{font-size:15px;line-height:1.75;padding:16px 18px;background:var(--soft);border-left:3px solid var(--accent)}
+/* PDF 뷰어 (데스크톱만, 모바일은 바로 다운로드) */
+dialog.pdfv{height:calc(100vh - 48px);overflow:hidden;display:none;flex-direction:column}
+dialog.pdfv[open]{display:flex}
+dialog.pdfv .work-head{align-items:center;padding:14px 20px}
+dialog.pdfv .work-head h3{margin:0;font-size:18px}
+.pdfv-act{display:flex;gap:8px;align-items:center}
+.pdfv-btn{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 16px;border:1px solid var(--hair-strong);color:var(--ink);text-decoration:none;font-weight:700;font-size:13px}
+.pdfv-btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.pdfv-btn:hover,.pdfv-btn:focus-visible{border-color:var(--accent)}
+dialog.pdfv iframe{flex:1;width:100%;border:0;background:#525659}
 @media (max-width:640px){.work-head{padding:16px}.work-body{padding:16px 16px 24px}.work-head h3{font-size:18px}}
 @media (prefers-reduced-motion:reduce){dialog.work[open],dialog.work[open]::backdrop{animation:none}}
 /* combat */
@@ -1081,6 +1091,10 @@ footer{padding-block:28px;font-weight:400;font-size:13px;color:var(--muted)}
   <div class="work-head"><div><div class="label" id="workKicker"></div><h3 id="workTitle"></h3><p class="cap" id="workSrc"></p></div><button class="work-x" type="button" aria-label="닫기">✕</button></div>
   <div class="work-body" id="workBody"></div>
 </dialog>
+<dialog class="work pdfv" id="pdfv" aria-labelledby="pdfvTitle">
+  <div class="work-head"><h3 id="pdfvTitle"></h3><div class="pdfv-act"><a class="pdfv-btn pri" id="pdfvDl" href="#" download><span aria-hidden="true">↓</span>다운로드</a><a class="pdfv-btn" id="pdfvTab" href="#" target="_blank" rel="noopener">새 탭으로 열기 ↗</a><button class="work-x" type="button" aria-label="닫기">✕</button></div></div>
+  <iframe id="pdfvFrame" title="PDF 미리보기"></iframe>
+</dialog>
 <footer><div class="wrap">© 2026 권두현</div></footer>
 
 <script>
@@ -1296,6 +1310,19 @@ function openWork(key,from){
 }
 dlg.addEventListener('close',()=>{if(dlg.open)return;document.documentElement.style.overflow='';if(dlg.returnTo)dlg.returnTo.focus()});
 dlg.querySelector('.work-x').addEventListener('click',()=>dlg.close());
+// PDF: 데스크톱은 팝업 뷰어, 모바일·터치는 기본 다운로드 그대로
+const pv=$('pdfv'),wide=matchMedia('(min-width:901px) and (pointer:fine)');
+document.querySelectorAll('a.dl').forEach(a=>a.addEventListener('click',e=>{
+  if(!wide.matches)return;e.preventDefault();
+  const href=a.getAttribute('href');
+  $('pdfvTitle').textContent=a.querySelector('b').textContent;
+  $('pdfvDl').href=href;$('pdfvDl').setAttribute('download',a.getAttribute('download'));$('pdfvTab').href=href;
+  $('pdfvFrame').src=href+'#navpanes=0&view=FitH';
+  pv.returnTo=a;pv.showModal();document.documentElement.style.overflow='hidden';
+}));
+pv.addEventListener('close',()=>{document.documentElement.style.overflow='';$('pdfvFrame').src='about:blank';if(pv.returnTo)pv.returnTo.focus()});
+pv.querySelector('.work-x').addEventListener('click',()=>pv.close());
+pv.addEventListener('click',e=>{if(e.target===pv)pv.close()});
 dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
 document.querySelectorAll('[data-work]').forEach(el=>{
   el.addEventListener('click',e=>{if(e.target.closest('a'))return;openWork(el.dataset.work,el)});
